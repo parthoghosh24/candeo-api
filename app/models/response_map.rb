@@ -10,6 +10,7 @@
 #  created_at     :datetime
 #  updated_at     :datetime
 #  feeling        :integer
+#  owner_id       :integer
 
 #@Partho- Response Maps hold all the mapping information between users and content.
 #feeling-> 1: Happy, 2: Confident, 3: Motivated, 4: Boosted, 5: Energetic, 6: Blessed

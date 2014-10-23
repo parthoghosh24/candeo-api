@@ -24,6 +24,11 @@
 #  gender                 :string(255)
 #  about                  :text
 #
+# Indexes
+#
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#
 
 # @Partho- This is the main User class
 class User < ActiveRecord::Base
@@ -33,5 +38,5 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
 
-  has_one :status       
+  has_many :statuses
 end

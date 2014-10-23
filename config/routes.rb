@@ -1,7 +1,16 @@
 Rails.application.routes.draw do
+
+
   namespace :api do
   namespace :v1 do
-    match '/activities', to:'activities#list', via:'get', as: :activities
+    #Activities
+    match  '/activities', to:'activities#list', via:'get', as: :activities
+
+    #Users
+    match  '/users/:id', to:'users#show', via:'get', as: :user
+    match  '/users/login', to:'users#login', via:'post', as: :login
+    match  '/users/logout', to:'users#logout', via:'delete', as: :logout
+    match  '/users/register', to:'users#register', via:'post', as: :register
     end
   end
 

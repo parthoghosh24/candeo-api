@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141021174521) do
+ActiveRecord::Schema.define(version: 20141023074016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20141021174521) do
     t.datetime "updated_at"
     t.string   "shareable_type"
     t.integer  "shareable_id"
+    t.integer  "user_id"
   end
 
   create_table "media", force: true do |t|
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(version: 20141021174521) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "feeling"
+    t.integer  "owner_id"
   end
 
   create_table "statuses", force: true do |t|

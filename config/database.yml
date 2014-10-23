@@ -10,8 +10,8 @@ development:
   encoding: unicode
   host: localhost
   database: candeo_dev
-  username: root
-  password: root
+  username: candeoadmin
+  password: candeoadmin2014
   pool: 5
 
 # Warning: The database defined as "test" will be erased and
@@ -22,8 +22,8 @@ test:
   encoding: unicode
   host: localhost
   database: candeo_test
-  username: root
-  password: root
+  username: candeoadmin
+  password: candeoadmin2014
   pool: 5
 
 production:
@@ -31,6 +31,6 @@ production:
   encoding: unicode
   host: localhost
   database: candeo_prod
-  username: root
-  password: root
+  username: candeoadmin
+  password: candeoadmin2014
   pool: 5

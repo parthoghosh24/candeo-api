@@ -9,6 +9,7 @@
 #  updated_at     :datetime
 #  shareable_type :string(255)
 #  shareable_id   :integer
+#  user_id        :integer
 #
 
 # @Partho - This is the parent Content class. User will generally share Content. Now Content can be a status, a user creation or data shared between friends.
@@ -17,6 +18,6 @@
 
 class Content < ActiveRecord::Base
   belongs_to :shareable, polymorphic: true
-  belongs_to :user #Owner 
+  belongs_to :user #Owner
   has_one :media
 end

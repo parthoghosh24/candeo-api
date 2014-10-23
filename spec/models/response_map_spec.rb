@@ -10,6 +10,7 @@
 #  created_at     :datetime
 #  updated_at     :datetime
 #  feeling        :integer
+#  owner_id       :integer
 #
 
 require 'rails_helper'

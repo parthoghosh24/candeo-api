@@ -9,6 +9,7 @@
 #  updated_at     :datetime
 #  shareable_type :string(255)
 #  shareable_id   :integer
+#  user_id        :integer
 #
 
 require 'rails_helper'
