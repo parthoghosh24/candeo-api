@@ -11,6 +11,11 @@ Rails.application.routes.draw do
     match  '/users/login', to:'users#login', via:'post', as: :login
     match  '/users/logout', to:'users#logout', via:'delete', as: :logout
     match  '/users/register', to:'users#register', via:'post', as: :register
+
+    #Contents
+    match  '/contents/:id', to:'contents#show', via:'get', as: :content
+    match  '/contents', to:'contents#list', via:'get', as: :contents
+
     end
   end
 
