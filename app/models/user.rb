@@ -39,4 +39,6 @@ class User < ActiveRecord::Base
 
 
   has_many :statuses
+  has_many :pledges
+  has_many :showcases
 end

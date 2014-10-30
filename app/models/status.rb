@@ -16,9 +16,4 @@ class Status < ActiveRecord::Base
   belongs_to :user
   has_one :content, as: :shareable
   accepts_nested_attributes_for :content
-
-  def to_s
-    id
-  end
-
 end

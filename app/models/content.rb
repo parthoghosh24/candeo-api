@@ -16,7 +16,7 @@
 # Any user on Candeo can get inspired from a posted content. After getting inspired, user responds back with feelings and pledges. This can also have tagged content.
 # In upcoming iterations, Users will be able to appreciate/ applause content too.
 
-class Content < ActiveRecord::Base
+class Content < ActiveRecord::Base  
   belongs_to :shareable, polymorphic: true
   belongs_to :user #Owner
   has_one :media

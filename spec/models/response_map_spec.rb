@@ -11,6 +11,7 @@
 #  updated_at     :datetime
 #  feeling        :integer
 #  owner_id       :integer
+#  content_type   :integer
 #
 
 require 'rails_helper'
