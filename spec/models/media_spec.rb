@@ -2,12 +2,28 @@
 #
 # Table name: media
 #
-#  id         :integer          not null, primary key
-#  type       :integer
-#  name       :string(255)
-#  mime_type  :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  id                 :integer          not null, primary key
+#  type               :integer
+#  name               :string(255)
+#  mime_type          :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#  image_file_name    :string(255)
+#  image_content_type :string(255)
+#  image_file_size    :integer
+#  image_updated_at   :datetime
+#  video_file_name    :string(255)
+#  video_content_type :string(255)
+#  video_file_size    :integer
+#  video_updated_at   :datetime
+#  audio_file_name    :string(255)
+#  audio_content_type :string(255)
+#  audio_file_size    :integer
+#  audio_updated_at   :datetime
+#  doc_file_name      :string(255)
+#  doc_content_type   :string(255)
+#  doc_file_size      :integer
+#  doc_updated_at     :datetime
 #
 
 require 'rails_helper'
