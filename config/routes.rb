@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     #Contents
     match  '/contents/:id', to:'contents#show', via:'get', as: :content
     match  '/contents', to:'contents#list', via:'get', as: :contents
+    match '/contents/upload', to:'contents#upload', via:'post', as: :upload
 
     end
   end

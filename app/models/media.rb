@@ -3,7 +3,7 @@
 # Table name: media
 #
 #  id                 :integer          not null, primary key
-#  type               :integer
+#  media_type         :integer
 #  name               :string(255)
 #  mime_type          :string(255)
 #  created_at         :datetime
@@ -24,11 +24,14 @@
 #  doc_content_type   :string(255)
 #  doc_file_size      :integer
 #  doc_updated_at     :datetime
+#  content_id         :integer
 #
 
-# Candeo Global Media Class. Whatever files get uploaded, this is the class which handles them.
+# @partho - Candeo Global Media Class. Whatever files get uploaded, this is the class which handles them.
+#type -> 1:audio 2:video 3:image 4:doc
 class Media < ActiveRecord::Base
   has_attached_file :image
+  belongs_to :content
   validates_attachment_content_type :image, :content_type => [ 'image/png','image/jpeg','image/jpg', 'image/gif']
 
   has_attached_file :video

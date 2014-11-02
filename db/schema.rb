@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141031113731) do
+ActiveRecord::Schema.define(version: 20141102191052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20141031113731) do
   end
 
   create_table "media", force: true do |t|
-    t.integer  "type"
+    t.integer  "media_type"
     t.string   "name"
     t.string   "mime_type"
     t.datetime "created_at"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20141031113731) do
     t.string   "doc_content_type"
     t.integer  "doc_file_size"
     t.datetime "doc_updated_at"
+    t.integer  "content_id"
   end
 
   create_table "pledges", force: true do |t|
