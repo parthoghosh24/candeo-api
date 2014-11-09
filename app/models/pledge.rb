@@ -8,6 +8,7 @@
 #  created_at :datetime
 #  updated_at :datetime
 #
+#mode-> 1:public 2:private
 
 class Pledge < ActiveRecord::Base
   belongs_to :user
