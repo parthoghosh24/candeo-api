@@ -23,6 +23,7 @@
 #  year                   :integer
 #  gender                 :string(255)
 #  about                  :text
+#  friend_block           :integer
 #
 # Indexes
 #

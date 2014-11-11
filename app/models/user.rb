@@ -23,6 +23,7 @@
 #  year                   :integer
 #  gender                 :string(255)
 #  about                  :text
+#  friend_block           :integer
 #
 # Indexes
 #
@@ -31,6 +32,7 @@
 #
 
 # @Partho- This is the main User class
+#friend_block: Disables friendship flow with user. User can't be befriended or befriend further when friend_block is on (1)
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -38,9 +40,18 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
 
-  has_many :statuses
+  has_many :inspiritions, foreign_key: 'user_id', class_name: "Reward"
   has_many :pledges
   has_many :showcases
+  has_many :contents
+
+  #Social Network
+  #Followers- People following me
+  has_many :follower_follows, foreign_key: :followee_id, class_name: "Network"
+  has_many :followers, through: :follower_follows, source: :follower
+  #Followee- People I am following
+  has_many :followee_follows, foreign_key: :follower_id, class_name: "Network"
+  has_many :followees, through: :followee_follows, source: :followee
 
 
   def self.show(params)
@@ -52,7 +63,8 @@ class User < ActiveRecord::Base
     total_you_got_inspired=ResponseMap.where(user_id:params[:id].to_i, is_inspired:1).size
     user_response[:total_inspired]=total_inspired
     user_response[:total_you_got_inspired]=total_you_got_inspired
-    user_response[:inspiritions]=user.statuses
+    user_response[:inspiritions]=user.inspiritions
     user_response
   end
+
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141102191052) do
+ActiveRecord::Schema.define(version: 20141111182015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,15 @@ ActiveRecord::Schema.define(version: 20141102191052) do
     t.integer  "doc_file_size"
     t.datetime "doc_updated_at"
     t.integer  "content_id"
+  end
+
+  create_table "networks", force: true do |t|
+    t.integer  "follower_id"
+    t.integer  "followee_id"
+    t.integer  "is_friend"
+    t.integer  "is_blocked"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "pledges", force: true do |t|
@@ -112,6 +121,7 @@ ActiveRecord::Schema.define(version: 20141102191052) do
     t.integer  "year"
     t.string   "gender"
     t.text     "about"
+    t.integer  "friend_block"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

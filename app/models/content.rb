@@ -59,12 +59,12 @@ class Content < ActiveRecord::Base
     when 3 #image
        media = Media.create(image:params[:file])
     end
-
+    media.update(media_type:params[:type].to_i)
     content = Content.create(description:params[:description])
     user=User.find(params[:user_id])
     content.user=user
     content.media=media
-    user_status=user.statuses.create(mode:1)
+    user_status=user.inspiritions.create(mode:1)
     user_status.content=content
   end
 end
