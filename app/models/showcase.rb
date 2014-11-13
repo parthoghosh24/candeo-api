@@ -9,6 +9,8 @@
 #  user_id    :integer
 #
 
+#@Partho- Showcase is the creative side of candeo. Users are supposed to share original content which either they created or
+# has the rights to share on candeo as they will be tagged with copyright. 
 class Showcase < ActiveRecord::Base
   belongs_to :user
   has_one :content, as: :shareable
