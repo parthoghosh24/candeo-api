@@ -40,31 +40,11 @@ class Content < ActiveRecord::Base
         end
 
 
-        contentMap[:id]=content.id
+        contentMap[:id]=content.shareable.id
         contentMap[:desc]=content.description
         contentMap[:user_id]=content.user.id
         contentMap[:user]=content.user.username
     end
     contentMap
-  end
-
-
-  def self.upload(params)
-    media=nil
-    case params[:type].to_i
-    when 1 #audio
-       media = Media.create(audio:params[:file])
-    when 2 #video
-       media = Media.create(video:params[:file])
-    when 3 #image
-       media = Media.create(image:params[:file])
-    end
-    media.update(media_type:params[:type].to_i)
-    content = Content.create(description:params[:description])
-    user=User.find(params[:user_id])
-    content.user=user
-    content.media=media
-    user_status=user.inspiritions.create(mode:1)
-    user_status.content=content
   end
 end

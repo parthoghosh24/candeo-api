@@ -4,8 +4,6 @@
 #
 #  id                 :integer          not null, primary key
 #  media_type         :integer
-#  name               :string(255)
-#  mime_type          :string(255)
 #  created_at         :datetime
 #  updated_at         :datetime
 #  image_file_name    :string(255)

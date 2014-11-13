@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111182015) do
+ActiveRecord::Schema.define(version: 20141113061011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20141111182015) do
     t.json     "activity"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "activity_level"
   end
 
   create_table "contents", force: true do |t|
@@ -36,8 +37,6 @@ ActiveRecord::Schema.define(version: 20141111182015) do
 
   create_table "media", force: true do |t|
     t.integer  "media_type"
-    t.string   "name"
-    t.string   "mime_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "image_file_name"
@@ -73,6 +72,7 @@ ActiveRecord::Schema.define(version: 20141111182015) do
     t.integer  "period"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "response_maps", force: true do |t|
@@ -84,13 +84,13 @@ ActiveRecord::Schema.define(version: 20141111182015) do
     t.datetime "updated_at"
     t.integer  "feeling"
     t.integer  "owner_id"
-    t.integer  "content_type"
   end
 
   create_table "showcases", force: true do |t|
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "statuses", force: true do |t|

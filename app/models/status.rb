@@ -16,4 +16,11 @@ class Status < ActiveRecord::Base
   belongs_to :user
   has_one :content, as: :shareable
   accepts_nested_attributes_for :content
+
+  def self.create_status(params)
+    status=Status.create(content_attributes:{description: params[:description]}, mode:1, user_id: params[:user_id])    
+    status.content.media=Media.upload(params[:media]) if !params[:media].blank?  
+    #Create Activity
+  end
+  
 end

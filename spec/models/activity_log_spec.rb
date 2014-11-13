@@ -2,12 +2,13 @@
 #
 # Table name: activity_logs
 #
-#  id            :integer          not null, primary key
-#  user_id       :integer
-#  activity_type :integer
-#  activity      :json
-#  created_at    :datetime
-#  updated_at    :datetime
+#  id             :integer          not null, primary key
+#  user_id        :integer
+#  activity_type  :integer
+#  activity       :json
+#  created_at     :datetime
+#  updated_at     :datetime
+#  activity_level :integer
 #
 
 require 'rails_helper'
