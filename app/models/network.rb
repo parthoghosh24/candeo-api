@@ -21,6 +21,7 @@ class Network < ActiveRecord::Base
     anonymous = User.find_by(username:"anonymous")
     if (anonymous.id!=params[:follower_id] || anonymous.id!=params[:followee_id].to_i) && (Network.exists?(follower_id:params[:user_id], followee_id:params[:owner_id]))
       Network.create(follower_id:params[:user_id], followee_id:params[:owner_id])  
+      #Create Activity
     end
   end
 
