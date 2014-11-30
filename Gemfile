@@ -14,6 +14,8 @@ gem 'devise'
 
 gem 'paperclip', "~> 4.1"
 
+gem 'fog'
+
 group :development, :test do
   gem 'rspec-rails'
   gem "better_errors"
