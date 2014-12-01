@@ -1,18 +1,20 @@
 # == Schema Information
 #
-# Table name: statuses
+# Table name: users
 #
 #  id         :integer          not null, primary key
-#  mode       :integer
-#  user_id    :integer
+#  name       :string(255)
+#  email      :string(255)
+#  auth_token :string(255)
 #  created_at :datetime
 #  updated_at :datetime
-#  tag        :string(255)
 #  uuid       :string(255)
+#  username   :string(255)
+#  about      :string(255)
 #
 
 require 'rails_helper'
 
-RSpec.describe Status, :type => :model do
+RSpec.describe User, :type => :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end

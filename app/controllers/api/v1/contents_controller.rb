@@ -15,13 +15,13 @@ class Api::V1::ContentsController < ApplicationController
       contents.push(contentData)
     end
     contentMap[:contents]=contents
-    render json: contentMap
+    render json: contentMap, status: 200
   end
 
   #GET /api/v1/contents/:id - Show Content Detail Screen
   def show
     contentMap=Content.show(params)
-    render json: contentMap
+    render json: contentMap, status: 200
   end
 
  #POST  /api/v1/contents/upload - Upload media
@@ -35,10 +35,10 @@ class Api::V1::ContentsController < ApplicationController
     puts params
     case params[:type].to_i
     when 1 #status
-       Status.create_status(params) 
+       Status.create_status(params)
     when 2 #showcase
-       Showcase.create_showcase(params) 
-    when 3 #Pledge      
+       Showcase.create_showcase(params)
+    when 3 #Pledge
     end
   end
 end

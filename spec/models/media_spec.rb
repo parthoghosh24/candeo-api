@@ -23,6 +23,7 @@
 #  doc_file_size      :integer
 #  doc_updated_at     :datetime
 #  content_id         :integer
+#  uuid               :string(255)
 #
 
 require 'rails_helper'

@@ -2,6 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::UsersController, :type => :controller do
 
+  describe "GET show" do
+    it "returns http success" do
+      get :show
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "GET login" do
     it "returns http success" do
       get :login
@@ -9,16 +16,16 @@ RSpec.describe Api::V1::UsersController, :type => :controller do
     end
   end
 
-  describe "GET register" do
+  describe "GET logout" do
     it "returns http success" do
-      get :register
+      get :logout
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET show" do
+  describe "GET register" do
     it "returns http success" do
-      get :show
+      get :register
       expect(response).to have_http_status(:success)
     end
   end

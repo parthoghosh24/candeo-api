@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     #Contents
     match  '/contents/:id', to:'contents#show', via:'get', as: :content
     match  '/contents', to:'contents#list', via:'get', as: :contents
+    match '/contents/check/tag/:tag', to:'contents#check_tag_exists', via:'post', as: :contents_tag_exists
     match '/contents/upload', to:'contents#upload', via:'post', as: :upload
     match '/contents/create', to:'contents#create', via: 'post', as: :create_content
     match '/contents/:id/responses/inspire', to:'responses#inspire', via:'post', as: :get_inspired
@@ -22,6 +23,4 @@ Rails.application.routes.draw do
 
     end
   end
-
-  devise_for :users  
 end

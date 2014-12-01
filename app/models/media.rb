@@ -23,11 +23,13 @@
 #  doc_file_size      :integer
 #  doc_updated_at     :datetime
 #  content_id         :integer
+#  uuid               :string(255)
 #
 
 # @partho - Candeo Global Media Class. Whatever files get uploaded, this is the class which handles them.
 #type -> 1:audio 2:video 3:image 4:doc
 class Media < ActiveRecord::Base
+  after_create :generate_uuid
   has_attached_file :image
   belongs_to :content
   validates_attachment_content_type :image, :content_type => [ 'image/png','image/jpeg','image/jpg', 'image/gif']
@@ -53,5 +55,15 @@ class Media < ActiveRecord::Base
     end
     media.update(media_type:params[:type].to_i)
     media
+  end
+
+   private
+
+  def generate_uuid
+        token = SecureRandom.hex(20)
+        while(self.class.exists?(uuid:token)) do
+          token = SecureRandom.hex(20)
+        end
+        self.update(uuid:token)
   end
 end

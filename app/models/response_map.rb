@@ -14,6 +14,7 @@
 #  appreciate_rating     :integer
 #  appreciate_feedback   :text
 #  appreciation_reaction :json
+#  uuid                  :string(255)
 #
 
 #@Partho- Response Maps hold all the mapping information between users and content.
@@ -24,8 +25,10 @@
 # User follows another user when user is getting inspired from that user. Appreciation has no following flow as user can appreciate anyone on platform.
 
 class ResponseMap < ActiveRecord::Base
-  def self.get_inspired(params)    
-     response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], is_inspired:1, feeling:params[:feeling], owner_id:params[:owner_id])     
+
+  after_create :generate_uuid
+  def self.get_inspired(params)
+     response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], is_inspired:1, feeling:params[:feeling], owner_id:params[:owner_id])
      network_map={}
      network_map[:user_id]=params[:user_id]
      network_map[:owner_id]=params[:owner_id]
@@ -35,7 +38,17 @@ class ResponseMap < ActiveRecord::Base
 
   def self.appreciate(params)
     #Create Response Map with appreciation
-    response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], did_appreciate:1, owner_id:params[:owner_id], appreciate_rating: params[:rating], appreciate_feedback: params[:feedback])    
-    #Create Activity    
+    response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], did_appreciate:1, owner_id:params[:owner_id], appreciate_rating: params[:rating], appreciate_feedback: params[:feedback])
+    #Create Activity
   end
-end      
+
+  private
+
+  def generate_uuid
+        token = SecureRandom.hex(20)
+        while(self.class.exists?(uuid:token)) do
+          token = SecureRandom.hex(20)
+        end
+        self.update(uuid:token)
+  end
+end

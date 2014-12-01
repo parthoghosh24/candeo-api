@@ -9,6 +9,7 @@
 #  created_at     :datetime
 #  updated_at     :datetime
 #  activity_level :integer
+#  uuid           :string(255)
 #
 
 require 'rails_helper'

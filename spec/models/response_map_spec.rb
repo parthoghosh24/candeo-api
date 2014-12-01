@@ -14,6 +14,7 @@
 #  appreciate_rating     :integer
 #  appreciate_feedback   :text
 #  appreciation_reaction :json
+#  uuid                  :string(255)
 #
 
 require 'rails_helper'

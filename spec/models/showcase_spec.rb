@@ -8,6 +8,7 @@
 #  updated_at :datetime
 #  user_id    :integer
 #  state      :integer
+#  uuid       :string(255)
 #
 
 require 'rails_helper'

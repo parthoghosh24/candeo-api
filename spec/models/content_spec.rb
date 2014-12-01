@@ -10,6 +10,8 @@
 #  shareable_type :string(255)
 #  shareable_id   :integer
 #  user_id        :integer
+#  uuid           :string(255)
+#  referral_tag   :string(255)
 #
 
 require 'rails_helper'

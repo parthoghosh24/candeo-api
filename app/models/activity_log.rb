@@ -9,6 +9,7 @@
 #  created_at     :datetime
 #  updated_at     :datetime
 #  activity_level :integer
+#  uuid           :string(255)
 #
 
 # @Partho - Activity Log keeps information about all the activities happening on network.
@@ -27,7 +28,18 @@
 # 7: User Pledging
 # 8: User Inspired from Pledge
 class ActivityLog < ActiveRecord::Base
+  after_create :generate_uuid
   def self.create_activity(params)
     ActivityLog.create(user_id:params[:user_id], activity_type:params[:activity_type],activity:params[:activity], activity_level: params[:activity_level])
+  end
+
+  private
+
+  def generate_uuid
+        token = SecureRandom.hex(20)
+        while(self.class.exists?(uuid:token)) do
+          token = SecureRandom.hex(20)
+        end
+        self.update(uuid:token)
   end
 end
