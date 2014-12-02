@@ -30,6 +30,16 @@ class User < ActiveRecord::Base
   has_many :followee_follows, foreign_key: :follower_id, class_name: "Network"
   has_many :followees, through: :followee_follows, source: :followee
 
+  def self.register(params)
+    username = params[:email][0...params[:email].index('@')]
+    username = username.gsub(/[^0-9A-Za-z]/,'')
+    user = User.create(name:params[:name], email:params[:email], username:username)
+    if user
+      user.id
+      # Create Activity
+    end
+  end
+
   private
 
   def generate_uuid

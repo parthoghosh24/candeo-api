@@ -24,12 +24,6 @@ class Api::V1::ContentsController < ApplicationController
     render json: contentMap, status: 200
   end
 
- #POST  /api/v1/contents/upload - Upload media
-  def  upload
-    puts params
-    Content.upload(params)
-  end
-
   #POST  /api/v1/contents/create - Create Content
   def create
     puts params
@@ -38,7 +32,8 @@ class Api::V1::ContentsController < ApplicationController
        Status.create_status(params)
     when 2 #showcase
        Showcase.create_showcase(params)
-    when 3 #Pledge
     end
+
   end
+
 end

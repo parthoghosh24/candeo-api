@@ -23,6 +23,9 @@ class Showcase < ActiveRecord::Base
 
   def self.create_showcase(params)
     showcase=Showcase.create(content_attributes:{description: params[:description]}, title:params[:title], user_id: params[:user_id], reviewed:params[:state])
+    if !params[:referral_tag].blank
+      status.content.update(referral_tag:params[:referral_tag])
+    end
     showcase.content.media=Media.upload(params[:media]) if !params[:media].blank?
     #Create Activity
   end
