@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141201172610) do
+ActiveRecord::Schema.define(version: 20141203194450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,12 +79,10 @@ ActiveRecord::Schema.define(version: 20141201172610) do
     t.integer  "did_appreciate"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "inspirition_feeling"
     t.integer  "owner_id"
-    t.integer  "appreciate_rating"
-    t.text     "appreciate_feedback"
     t.json     "appreciation_reaction"
     t.string   "uuid"
+    t.json     "inspiration_response"
   end
 
   create_table "showcases", force: true do |t|

@@ -6,4 +6,10 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-User.find_or_create_by(name:"Anonymous", username:"anonymous", email:"anon@candeoapp.com")
+if !User.exists?(username:"anonymous")
+	anon_params={}
+	anon_params[:name]="Anonymous"	
+	anon_params[:email]="anonymous@candeoapp.com"
+	User.register(anon_params)
+end
+

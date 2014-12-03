@@ -29,11 +29,34 @@ class Api::V1::ContentsController < ApplicationController
     puts params
     case params[:type].to_i
     when 1 #status
-       Status.create_status(params)
+       id=Status.create_status(params)
     when 2 #showcase
-       Showcase.create_showcase(params)
-    end
+       id=Showcase.create_showcase(params)
+    end   
 
+    if !id.blank?
+      response_map={:id=> id}
+      render json: response_map, status: 200
+    else
+      render json:{:response=>"failed"}, status:422
+    end   
+  end
+
+  #POST /api/v1/contents/:id - Update Content
+  def update
+    puts params
+    case params[:type].to_i
+    when 1 #Status
+      id=nil
+    when 2 #Showcase
+      id=Showcase.update_showcase(params)
+    end
+    if !id.blank?
+      response_map={:id=> id}
+      render json: response_map, status: 200
+    else
+      render json:{:response=>"failed"}, status:422
+    end
   end
 
 end

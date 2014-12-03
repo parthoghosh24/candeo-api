@@ -28,7 +28,34 @@ class Status < ActiveRecord::Base
       status.content.update(referral_tag:params[:referral_tag])
     end
     status.content.media=Media.upload(params[:media]) if !params[:media].blank?
-    #Create Activity
+    #Create Activity    
+    activity = {}
+    activity[:description]=params[:description]
+    if !params[:media].blank?
+      case status.content.media.media_type
+        when 1
+            activity[:media_url]=status.content.media.audio.url
+        when 2
+            activity[:media_url]=status.content.media.video.url
+        when 3
+            activity[:media_url]=status.content.media.image.url
+      end
+    end 
+    if !params[:referral_tag].blank?
+      activity[:referral_tag]="*params[:referral_tag]"
+    end
+    activity[:status_id]=status.id
+    activity_params={}
+    activity_params[:user_id]=user.id
+    if !params[:referral_tag].blank?
+      activity_params[:activity_type]=3
+    else
+      activity_params[:activity_type]=2
+    end    
+    activity_params[:activity]=activity
+    activity_params[:activity_level]=1 #Public      
+    ActivityLog.create_activity(activity_params)
+    status.id
   end
 
   private

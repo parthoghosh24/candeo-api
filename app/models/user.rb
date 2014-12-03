@@ -34,9 +34,17 @@ class User < ActiveRecord::Base
     username = params[:email][0...params[:email].index('@')]
     username = username.gsub(/[^0-9A-Za-z]/,'')
     user = User.create(name:params[:name], email:params[:email], username:username)
-    if user
-      user.id
+    if user      
       # Create Activity
+      activity = {}
+      activity[:name]=params[:name]
+      activity_params={}
+      activity_params[:user_id]=user.id
+      activity_params[:activity_type]=1
+      activity_params[:activity]=activity
+      activity_params[:activity_level]=3 #Private      
+      ActivityLog.create_activity(activity_params)
+      user.id
     end
   end
 

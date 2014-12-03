@@ -9,12 +9,10 @@
 #  did_appreciate        :integer
 #  created_at            :datetime
 #  updated_at            :datetime
-#  inspirition_feeling   :integer
 #  owner_id              :integer
-#  appreciate_rating     :integer
-#  appreciate_feedback   :text
 #  appreciation_reaction :json
 #  uuid                  :string(255)
+#  inspiration_response  :json
 #
 
 require 'rails_helper'

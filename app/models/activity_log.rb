@@ -19,17 +19,22 @@
 # 3: Private
 
 # activity_types are (Text is not final and will be customizable):
-# 1: User Inspiring by Sharing Status
-# 2: User Inspired from Content and Following User
-# 3: User Inspiring by Sharing Content in response to Inspirtion
-# 4: User Showcasing
-# 5: User Showcasing Content in response to Inspirtion
-# 6: User Appreciating Content
-# 7: User Pledging
-# 8: User Inspired from Pledge
+#1 : welcome
+#2 : New Status/Inspirition created
+#3 : New Status/Inspirition created in response to inspiration referral tag
+#4 : New Showcase created
+#5 : New Showcase created in response to inspiration referral tag
+#6 : New Showcase published
+#7 : New Showcase published in response to inspiration referral tag
+#8 : Showcase drafted
+#9 : Showcase submitted for review
+#10 : Showcase rejected
+
 class ActivityLog < ActiveRecord::Base
   after_create :generate_uuid
   def self.create_activity(params)
+    puts "Activity Log getting created"
+    Rails.logger.debug("Activity Log getting created")
     ActivityLog.create(user_id:params[:user_id], activity_type:params[:activity_type],activity:params[:activity], activity_level: params[:activity_level])
   end
 
