@@ -13,6 +13,7 @@
 #  appreciation_reaction :json
 #  uuid                  :string(255)
 #  inspiration_response  :json
+#  content_type          :integer
 #
 
 #@Partho- Response Maps hold all the mapping information between users and content.
@@ -29,7 +30,7 @@ class ResponseMap < ActiveRecord::Base
      inspiration_response ={}
      inspiration_response[:feeling] =params[:feeling]
      inspiration_response[:description] =params[:description]
-     response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], is_inspired:1, inspiration_response:inspiration_response, owner_id:params[:owner_id])
+     response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], content_type:params[:content_type], is_inspired:1, inspiration_response:inspiration_response, owner_id:params[:owner_id])
      network_map={}
      network_map[:user_id]=params[:user_id]
      network_map[:owner_id]=params[:owner_id]

@@ -13,6 +13,7 @@
 #  appreciation_reaction :json
 #  uuid                  :string(255)
 #  inspiration_response  :json
+#  content_type          :integer
 #
 
 require 'rails_helper'

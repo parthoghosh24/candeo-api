@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141203194450) do
+ActiveRecord::Schema.define(version: 20141204181211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20141203194450) do
     t.json     "appreciation_reaction"
     t.string   "uuid"
     t.json     "inspiration_response"
+    t.integer  "content_type"
   end
 
   create_table "showcases", force: true do |t|
