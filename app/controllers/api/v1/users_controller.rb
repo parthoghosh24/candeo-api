@@ -6,9 +6,6 @@ class Api::V1::UsersController < ApplicationController
   def login
   end
 
-  def logout
-  end
-
   #POST /users/register - User registers
   def register
   	id=User.register(params)

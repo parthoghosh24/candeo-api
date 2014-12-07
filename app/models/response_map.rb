@@ -36,6 +36,31 @@ class ResponseMap < ActiveRecord::Base
      network_map[:owner_id]=params[:owner_id]
      Network.create_network(network_map)
      #Create Activity
+       activity = {}
+       activity[:feeling]=params[:feeling]
+      activity[:description]=params[:description]
+      activity[:content_type]=params[:content_type]
+      activity[:content_id]=params[:content_id]
+      content = Content.find(params[:content_id])
+    if !content.media.blank?
+      activity[:media_type]=content.media.media_type
+      case content.media.media_type
+        when 1
+            activity[:media_url]=content.media.audio.url
+        when 2
+            activity[:media_url]=content.media.video.url
+        when 3
+            activity[:media_url]=content.media.image.url
+      end
+    end
+    activity[:owner_id]=params[:owner_id]
+    activity_params={}
+    activity_params[:user_id]=user.id
+    activity_params[:activity_type]=12
+    activity_params[:activity]=activity
+    activity_params[:activity_level]=1 #Public
+    ActivityLog.create_activity(activity_params)
+    response.id
   end
 
   def self.appreciate(params)
@@ -43,8 +68,32 @@ class ResponseMap < ActiveRecord::Base
     appreciation_reaction[:rating]=params[:rating]
     appreciation_reaction[:feedback]=params[:feedback] #micro review
     #Create Response Map with appreciation
-    response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], did_appreciate:1, owner_id:params[:owner_id], appreciation_reaction: appreciation_reaction)
+    response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], content_type:params[:content_type], did_appreciate:1, owner_id:params[:owner_id], appreciation_reaction: appreciation_reaction)
     #Create Activity
+    activity = {}
+       activity[:rating]=params[:rating]
+      activity[:feedback]=params[:feedback]
+      activity[:content_type]=params[:content_type]
+      activity[:content_id]=params[:content_id]
+      content = Content.find(params[:content_id])
+    if !content.media.blank?
+      activity[:media_type]=content.media.media_type
+      case content.media.media_type
+        when 1
+            activity[:media_url]=content.media.audio.url
+        when 2
+            activity[:media_url]=content.media.video.url
+        when 3
+            activity[:media_url]=content.media.image.url
+      end
+    end
+    activity[:owner_id]=params[:owner_id]
+    activity_params={}
+    activity_params[:user_id]=user.id
+    activity_params[:activity_type]=13
+    activity_params[:activity]=activity
+    activity_params[:activity_level]=1 #Public
+    ActivityLog.create_activity(activity_params)
   end
 
   private

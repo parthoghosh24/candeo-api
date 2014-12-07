@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   has_many :contents
   has_many :inspiritions, foreign_key: 'user_id', class_name: "Status"
   validates :email, uniqueness: true
+  has_one :media #avatar
 
   #Social Network
   #Followers- People following me
@@ -34,7 +35,7 @@ class User < ActiveRecord::Base
     username = params[:email][0...params[:email].index('@')]
     username = username.gsub(/[^0-9A-Za-z]/,'')
     user = User.create(name:params[:name], email:params[:email], username:username)
-    if user      
+    if user
       # Create Activity
       activity = {}
       activity[:name]=params[:name]
@@ -42,10 +43,16 @@ class User < ActiveRecord::Base
       activity_params[:user_id]=user.id
       activity_params[:activity_type]=1
       activity_params[:activity]=activity
-      activity_params[:activity_level]=3 #Private      
+      activity_params[:activity_level]=3 #Private
       ActivityLog.create_activity(activity_params)
       user.id
     end
+  end
+
+  def self.show(params)
+  end
+
+  def self.login(params)
   end
 
   private

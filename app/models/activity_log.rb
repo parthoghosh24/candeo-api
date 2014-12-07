@@ -29,6 +29,9 @@
 #8 : Showcase drafted
 #9 : Showcase submitted for review
 #10 : Showcase rejected
+#11 : Follower following Followee
+#12 : User got inspired
+#13 : User Appreciated
 
 class ActivityLog < ActiveRecord::Base
   after_create :generate_uuid
