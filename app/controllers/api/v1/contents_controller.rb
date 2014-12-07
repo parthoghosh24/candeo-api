@@ -32,14 +32,14 @@ class Api::V1::ContentsController < ApplicationController
        id=Status.create_status(params)
     when 2 #showcase
        id=Showcase.create_showcase(params)
-    end   
+    end
 
     if !id.blank?
       response_map={:id=> id}
       render json: response_map, status: 200
     else
       render json:{:response=>"failed"}, status:422
-    end   
+    end
   end
 
   #POST /api/v1/contents/:id - Update Content

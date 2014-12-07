@@ -43,17 +43,17 @@ class Media < ActiveRecord::Base
   has_attached_file :doc #Need to be dealt in second release
   validates_attachment_content_type :image, :content_type => [ 'application/epub+zip', 'application/pdf',  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
 
-  def self.upload(params)
+  def self.upload(file, type)
     media=nil
-    case params[:type].to_i
+    case type
     when 1 #audio
-       media = Media.create(audio:params[:file])
+       media = Media.create(audio:file)
     when 2 #video
-       media = Media.create(video:params[:file])
+       media = Media.create(video:file)
     when 3 #image
-       media = Media.create(image:params[:file])
+       media = Media.create(image:file)
     end
-    media.update(media_type:params[:type].to_i)
+    media.update(media_type:type)
     media
   end
 

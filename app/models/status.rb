@@ -24,11 +24,11 @@ class Status < ActiveRecord::Base
 
   def self.create_status(params)
     status=Status.create(content_attributes:{description: params[:description]}, mode:1, user_id: params[:user_id], tag:params[:tag])
-    if !params[:referral_tag].blank
+    if !params[:referral_tag].blank?
       status.content.update(referral_tag:params[:referral_tag])
     end
-    status.content.media=Media.upload(params[:media]) if !params[:media].blank?
-    #Create Activity    
+    status.content.media=Media.upload(params[:media], params[:media_type].to_i) if !params[:media].blank?
+    #Create Activity
     activity = {}
     activity[:description]=params[:description]
     if !params[:media].blank?
@@ -40,20 +40,20 @@ class Status < ActiveRecord::Base
         when 3
             activity[:media_url]=status.content.media.image.url
       end
-    end 
+    end
     if !params[:referral_tag].blank?
       activity[:referral_tag]="*params[:referral_tag]"
     end
     activity[:status_id]=status.id
     activity_params={}
-    activity_params[:user_id]=user.id
+    activity_params[:user_id]= params[:user_id]
     if !params[:referral_tag].blank?
       activity_params[:activity_type]=3
     else
       activity_params[:activity_type]=2
-    end    
+    end
     activity_params[:activity]=activity
-    activity_params[:activity_level]=1 #Public      
+    activity_params[:activity_level]=1 #Public
     ActivityLog.create_activity(activity_params)
     status.id
   end
