@@ -204,6 +204,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   fog
+  mime-types
   paperclip (~> 4.1)
   pg
   rails (= 4.1.0)
