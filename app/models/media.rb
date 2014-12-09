@@ -45,6 +45,7 @@ class Media < ActiveRecord::Base
 
   def self.upload(file, type)
     media=nil
+    file.content_type=MIME::Types.type_for(file.original_filename).to_s
     case type
     when 1 #audio
        media = Media.create(audio:file)
