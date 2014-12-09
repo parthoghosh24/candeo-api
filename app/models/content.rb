@@ -4,7 +4,6 @@
 #
 #  id             :integer          not null, primary key
 #  description    :text
-#  media_id       :integer
 #  created_at     :datetime
 #  updated_at     :datetime
 #  shareable_type :string(255)
@@ -22,8 +21,7 @@ class Content < ActiveRecord::Base
   belongs_to :shareable, polymorphic: true
   belongs_to :user #Owner
   has_one :media
-  after_create :generate_uuid
-  validates :referral_tag, uniqueness: true
+  after_create :generate_uuid  
 
   def self.show(params)
     content = Content.find(params[:id])

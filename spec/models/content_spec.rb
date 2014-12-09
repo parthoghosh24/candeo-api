@@ -4,7 +4,6 @@
 #
 #  id             :integer          not null, primary key
 #  description    :text
-#  media_id       :integer
 #  created_at     :datetime
 #  updated_at     :datetime
 #  shareable_type :string(255)

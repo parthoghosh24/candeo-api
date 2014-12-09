@@ -26,7 +26,7 @@ class Network < ActiveRecord::Base
       #Create Activity
       activity = {}
       activity[:follower_id]=params[:user_id]
-      activity[:followee_id]=params[:owner_id])
+      activity[:followee_id]=params[:owner_id]
       follower = User.find(params[:user_id])
       activity[:follower_name]=follower.name
       activity[:follower_avatar]=follower.media.image.url

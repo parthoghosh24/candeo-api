@@ -23,7 +23,7 @@ class Status < ActiveRecord::Base
   accepts_nested_attributes_for :content
 
   def self.create_status(params)
-    status=Status.create(content_attributes:{description: params[:description]}, mode:1, user_id: params[:user_id], tag:params[:tag])
+    status=Status.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, mode:1, user_id: params[:user_id], tag:params[:tag])
     if !params[:referral_tag].blank?
       status.content.update(referral_tag:params[:referral_tag])
     end

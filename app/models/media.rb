@@ -38,14 +38,15 @@ class Media < ActiveRecord::Base
   validates_attachment_content_type :image, :content_type => [ 'video/mp4']
 
   has_attached_file :audio
-  validates_attachment_content_type :image, :content_type => [ 'audio/mp3', 'audio/mpeg', 'audio/ogg', 'audio/mp4a-latm', 'audio/mp4']
+  validates_attachment_content_type :image, :content_type => [ 'audio/mp3', 'audio/mpeg', 'audio/ogg', 'audio/mp4a-latm', 'audio/mp4', 'application/octet-stream']
 
   has_attached_file :doc #Need to be dealt in second release
   validates_attachment_content_type :image, :content_type => [ 'application/epub+zip', 'application/pdf',  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
 
   def self.upload(file, type)
     media=nil
-    file.content_type=MIME::Types.type_for(file.original_filename).to_s
+    file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s
+    puts "CONTENT TYPE IS #{file.content_type}"
     case type
     when 1 #audio
        media = Media.create(audio:file)
