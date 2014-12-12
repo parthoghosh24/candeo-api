@@ -29,7 +29,8 @@
 # @partho - Candeo Global Media Class. Whatever files get uploaded, this is the class which handles them.
 #type -> 1:audio 2:video 3:image 4:doc
 class Media < ActiveRecord::Base
-  after_create :generate_uuid
+  after_create :generate_uuid  
+  before_validation :convert_file
   has_attached_file :image
   belongs_to :content
   validates_attachment_content_type :image, :content_type => [ 'image/png','image/jpeg','image/jpg', 'image/gif']
@@ -60,6 +61,13 @@ class Media < ActiveRecord::Base
   end
 
    private
+
+  def convert_file
+    if self.media_type == 1 #audio
+      puts "#{self.audio.queued_for_write[:original].path}"
+      f = open(self.audio.queued_for_write[:original].path)
+    end
+  end
 
   def generate_uuid
         token = SecureRandom.hex(20)
