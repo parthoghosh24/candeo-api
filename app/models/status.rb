@@ -22,41 +22,69 @@ class Status < ActiveRecord::Base
   has_one :content, as: :shareable
   accepts_nested_attributes_for :content
 
+#Upload Media first then create content and activity
   def self.create_status(params)
-    status=Status.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, mode:1, user_id: params[:user_id], tag:params[:tag])
-    if !params[:referral_tag].blank?
-      status.content.update(referral_tag:params[:referral_tag])
-    end
-    status.content.media=Media.upload(params[:media], params[:media_type].to_i) if !params[:media].blank?
-    #Create Activity
-    activity = {}
-    activity[:description]=params[:description]
+    status=nil
+    media=Media.upload(params[:media], params[:media_type].to_i) if !params[:media].blank?
+    puts "MEDIA IS #{media}"
     if !params[:media].blank?
-      case status.content.media.media_type
-        when 1
-            activity[:media_url]=status.content.media.audio.url
-        when 2
-            activity[:media_url]=status.content.media.video.url
-        when 3
-            activity[:media_url]=status.content.media.image.url
-      end
-    end
-    if !params[:referral_tag].blank?
-      activity[:referral_tag]="*params[:referral_tag]"
-    end
-    activity[:status_id]=status.id
-    activity_params={}
-    activity_params[:user_id]= params[:user_id]
-    if !params[:referral_tag].blank?
-      activity_params[:activity_type]=3
-    else
-      activity_params[:activity_type]=2
-    end
-    activity_params[:activity]=activity
-    activity_params[:activity_level]=1 #Public
-    ActivityLog.create_activity(activity_params)
-    status.id
+          if media
+              status=Status.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, mode:1, user_id: params[:user_id], tag:params[:tag])
+              if !params[:referral_tag].blank?
+                status.content.update(referral_tag:params[:referral_tag])
+              end
+              status.content.media=media
+              #Create Activity
+              activity = {}
+              activity[:description]=params[:description]
+              if !params[:media].blank?
+                case status.content.media.media_type
+                  when 1
+                      activity[:media_url]=status.content.media.audio.url
+                  when 2
+                      activity[:media_url]=status.content.media.video.url
+                  when 3
+                      activity[:media_url]=status.content.media.image.url
+                end
+              end
+              if !params[:referral_tag].blank?
+                activity[:referral_tag]="*params[:referral_tag]"
+              end
+              activity[:status_id]=status.id
+              activity_params={}
+              activity_params[:user_id]= params[:user_id]
+              if !params[:referral_tag].blank?
+                activity_params[:activity_type]=3
+              else
+                activity_params[:activity_type]=2
+              end
+              activity_params[:activity]=activity
+              activity_params[:activity_level]=1 #Public
+              ActivityLog.create_activity(activity_params)
+              status.id
+          end
+  else
+       status=Status.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, mode:1, user_id: params[:user_id], tag:params[:tag])
+       #Create Activity
+              activity = {}
+              activity[:description]=params[:description]
+              if !params[:referral_tag].blank?
+                activity[:referral_tag]="*params[:referral_tag]"
+              end
+              activity[:status_id]=status.id
+              activity_params={}
+              activity_params[:user_id]= params[:user_id]
+              if !params[:referral_tag].blank?
+                activity_params[:activity_type]=3
+              else
+                activity_params[:activity_type]=2
+              end
+              activity_params[:activity]=activity
+              activity_params[:activity_level]=1 #Public
+              ActivityLog.create_activity(activity_params)
+              status.id
   end
+end
 
   private
 

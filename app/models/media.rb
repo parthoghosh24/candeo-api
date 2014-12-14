@@ -29,45 +29,55 @@
 # @partho - Candeo Global Media Class. Whatever files get uploaded, this is the class which handles them.
 #type -> 1:audio 2:video 3:image 4:doc
 class Media < ActiveRecord::Base
-  after_create :generate_uuid  
-  before_validation :convert_file
-  has_attached_file :image
+  after_create :generate_uuid
   belongs_to :content
-  validates_attachment_content_type :image, :content_type => [ 'image/png','image/jpeg','image/jpg', 'image/gif']
+
+  has_attached_file :image
+  validates_attachment_content_type :image, :content_type => ['image/jpeg','image/jpg','image/png']
 
   has_attached_file :video
-  validates_attachment_content_type :image, :content_type => [ 'video/mp4']
+  validates_attachment_content_type :video, :content_type => [ 'video/mp4','video/3gpp']
 
   has_attached_file :audio
-  validates_attachment_content_type :image, :content_type => [ 'audio/mp3', 'audio/mpeg', 'audio/ogg', 'audio/mp4a-latm', 'audio/mp4', 'application/octet-stream']
+  validates_attachment_content_type :audio, :content_type => [ 'audio/mp3']
 
-  has_attached_file :doc #Need to be dealt in second release
-  validates_attachment_content_type :image, :content_type => [ 'application/epub+zip', 'application/pdf',  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+  #has_attached_file :doc #Need to be dealt in second release
+  #validates_attachment_content_type :image, :content_type => [ 'application/epub+zip', 'application/pdf',  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
 
   def self.upload(file, type)
     media=nil
-    file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s
-    puts "CONTENT TYPE IS #{file.content_type}"
+
     case type
     when 1 #audio
-       media = Media.create(audio:file)
+       f = file.tempfile
+       original_path="/tmp/#{file.original_filename}"
+       File.rename(f, "/tmp/#{file.original_filename}")
+       puts "ORIGINAL PATH #{original_path}"
+       new_path="/tmp/#{File.basename(original_path,'.*')}.mp3"
+       puts "NEW PATH #{new_path}"
+       system("ffmpeg -i #{original_path} -y -vn -ar 44100 -ac 2 -ab 192k -f mp3 #{new_path}")
+       new_f = open(new_path)
+       media = Media.create(audio:new_f )
+       File.delete(original_path) if File.exist?(original_path)
+       File.delete(new_path) if File.exist?(new_path)
     when 2 #video
+       file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s
        media = Media.create(video:file)
     when 3 #image
-       media = Media.create(image:file)
+       file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s
+       puts "CONTENT TYPE #{file.content_type}"
+       media = Media.create!(image:file)
+       media.save
+       puts "IMAGE #{media.image_file_name}"
+       puts "SIZE #{media.image_file_size}"
+       puts "TYPE #{media.image_content_type}"
     end
+
     media.update(media_type:type)
     media
   end
 
    private
-
-  def convert_file
-    if self.media_type == 1 #audio
-      puts "#{self.audio.queued_for_write[:original].path}"
-      f = open(self.audio.queued_for_write[:original].path)
-    end
-  end
 
   def generate_uuid
         token = SecureRandom.hex(20)
