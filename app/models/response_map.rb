@@ -94,6 +94,7 @@ class ResponseMap < ActiveRecord::Base
     activity_params[:activity]=activity
     activity_params[:activity_level]=1 #Public
     ActivityLog.create_activity(activity_params)
+    response.id
   end
 
   private
