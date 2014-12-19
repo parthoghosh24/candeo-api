@@ -32,15 +32,8 @@ class Showcase < ActiveRecord::Base
       showcase.content.media=media
       #Create Activity
       activity = {}
-      if !params[:media].blank?
-        case showcase.content.media.media_type
-          when 1
-              activity[:media_url]=showcase.content.media.audio.url
-          when 2
-              activity[:media_url]=showcase.content.media.video.url
-          when 3
-              activity[:media_url]=showcase.content.media.image.url
-        end
+      if !params[:media].blank?        
+          activity[:media_url]=showcase.content.media.attachment.url          
       end
       activity[:title]=params[:title]
       activity[:showcase_id]=showcase.id
@@ -73,15 +66,8 @@ class Showcase < ActiveRecord::Base
     showcase.update(reviewed:params[:state])
     #Create Activity
     activity = {}
-    if !params[:media].blank?
-      case showcase.content.media.media_type
-        when 1
-            activity[:media_url]=showcase.content.media.audio.url
-        when 2
-            activity[:media_url]=showcase.content.media.video.url
-        when 3
-            activity[:media_url]=showcase.content.media.image.url
-      end
+    if !params[:media].blank?      
+       activity[:media_url]=showcase.content.media.attachment.url        
     end
     activity[:title]=params[:title]
     activity[:showcase_id]=showcase.id

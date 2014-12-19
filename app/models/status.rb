@@ -38,14 +38,7 @@ class Status < ActiveRecord::Base
               activity = {}
               activity[:description]=params[:description]
               if !params[:media].blank?
-                case status.content.media.media_type
-                  when 1
-                      activity[:media_url]=status.content.media.audio.url
-                  when 2
-                      activity[:media_url]=status.content.media.video.url
-                  when 3
-                      activity[:media_url]=status.content.media.image.url
-                end
+                      activity[:media_url]=status.content.media.attachment.url                  
               end
               if !params[:referral_tag].blank?
                 activity[:referral_tag]="*params[:referral_tag]"

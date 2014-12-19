@@ -29,15 +29,8 @@ class Content < ActiveRecord::Base
     if content
         contentMap[:media]=nil
         contentMap[:media_type]=0
-        if content.media
-          case content.media.media_type
-          when 1
-              contentMap[:media]=content.media.audio.url
-          when 2
-              contentMap[:media]=content.media.video.url
-           when 3
-              contentMap[:media]=content.media.image.url
-          end
+        if content.media          
+          contentMap[:media]=content.media.attachment.url          
           contentMap[:media_type]=content.media.media_type
         end
 
