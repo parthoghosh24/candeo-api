@@ -36,7 +36,8 @@ class Api::V1::ContentsController < ApplicationController
 
     if !id.blank?
       response_map={:id=> id}
-      render json: response_map, status: 200
+      puts response_map.to_json
+      render json: response_map.to_json , status: 200
     else
       render json:{:response=>"failed"}, status:422
     end

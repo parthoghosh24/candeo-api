@@ -15,14 +15,14 @@
 #
 
 # @partho - Candeo Global Media Class. Whatever files get uploaded, this is the class which handles them.
-# media_type -> 1:audio 2:video 3:image 4:doc
+# media_type -> 1:audio 2:video 3:image 4:Book
 class Media < ActiveRecord::Base
   after_create :generate_uuid
   belongs_to :content
 
   has_attached_file :attachment
-  validates_attachment_content_type :attachment, :content_type => ['image/jpeg','image/jpg','image/png','video/mp4','video/3gpp','audio/mp3','audio/mpeg', 'application/mp4']
-  
+  validates_attachment_content_type :attachment, :content_type => ['image/jpeg','image/jpg','image/png','video/mp4','video/3gpp','audio/mp3','audio/mpeg', 'application/mp4','application/epub+zip']
+
 
 
   #has_attached_file :doc #Need to be dealt in second release
@@ -31,7 +31,7 @@ class Media < ActiveRecord::Base
   def self.upload(file, type)
     media=nil
     original_path=nil
-    new_path=nil    
+    new_path=nil
     new_file=nil
     case type
     when 1 #audio
@@ -43,17 +43,23 @@ class Media < ActiveRecord::Base
        puts "NEW PATH #{new_path}"
        system("ffmpeg -i #{original_path} -y -vn -ar 44100 -ac 2 -ab 192k -f mp3 #{new_path}")
        new_f = open(new_path)
-       new_file=new_f       
+       new_file=new_f
        puts "MIME TYPE IS #{MIME::Types.type_for(File.basename(new_file)).first.content_type.to_s}"
 
     when 2 #video
-       file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s       
+       file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s
        new_file=file
        puts "CONTENT TYPE #{file.content_type}"
+
     when 3 #image
        file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s
        new_file=file
-       puts "CONTENT TYPE #{file.content_type}"       
+       puts "CONTENT TYPE #{file.content_type}"
+
+     when 4 #book
+        file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s
+        new_file=file
+        puts "CONTENT TYPE #{file.content_type}"
     end
     media = Media.create!(attachment:new_file)
     File.delete(original_path) if original_path && File.exist?(original_path)
