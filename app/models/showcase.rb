@@ -23,17 +23,17 @@ class Showcase < ActiveRecord::Base
 
   def self.create_showcase(params)
     showcase =nil
-    media=Media.upload(params[:media]) if !params[:media].blank?
+    media=Media.upload(params[:media], params[:media_type].to_i) if !params[:media].blank?
     if media
-      showcase=Showcase.create(content_attributes:{description: params[:description]}, title:params[:title], user_id: params[:user_id], state:params[:state].to_i)
-      if !params[:referral_tag].blank
+      showcase=Showcase.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, title:params[:title], user_id: params[:user_id], state:2) #state needs to be implemented after people's usage
+      if !params[:referral_tag].blank?
         showcase.content.update(referral_tag:params[:referral_tag])
       end
       showcase.content.media=media
       #Create Activity
       activity = {}
-      if !params[:media].blank?        
-          activity[:media_url]=showcase.content.media.attachment.url          
+      if !params[:media].blank?
+          activity[:media_url]=showcase.content.media.attachment.url
       end
       activity[:title]=params[:title]
       activity[:showcase_id]=showcase.id
@@ -66,8 +66,8 @@ class Showcase < ActiveRecord::Base
     showcase.update(reviewed:params[:state])
     #Create Activity
     activity = {}
-    if !params[:media].blank?      
-       activity[:media_url]=showcase.content.media.attachment.url        
+    if !params[:media].blank?
+       activity[:media_url]=showcase.content.media.attachment.url
     end
     activity[:title]=params[:title]
     activity[:showcase_id]=showcase.id

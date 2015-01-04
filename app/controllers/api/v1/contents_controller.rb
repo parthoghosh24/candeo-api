@@ -10,8 +10,9 @@ class Api::V1::ContentsController < ApplicationController
       contentData={}
       contentData[:id]=content.id
       contentData[:desc]=content.description
-      contentData[:username]=content.user.username
+      contentData[:name]=content.user.name
       contentData[:time]=distance_of_time_in_words(Time.now, content.created_at)+" ago"
+      contentData[:media_type]= content.media ? content.media.media_type : 0
       contents.push(contentData)
     end
     contentMap[:contents]=contents
