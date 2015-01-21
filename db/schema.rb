@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141218155819) do
+ActiveRecord::Schema.define(version: 20150119175237) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,13 @@ ActiveRecord::Schema.define(version: 20141218155819) do
     t.string   "uuid"
   end
 
+  create_table "redirects", force: true do |t|
+    t.string   "token"
+    t.string   "long_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "response_maps", force: true do |t|
     t.integer  "user_id"
     t.integer  "content_id"
@@ -100,6 +107,7 @@ ActiveRecord::Schema.define(version: 20141218155819) do
     t.string   "uuid"
     t.string   "username"
     t.string   "about"
+    t.integer  "random_token"
   end
 
 end

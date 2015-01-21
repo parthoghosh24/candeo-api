@@ -17,9 +17,7 @@
 # @partho - Candeo Global Media Class. Whatever files get uploaded, this is the class which handles them.
 # media_type -> 1:audio 2:video 3:image 4:Book
 class Media < ActiveRecord::Base
-  after_create :generate_uuid
-  belongs_to :content
-
+  after_create :generate_uuid  
   has_attached_file :attachment
   validates_attachment_content_type :attachment, :content_type => ['image/jpeg','image/jpg','image/png','video/mp4','video/3gpp','audio/mp3','audio/mpeg', 'application/mp4','application/epub+zip']
 

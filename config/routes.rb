@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
 
+  
+
   namespace :api do
   namespace :v1 do
+
+    #Redirects
+    match  '/:code', to:'redirects#show', via:'get', as: :redirect
+
     #Activities
     match  '/activities', to:'activities#list', via:'get', as: :activities
 
@@ -9,6 +15,7 @@ Rails.application.routes.draw do
     match  '/users/:id', to:'users#show', via:'get', as: :user
     match  '/users/login', to:'users#login', via:'post', as: :login
     match  '/users/register', to:'users#register', via:'post', as: :register
+    match  '/users/verify/:code', to:'users#verify', via:'post',as: :verify
 
     #Contents
     match  '/contents/:id', to:'contents#show', via:'get', as: :content
