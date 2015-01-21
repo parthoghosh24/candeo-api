@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150119175237) do
+ActiveRecord::Schema.define(version: 20150121075052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,12 +41,20 @@ ActiveRecord::Schema.define(version: 20150119175237) do
     t.integer  "media_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "content_id"
     t.string   "uuid"
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
     t.integer  "attachment_file_size"
     t.datetime "attachment_updated_at"
+  end
+
+  create_table "media_maps", force: true do |t|
+    t.integer  "media_id"
+    t.integer  "type_id"
+    t.string   "type_name"
+    t.string   "media_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "networks", force: true do |t|
@@ -78,6 +86,14 @@ ActiveRecord::Schema.define(version: 20150119175237) do
     t.string   "uuid"
     t.json     "inspiration_response"
     t.integer  "content_type"
+  end
+
+  create_table "showcase_queues", force: true do |t|
+    t.integer  "showcase_id"
+    t.boolean  "is_deleted"
+    t.boolean  "is_queued"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "showcases", force: true do |t|

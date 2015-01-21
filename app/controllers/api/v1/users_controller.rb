@@ -5,9 +5,9 @@ class Api::V1::UsersController < ApplicationController
 
   #POST /users/verify - User verification
   def verify
-    hmac = User.verify(params)
-    if !hmac.blank?
-      response_map={:hmac => hmac}
+    user = User.verify(params)
+    if user
+      response_map={:user => user}
       render json: response_map, status: 200
     else
       render json:{:response=>"failed"}, status:422
@@ -19,11 +19,12 @@ class Api::V1::UsersController < ApplicationController
      response = User.login(params)
      if !response.blank?
         user = response[:user]
-        url = "http://www.candeoapp.com/#{response[:random_token]}"  
+        url = "http://www.candeoapp.com/verify/#{response[:random_token]}"  
         Thread.new do
            CandeoMailer.verify_user(user, url).deliver        
         end        
-        render json: "success", status: 200
+        puts "Sending success"
+        render json: {:response=>"success"}, status: 200
      else
       render json:{:response=>"failed"}, status:422
       end     

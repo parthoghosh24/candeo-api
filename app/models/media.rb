@@ -6,7 +6,6 @@
 #  media_type              :integer
 #  created_at              :datetime
 #  updated_at              :datetime
-#  content_id              :integer
 #  uuid                    :string(255)
 #  attachment_file_name    :string(255)
 #  attachment_content_type :string(255)

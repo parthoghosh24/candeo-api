@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     match  '/users/:id', to:'users#show', via:'get', as: :user
     match  '/users/login', to:'users#login', via:'post', as: :login
     match  '/users/register', to:'users#register', via:'post', as: :register
-    match  '/users/verify/:code', to:'users#verify', via:'post',as: :verify
+    match  '/users/verify', to:'users#verify', via:'post',as: :verify
 
     #Contents
     match  '/contents/:id', to:'contents#show', via:'get', as: :content

@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   has_many :contents
   has_many :inspiritions, foreign_key: 'user_id', class_name: "Status"
   validates :email, uniqueness: true
-  has_one :media #avatar
+  has_one :media_map #avatar
 
   #Social Network
   #Followers- People following me
@@ -61,6 +61,7 @@ class User < ActiveRecord::Base
        response ={}
        response[:user]=user
        response[:random_token]= generate_random_token       
+       user.update(random_token:response[:random_token])
        Redirect.create!(token:response[:random_token].to_s,long_url:"play store link")
     end
     response 
@@ -69,15 +70,15 @@ class User < ActiveRecord::Base
   def self.verify(params)
     #Once user clicked the link, the user email and random token received will be used to generate HMAC key for that user
     #And that HMAC key will sent which will be stored in app for further communication and API signing.
-    user = User.find_by(email:params[:email], random_token:params[:token])
-    if user
+    user = User.find_by(random_token:params[:token])
+    if user      
       token = params[:token]
       user.update(auth_token:generate_auth_token(user), random_token:-1)  
-      redirect = Redirect.find_by(token:params[:token].to_i) 
+      redirect = Redirect.find_by(token:params[:token].to_s) 
       if redirect
          redirect.destroy
       end
-      return user.auth_token
+      return user
     end
     user
   end
@@ -93,10 +94,11 @@ class User < ActiveRecord::Base
   end
 
   def self.generate_auth_token(user)
-       msg ="#{user.email}|#{user.random_token}"
-       hash = OpenSSL::HMAC.digest('sha256',user.uuid,msg)
-       auth_token=Base64.encode64(hash).tr('+/=1TO0','pqrsxyz')       
-       user.update(auth_token:auth_token)
+       puts "Random token is #{user.random_token}"
+
+       msg ="#{user.email}|#{user.random_token}"       
+       auth_token= CandeoHmac.generate_hmac(user.uuid,msg)
+       auth_token
   end
 
   def self.generate_random_token 
