@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150121075052) do
+ActiveRecord::Schema.define(version: 20150126194032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,23 @@ ActiveRecord::Schema.define(version: 20150121075052) do
     t.string   "uuid"
   end
 
+  create_table "performances", force: true do |t|
+    t.integer  "showcase_id"
+    t.string   "showcase_title"
+    t.string   "showcase_bg_url"
+    t.string   "showcase_media_url"
+    t.integer  "showcase_media_type"
+    t.integer  "showcase_total_appreciations"
+    t.integer  "showcase_total_skips"
+    t.string   "showcase_user_name"
+    t.string   "showcase_user_avatar_url"
+    t.datetime "showcase_created_at"
+    t.integer  "showcase_rank"
+    t.decimal  "showcase_score"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "redirects", force: true do |t|
     t.string   "token"
     t.string   "long_url"
@@ -91,9 +108,16 @@ ActiveRecord::Schema.define(version: 20150121075052) do
   create_table "showcase_queues", force: true do |t|
     t.integer  "showcase_id"
     t.boolean  "is_deleted"
-    t.boolean  "is_queued"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
+    t.string   "title"
+    t.string   "user_avatar_url"
+    t.integer  "total_appreciations"
+    t.integer  "total_skips"
+    t.string   "bg_url"
+    t.string   "media_url"
+    t.integer  "media_type"
   end
 
   create_table "showcases", force: true do |t|
