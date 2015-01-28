@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150126194032) do
+ActiveRecord::Schema.define(version: 20150128092652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,15 @@ ActiveRecord::Schema.define(version: 20150126194032) do
     t.string   "bg_url"
     t.string   "media_url"
     t.integer  "media_type"
+  end
+
+  create_table "showcase_tasks", force: true do |t|
+    t.string   "cron"
+    t.integer  "content_limit"
+    t.datetime "last_timestamp"
+    t.integer  "last_timestamp_epoch"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "showcases", force: true do |t|

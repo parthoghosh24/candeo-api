@@ -21,14 +21,23 @@
 class ShowcaseQueue < ActiveRecord::Base
   after_create :update_queue
 
-  def self.enqueue(params)
+  def self.enqueue(showcase)
+  	bg_url = showcase.content.media_map.media.media_type == 3 ? nil : showcase.user.media_map.media_url
+  	ShowcaseQueue.create!(showcase_id:showcase.id, 
+  						  name:showcase.user.name,
+  						  title:showcase.title,
+  						  user_avatar_url:showcase.user.media_map.media_url,
+  						  bg_url:bg_url, 
+  						  media_url:showcase.content.media_map.media_url,
+  						  media_type:showcase.content.media_map.media.media_type)
   end
 
-  def self.list
+  def self.list(params)
+  	  
   end
 
   private
   def update_queue
-      self.update(is_deleted:false)
+      self.update(is_deleted:false, total_appreciations:0, total_skips:0)
   end
 end

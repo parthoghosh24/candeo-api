@@ -22,8 +22,7 @@ class Showcase < ActiveRecord::Base
   accepts_nested_attributes_for :content
 
   def self.create_showcase(params)
-    showcase =nil
-    media=Media.upload(params[:media], params[:media_type].to_i) if !params[:media].blank?
+    showcase =nil    
     if media
       showcase=Showcase.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, title:params[:title], user_id: params[:user_id], state:2) #state needs to be implemented after people's usage
       if !params[:referral_tag].blank?
@@ -51,6 +50,7 @@ class Showcase < ActiveRecord::Base
       activity_params[:activity]=activity
       activity_params[:activity_level]=3 #Private
       ActivityLog.create_activity(activity_params)
+      ShowcaseQueue.enqueue(showcase)
       showcase.id
     end
 

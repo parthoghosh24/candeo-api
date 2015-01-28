@@ -1,6 +1,7 @@
 class Api::V1::ContentsController < ApplicationController
   skip_before_filter :verify_authenticity_token
   include ActionView::Helpers::DateHelper
+
   #GET /api/v1/contents - Fetches Contents for Feed Screen
   def list
     require 'action_view'
@@ -17,6 +18,19 @@ class Api::V1::ContentsController < ApplicationController
     end
     contentMap[:contents]=contents
     render json: contentMap, status: 200
+  end
+
+  #GET /api/v1/contents/performances/show - Fetch Last Week Performances
+  def get_performances_map
+    render json: {}, status: 200
+  end
+
+  #GET /api/v1/contents/performances/list/:rank - Fetch 10 showcases sorted by rank in ascending order
+  def list_performances(params)
+  end
+
+  #GET /api/vt1/contents/limelight/:createdat - Fetch 50 showcases for limelight sorted by created at in descending order
+  def limelight(params)
   end
 
   #GET /api/v1/contents/:id - Show Content Detail Screen
