@@ -34,8 +34,12 @@ class User < ActiveRecord::Base
 
   def self.register(params)
     username = params[:email][0...params[:email].index('@')]
-    username = username.gsub(/[^0-9A-Za-z]/,'')
+    username = username.gsub(/[^0-9A-Za-z]/,'')    
     user = User.create!(name:params[:name], email:params[:email], username:username)
+    if !params[:media_id].blank?
+      media = Media.find(params[:media_id])
+      user.media_map=MediaMap.create!(media_id:media.id,media_url:media.attachment.url, type_id:user.id, type_name:"User")
+    end
     if user
       # Create Activity
       activity = {}
@@ -45,9 +49,9 @@ class User < ActiveRecord::Base
       activity_params[:activity_type]=1
       activity_params[:activity]=activity
       activity_params[:activity_level]=3 #Private
-      ActivityLog.create_activity(activity_params)
-      user.id
+      ActivityLog.create_activity(activity_params)      
     end
+    user.id
   end
 
   def self.show(params)

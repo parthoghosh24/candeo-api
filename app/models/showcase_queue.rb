@@ -33,7 +33,19 @@ class ShowcaseQueue < ActiveRecord::Base
   end
 
   def self.list(params)
-  	  
+      timestamp=params[:timestamp]
+      if timestamp.blank?
+         timestamp = Time.now()
+      else
+         timestamp = Time.at(timestamp.to_i).utc.to_datetime 
+      end
+  	  list = ShowcaseQueue.where("created_at<=?",timestamp).order(created_at: :desc).limit(50)
+      if list.size>0
+        last_timestamp = list.last.created_at.to_i
+        response = {last_timestamp:last_timestamp, list:list}
+        return response
+      end
+      nil    
   end
 
   private

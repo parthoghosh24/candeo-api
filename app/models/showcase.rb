@@ -28,11 +28,15 @@ class Showcase < ActiveRecord::Base
       if !params[:referral_tag].blank?
         showcase.content.update(referral_tag:params[:referral_tag])
       end
-      showcase.content.media=media
+      if !params[:media_id].blank?
+        media = Media.find(params[:media_id])
+        showcase.content.media_map=MediaMap.create!(media_id:media.id,media_url:media.attachment.url, type_id:showcase.content.id, type_name:"Content")
+      end
+      
       #Create Activity
       activity = {}
       if !params[:media].blank?
-          activity[:media_url]=showcase.content.media.attachment.url
+          activity[:media_url]=showcase.content.media_map.media_url
       end
       activity[:title]=params[:title]
       activity[:showcase_id]=showcase.id
@@ -54,58 +58,7 @@ class Showcase < ActiveRecord::Base
       showcase.id
     end
 
-  end
-
-  # Update Showcase state. If content passed, content uploaded(2:published) or content rejected(-1:rejected)
-  def self.update_showcase(params)
-    showcase = Showcase.find(params[:id])
-    # If the state is draft or submit. In rest of the cases, just update the showcase reviewed state.
-    if params[:state].to_i == 0 || params[:state].to_i == 1
-      showcase.update(content_attributes:{description: params[:description]}, title:params[:title], user_id: params[:user_id])
-    end
-    showcase.update(reviewed:params[:state])
-    #Create Activity
-    activity = {}
-    if !params[:media].blank?
-       activity[:media_url]=showcase.content.media.attachment.url
-    end
-    activity[:title]=params[:title]
-    activity[:showcase_id]=showcase.id
-    if params[:state].to_i == 2
-      if !params[:referral_tag].blank?
-      activity[:referral_tag]="*params[:referral_tag]"
-    end
-    end
-
-    activity[:state]=params[:state]
-    activity_params={}
-    activity_params[:user_id]=user.id
-
-    if params[:state].to_i == 2 #Submitted
-      if !showcase.content.referral_tag.blank?
-        activity_params[:activity_type]=7
-      else
-        activity_params[:activity_type]=6
-      end
-    elsif params[:state].to_i == 0 #Draft
-        activity_params[:activity_type]=8
-    elsif params[:state].to_i == 1 #Submitted
-        activity_params[:activity_type]=9
-    elsif params[:state].to_i == -1 #Rejected
-        activity_params[:activity_type]=10
-    end
-
-
-    activity_params[:activity]=activity
-    if params[:state].to_i == 2
-       activity_params[:activity_level]=1 #Public
-    else
-       activity_params[:activity_level]=3 #Privare
-    end
-
-    ActivityLog.create_activity(activity_params)
-    showcase.id
-  end
+  end  
 
   private
 

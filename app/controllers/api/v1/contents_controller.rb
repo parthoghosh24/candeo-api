@@ -56,23 +56,6 @@ class Api::V1::ContentsController < ApplicationController
     else
       render json:{:response=>"failed"}, status:422
     end
-  end
-
-  #POST /api/v1/contents/:id - Update Content
-  def update
-    puts params
-    case params[:type].to_i
-    when 1 #Status
-      id=nil
-    when 2 #Showcase
-      id=Showcase.update_showcase(params)
-    end
-    if !id.blank?
-      response_map={:id=> id}
-      render json: response_map, status: 200
-    else
-      render json:{:response=>"failed"}, status:422
-    end
-  end
+  end  
 
 end
