@@ -9,10 +9,8 @@ gem 'spring', :group => :development
 
 
 gem 'pg'
-
+gem 'rufus-scheduler'
 gem 'paperclip', "~> 4.1"
-
-gem 'fog'
 
 gem 'mime-types'
 group :development, :test do

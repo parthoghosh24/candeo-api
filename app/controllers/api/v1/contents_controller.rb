@@ -31,6 +31,12 @@ class Api::V1::ContentsController < ApplicationController
 
   #GET /api/vt1/contents/limelight/:createdat - Fetch 50 showcases for limelight sorted by created at in descending order
   def limelight(params)
+      limelightMap = ShowcaseQueue.list(params)
+      if limelightMap.blank?
+         render json:{:response=>"failed"}, status:422
+      else
+         render json: {:limelight=>limelightMap}, status: 200
+      end
   end
 
   #GET /api/v1/contents/:id - Show Content Detail Screen
