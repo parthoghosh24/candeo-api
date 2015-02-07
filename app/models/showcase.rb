@@ -19,24 +19,26 @@ class Showcase < ActiveRecord::Base
   after_create :generate_uuid
   belongs_to :user
   has_one :content, as: :shareable
+  has_one :showcase_queue
   accepts_nested_attributes_for :content
 
   def self.create_showcase(params)
     showcase =nil    
-    if media
-      showcase=Showcase.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, title:params[:title], user_id: params[:user_id], state:2) #state needs to be implemented after people's usage
+    if !params[:media_id].blank?
+      media = Media.find(params[:media_id])
+      showcase=Showcase.create(content_attributes:{user_id:params[:user_id]}, title:params[:title], user_id: params[:user_id], state:2) #state needs to be implemented after people's usage
       if !params[:referral_tag].blank?
         showcase.content.update(referral_tag:params[:referral_tag])
       end
-      if !params[:media_id].blank?
-        media = Media.find(params[:media_id])
-        showcase.content.media_map=MediaMap.create!(media_id:media.id,media_url:media.attachment.url, type_id:showcase.content.id, type_name:"Content")
-      end
+      
+        
+      showcase.content.content_media_map=ContentMediaMap.create!(media_map_attributes:{media_id:media.id,media_url:media.attachment.url})        
+      
       
       #Create Activity
       activity = {}
       if !params[:media].blank?
-          activity[:media_url]=showcase.content.media_map.media_url
+          activity[:media_url]=showcase.content.content_media_map.media_map.media_url
       end
       activity[:title]=params[:title]
       activity[:showcase_id]=showcase.id
@@ -45,7 +47,7 @@ class Showcase < ActiveRecord::Base
       end
       activity[:state]=params[:state]
       activity_params={}
-      activity_params[:user_id]=user.id
+      activity_params[:user_id]=showcase.user_id
       if !params[:referral_tag].blank?
         activity_params[:activity_type]=5
       else
@@ -56,8 +58,7 @@ class Showcase < ActiveRecord::Base
       ActivityLog.create_activity(activity_params)
       ShowcaseQueue.enqueue(showcase)
       showcase.id
-    end
-
+    end          
   end  
 
   private

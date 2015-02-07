@@ -29,7 +29,7 @@ class Api::V1::ContentsController < ApplicationController
   def list_performances(params)
   end
 
-  #GET /api/vt1/contents/limelight/:createdat - Fetch 50 showcases for limelight sorted by created at in descending order
+  #GET /api/vt1/contents/limelight/:createdate - Fetch 50 showcases for limelight sorted by created at in descending order
   def limelight(params)
       limelightMap = ShowcaseQueue.list(params)
       if limelightMap.blank?

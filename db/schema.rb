@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150128092652) do
+ActiveRecord::Schema.define(version: 20150202174617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,12 @@ ActiveRecord::Schema.define(version: 20150128092652) do
     t.datetime "updated_at"
     t.integer  "activity_level"
     t.string   "uuid"
+  end
+
+  create_table "content_media_maps", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "content_id"
   end
 
   create_table "contents", force: true do |t|
@@ -50,11 +56,12 @@ ActiveRecord::Schema.define(version: 20150128092652) do
 
   create_table "media_maps", force: true do |t|
     t.integer  "media_id"
-    t.integer  "type_id"
-    t.string   "type_name"
     t.string   "media_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "attachable_id"
+    t.string   "attachable_type"
+    t.string   "uuid"
   end
 
   create_table "networks", force: true do |t|
@@ -145,6 +152,12 @@ ActiveRecord::Schema.define(version: 20150128092652) do
     t.datetime "updated_at"
     t.string   "tag"
     t.string   "uuid"
+  end
+
+  create_table "user_media_maps", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "users", force: true do |t|

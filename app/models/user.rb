@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   has_many :contents
   has_many :inspiritions, foreign_key: 'user_id', class_name: "Status"
   validates :email, uniqueness: true
-  has_one :media_map #avatar
+  has_one :user_media_map #avatar
 
   #Social Network
   #Followers- People following me
@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
     user = User.create!(name:params[:name], email:params[:email], username:username)
     if !params[:media_id].blank?
       media = Media.find(params[:media_id])
-      user.media_map=MediaMap.create!(media_id:media.id,media_url:media.attachment.url, type_id:user.id, type_name:"User")
+      user.user_media_map=UserMediaMap.create!(media_map_attributes:{media_id:media.id,media_url:media.attachment.url})
     end
     if user
       # Create Activity
@@ -54,13 +54,16 @@ class User < ActiveRecord::Base
     user.id
   end
 
+  
+
   def self.show(params)
+    
   end
 
   def self.login(params)    
     #generate a link with randomized token and send to user email    
     response=nil
-    user = User.find(params[:id])
+    user = User.find_by(id:params[:id], email:params[:email])
     if user
        response ={}
        response[:user]=user
@@ -81,10 +84,12 @@ class User < ActiveRecord::Base
       redirect = Redirect.find_by(token:params[:token].to_s) 
       if redirect
          redirect.destroy
-      end
-      return user
+      end      
+      userHash = user.as_json
+      userHash["avatar_path"]=user.user_media_map.media_map.media_url if user.user_media_map
+      return userHash
     end
-    user
+    nil
   end
 
   private

@@ -20,7 +20,7 @@
 class Content < ActiveRecord::Base
   belongs_to :shareable, polymorphic: true
   belongs_to :user #Owner
-  has_one :media_map #attached media
+  has_one :content_media_map #attached media
   after_create :generate_uuid  
 
   def self.show(params)

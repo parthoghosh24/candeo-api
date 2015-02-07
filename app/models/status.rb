@@ -24,59 +24,49 @@ class Status < ActiveRecord::Base
 
 #Upload Media first then create content and activity
   def self.create_status(params)
-    status=nil
-    media=Media.upload(params[:media], params[:media_type].to_i) if !params[:media].blank?
-    puts "MEDIA IS #{media}"
+    status=nil  
+
+    status=Status.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, mode:1, user_id: params[:user_id])
     if !params[:media].blank?
-          if media
-              status=Status.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, mode:1, user_id: params[:user_id], tag:params[:tag])
-              if !params[:referral_tag].blank?
-                status.content.update(referral_tag:params[:referral_tag])
-              end
-              status.content.media=media
-              #Create Activity
-              activity = {}
-              activity[:description]=params[:description]
-              if !params[:media].blank?
-                      activity[:media_url]=status.content.media.attachment.url                  
-              end
-              if !params[:referral_tag].blank?
-                activity[:referral_tag]="*params[:referral_tag]"
-              end
-              activity[:status_id]=status.id
-              activity_params={}
-              activity_params[:user_id]= params[:user_id]
-              if !params[:referral_tag].blank?
-                activity_params[:activity_type]=3
-              else
-                activity_params[:activity_type]=2
-              end
-              activity_params[:activity]=activity
-              activity_params[:activity_level]=1 #Public
-              ActivityLog.create_activity(activity_params)
-              status.id
-          end
+      media = Media.find(params[:media_id])           
+      
+      if !params[:referral_tag].blank?
+        status.content.update(referral_tag:params[:referral_tag])
+      end
+      status.content.content_media_map=ContentMediaMap.create!(media_map_attributes:{media_id:media.id,media_url:media.attachment.url})        
+      
+      #Create Activity
+      activity = {}
+      activity[:description]=params[:description]      
+      activity[:media_url]=status.content.content_media_map.media_map.media_url                        
+      if !params[:referral_tag].blank?
+        activity[:referral_tag]="*params[:referral_tag]"
+      end
+      activity[:status_id]=status.id
+              
+          
   else
-       status=Status.create(content_attributes:{description: params[:description], user_id:params[:user_id]}, mode:1, user_id: params[:user_id], tag:params[:tag])
        #Create Activity
-              activity = {}
-              activity[:description]=params[:description]
-              if !params[:referral_tag].blank?
-                activity[:referral_tag]="*params[:referral_tag]"
-              end
-              activity[:status_id]=status.id
-              activity_params={}
-              activity_params[:user_id]= params[:user_id]
-              if !params[:referral_tag].blank?
-                activity_params[:activity_type]=3
-              else
-                activity_params[:activity_type]=2
-              end
-              activity_params[:activity]=activity
-              activity_params[:activity_level]=1 #Public
-              ActivityLog.create_activity(activity_params)
-              status.id
+        activity = {}
+        activity[:description]=params[:description]
+        if !params[:referral_tag].blank?
+          activity[:referral_tag]="*params[:referral_tag]"
+        end
+        activity[:status_id]=status.id
+              
+              
   end
+  activity_params={}
+  activity_params[:user_id]= params[:user_id]
+  if !params[:referral_tag].blank?
+    activity_params[:activity_type]=3
+  else
+    activity_params[:activity_type]=2
+  end
+  activity_params[:activity]=activity
+  activity_params[:activity_level]=1 #Public
+  ActivityLog.create_activity(activity_params)
+  status.id if status           
 end
 
   private

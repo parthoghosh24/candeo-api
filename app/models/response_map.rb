@@ -18,7 +18,7 @@
 
 #@Partho- Response Maps hold all the mapping information between users and content.
 #feeling-> 1: Happy, 2: Confident, 3: Motivated, 4: Boosted, 5: Energetic, 6: Blessed, 7: Crazy, 8: Epic, 9: Super
-#Content Type-> 1:Status/Inspirition, 2:Pledge, 3:Showcase
+#Content Type-> 1:Status/Inspirition, 2:Showcase
 #appreciate_rating -> Positive ratings
 #user_id is the person who is getting inspired and/or appreciating the owner_id's inspirtion and showcase
 # User follows another user when user is getting inspired from that user. Appreciation has no following flow as user can appreciate anyone on platform.
