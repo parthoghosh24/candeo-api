@@ -4,16 +4,19 @@
 #
 #  id                    :integer          not null, primary key
 #  user_id               :integer
-#  content_id            :integer
 #  is_inspired           :integer
-#  did_appreciate        :integer
+#  has_appreciated       :integer
 #  created_at            :datetime
 #  updated_at            :datetime
 #  owner_id              :integer
-#  appreciation_reaction :json
+#  appreciation_response :json
 #  uuid                  :string(255)
 #  inspiration_response  :json
 #  content_type          :integer
+#  showcase_id           :integer
+#  status_id             :integer
+#  has_skipped           :boolean
+#  skip_response         :json
 #
 
 require 'rails_helper'

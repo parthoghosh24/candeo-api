@@ -4,16 +4,19 @@
 #
 #  id                    :integer          not null, primary key
 #  user_id               :integer
-#  content_id            :integer
 #  is_inspired           :integer
-#  did_appreciate        :integer
+#  has_appreciated       :integer
 #  created_at            :datetime
 #  updated_at            :datetime
 #  owner_id              :integer
-#  appreciation_reaction :json
+#  appreciation_response :json
 #  uuid                  :string(255)
 #  inspiration_response  :json
 #  content_type          :integer
+#  showcase_id           :integer
+#  status_id             :integer
+#  has_skipped           :boolean
+#  skip_response         :json
 #
 
 #@Partho- Response Maps hold all the mapping information between users and content.
@@ -26,6 +29,7 @@
 class ResponseMap < ActiveRecord::Base
 
   after_create :generate_uuid
+
   def self.get_inspired(params)
      inspiration_response ={}
      inspiration_response[:feeling] =params[:feeling]
@@ -64,9 +68,12 @@ class ResponseMap < ActiveRecord::Base
   end
 
   def self.appreciate(params)
-    appreciation_reaction={}
-    appreciation_reaction[:rating]=params[:rating]
-    appreciation_reaction[:feedback]=params[:feedback] #micro review
+    appreciation_response={}
+    appreciation_response[:rating]=params[:rating]
+    appreciation_response[:feedback]=params[:feedback] #micro review
+    showcase = Showcase.find(params[:showcase_id])
+    if showcase
+    end
     #Create Response Map with appreciation
     response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], content_type:params[:content_type], did_appreciate:1, owner_id:params[:owner_id], appreciation_reaction: appreciation_reaction)
     #Create Activity
@@ -95,6 +102,9 @@ class ResponseMap < ActiveRecord::Base
     activity_params[:activity_level]=1 #Public
     ActivityLog.create_activity(activity_params)
     response.id
+  end
+
+  def self.skip(params)
   end
 
   private

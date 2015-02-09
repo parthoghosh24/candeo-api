@@ -21,26 +21,27 @@ class Content < ActiveRecord::Base
   belongs_to :shareable, polymorphic: true
   belongs_to :user #Owner
   has_one :content_media_map #attached media
-  after_create :generate_uuid  
+  after_create :generate_uuid
 
   def self.show(params)
-    content = Content.find(params[:id])
-    contentMap={}
-    if content
-        contentMap[:media]=nil
-        contentMap[:media_type]=0
-        if content.media          
-          contentMap[:media]=content.media.attachment.url          
-          contentMap[:media_type]=content.media.media_type
-        end
-
-
-        contentMap[:id]=content.shareable.id
-        contentMap[:desc]=content.description
-        contentMap[:user_id]=content.user.id
-        contentMap[:user]=content.user.username
+    type=params[:type].to_i
+    if(type == 1)
+         content = Content.find_by(shareable_id:params[:id], shareable_type:"Showcase")
+    else
+        content = Content.find_by(shareable_id:params[:id], shareable_type:"Status")
     end
-    contentMap
+
+    contentHash=nil
+    if content
+        bg_url = content.user.user_media_map.media_map.media_url if content.content_media_map.media_map.media.media_type != 3
+        contentHash = content.as_json
+        contentHash[:media_type]=content.content_media_map.media_map.media.media_type if content.content_media_map
+        contentHash[:media_url]=content.content_media_map.media_map.media_url if content.content_media_map
+        contentHash[:bg_url]=bg_url
+        contentHash[:user_name]=content.user.name
+        contentHash[:user_avatar_url]=content.user.user_media_map.media_map.media_url
+    end
+    contentHash
   end
 
   def self.referral_tag_exists?(params)

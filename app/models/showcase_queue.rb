@@ -24,30 +24,43 @@ class ShowcaseQueue < ActiveRecord::Base
 
   def self.enqueue(showcase)
   	bg_url = showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
-  	ShowcaseQueue.create!(showcase_id:showcase.id, 
+  	ShowcaseQueue.create!(showcase_id:showcase.id,
   						  name:showcase.user.name,
   						  title:showcase.title,
   						  user_avatar_url:showcase.user.user_media_map.media_map.media_url,
-  						  bg_url:bg_url, 
+  						  bg_url:bg_url,
   						  media_url:showcase.content.content_media_map.media_map.media_url,
   						  media_type:showcase.content.content_media_map.media_map.media.media_type)
   end
 
-  def self.list(params)
-      timestamp=params[:timestamp]
-      if timestamp.blank?
-         timestamp = Time.now()
-      else
-         timestamp = Time.at(timestamp.to_i).utc.to_datetime 
+def self.list_limelights(params)
+  list=[]
+  if !params[:user_id].blank?
+       count=0
+       ShowcaseQueue.all.order(created_at: :desc).each do |data|
+             if count ==50
+                 break
+             end
+            if(!ResponseMap.exists?(user_id:params[:user_id].to_i, showcase_id:data.showcase.id))
+                list.push({"id"=>data.id})
+                count+=1
+           end
+       end
+       return list
+  else
+      ShowcaseQueue.all.order(created_at: :desc).limit(50).each do |data|
+           list.push({"id"=>data.id})
       end
-  	  list = ShowcaseQueue.where("created_at<=?",timestamp).order(created_at: :desc).limit(50)
-      if list.size>0
-        last_timestamp = list.last.created_at.to_i
-        response = {last_timestamp:last_timestamp, list:list}
-        return response
-      end
-      nil    
   end
+  list
+end
+
+ def  self.fetch(params)
+  Rails.logger.debug("In Showase queue fetch")
+
+  item=ShowcaseQueue.find(params[:id])
+  item
+ end
 
   private
   def update_queue

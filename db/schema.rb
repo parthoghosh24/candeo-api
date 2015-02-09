@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150202174617) do
+ActiveRecord::Schema.define(version: 20150207205337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,16 +100,19 @@ ActiveRecord::Schema.define(version: 20150202174617) do
 
   create_table "response_maps", force: true do |t|
     t.integer  "user_id"
-    t.integer  "content_id"
     t.integer  "is_inspired"
-    t.integer  "did_appreciate"
+    t.integer  "has_appreciated"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "owner_id"
-    t.json     "appreciation_reaction"
+    t.json     "appreciation_response"
     t.string   "uuid"
     t.json     "inspiration_response"
     t.integer  "content_type"
+    t.integer  "showcase_id"
+    t.integer  "status_id"
+    t.boolean  "has_skipped"
+    t.json     "skip_response"
   end
 
   create_table "showcase_queues", force: true do |t|
@@ -170,6 +173,8 @@ ActiveRecord::Schema.define(version: 20150202174617) do
     t.string   "username"
     t.string   "about"
     t.integer  "random_token"
+    t.integer  "total_appreciations"
+    t.integer  "total_inspires"
   end
 
 end

@@ -1,6 +1,14 @@
 class Api::V1::UsersController < ApplicationController
 
+  #GET /api/v1/users/:id - Fetch User profile
   def show
+    user = User.show(params)
+    if user
+      response_map={:user => user}
+      render json: response_map, status: 200
+    else
+      render json:{:response=>"failed"}, status:422
+    end
   end
 
   #POST /users/verify - User verification
@@ -14,27 +22,27 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  #POST /users/login - User logins
+  #POST /api/v1/users/login - User logins
   def login
      response = User.login(params)
      if !response.blank?
         user = response[:user]
-        url = "http://www.candeoapp.com/verify/#{response[:random_token]}"  
+        url = "http://www.candeoapp.com/verify/#{response[:random_token]}"
         Thread.new do
-           CandeoMailer.verify_user(user, url).deliver        
-        end        
+           CandeoMailer.verify_user(user, url).deliver
+        end
         puts "Sending success"
         render json: {:response=>"success"}, status: 200
      else
       render json:{:response=>"failed"}, status:422
-      end     
+      end
   end
 
-  #POST /users/register - User registers
+  #POST /api/v1/users/register - User registers
   def register
   	id=User.register(params)
-  	if !id.blank?  		
-      render json: {:id=>id}, status: 200      
+  	if !id.blank?
+      render json: {:id=>id}, status: 200
   	else
   		render json:{:response=>"failed"}, status:422
   	end

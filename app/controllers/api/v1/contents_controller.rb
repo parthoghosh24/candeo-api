@@ -26,16 +26,25 @@ class Api::V1::ContentsController < ApplicationController
   end
 
   #GET /api/v1/contents/performances/list/:rank - Fetch 10 showcases sorted by rank in ascending order
-  def list_performances(params)
+  def list_performances
   end
 
-  #GET /api/vt1/contents/limelight/:createdate - Fetch 50 showcases for limelight sorted by created at in descending order
-  def limelight(params)
-      limelightMap = ShowcaseQueue.list(params)
+  #GET /api/v1/contents/limelight/:id - Fetch Showcase from queue which has not by responded by user yet
+  def limelight
+      limelightMap = ShowcaseQueue.fetch(params)
       if limelightMap.blank?
          render json:{:response=>"failed"}, status:422
       else
          render json: {:limelight=>limelightMap}, status: 200
+      end
+  end
+
+  def list_limelight
+      list = ShowcaseQueue.list_limelights(params)
+      if list.blank?
+         render json:{:response=>"failed"}, status:422
+      else
+         render json: {:limelights=>list}, status: 200
       end
   end
 
@@ -62,6 +71,6 @@ class Api::V1::ContentsController < ApplicationController
     else
       render json:{:response=>"failed"}, status:422
     end
-  end  
+  end
 
 end
