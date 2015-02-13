@@ -11,7 +11,7 @@
 #  updated_at           :datetime
 #
 
-class ShowcaseTask < ActiveRecord::Baseas
+class ShowcaseTask < ActiveRecord::Base
 
   def self.populate_performances
 

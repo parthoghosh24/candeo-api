@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     match '/contents/performances/show', to:'contents#get_performances_map', via:'get',as: :performance_map
     match '/contents/performances/list/:rank', to:'contents#list_performances', via:'get', as: :performances
     match '/contents/limelight/:id', to:'contents#limelight', via:'get', as: :limelight
-    match '/contents/limelight/list/:user_id', to:'contents#list_limelight', via:'get', as: :list_limelight
+    match '/contents/limelights/list/:user_id', to:'contents#list_limelight', via:'get', as: :list_limelight
     match  '/contents', to:'contents#list', via:'get', as: :contents
     match '/contents/check/tag/:tag', to:'contents#check_tag_exists', via:'post', as: :contents_tag_exists
     match '/contents/upload', to:'contents#upload', via:'post', as: :upload

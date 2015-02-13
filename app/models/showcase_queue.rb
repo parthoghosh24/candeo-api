@@ -48,9 +48,7 @@ def self.list_limelights(params)
        end
        return list
   else
-      ShowcaseQueue.all.order(created_at: :desc).limit(50).each do |data|
-           list.push({"id"=>data.id})
-      end
+      list=ShowcaseQueue.all.order(created_at: :desc).limit(50).pluck(:id)           
   end
   list
 end
