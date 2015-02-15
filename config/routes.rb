@@ -27,8 +27,9 @@ Rails.application.routes.draw do
     match '/contents/check/tag/:tag', to:'contents#check_tag_exists', via:'post', as: :contents_tag_exists
     match '/contents/upload', to:'contents#upload', via:'post', as: :upload
     match '/contents/create', to:'contents#create', via: 'post', as: :create_content
-    match '/contents/:id/responses/inspire', to:'responses#inspire', via:'post', as: :get_inspired
-    match '/contents/:id/responses/appreciate', to:'responses#appreciate', via:'post', as: :appreciate
+    match '/contents/responses/inspire', to:'responses#inspire', via:'post', as: :get_inspired
+    match '/contents/responses/appreciate', to:'responses#appreciate', via:'post', as: :appreciate
+    match '/contents/responses/skip', to:'responses#skip', via:'post', as: :skip
     match  '/contents/:id/:type', to:'contents#show', via:'get', as: :content
 
     end

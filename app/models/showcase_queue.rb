@@ -35,7 +35,7 @@ class ShowcaseQueue < ActiveRecord::Base
 
 def self.list_limelights(params)
   list=[]
-  if !params[:user_id].blank?
+  if params[:user_id]==0 or !params[:user_id].blank?
        count=0
        ShowcaseQueue.all.order(created_at: :desc).each do |data|
              if count ==50
@@ -48,7 +48,7 @@ def self.list_limelights(params)
        end
        return list
   else
-      list=ShowcaseQueue.all.order(created_at: :desc).limit(50).pluck(:id)           
+      list=ShowcaseQueue.all.order(created_at: :desc).limit(50).pluck(:id)
   end
   list
 end

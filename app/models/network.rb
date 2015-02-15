@@ -20,26 +20,8 @@ class Network < ActiveRecord::Base
   after_create :update_network_with_defaults
 
   def self.create_network(params)
-    anonymous = User.find_by(username:"anonymous")
-    if (anonymous.id!=params[:follower_id].to_i || anonymous.id!=params[:followee_id].to_i) && (Network.exists?(follower_id:params[:user_id], followee_id:params[:owner_id]))
+    if params[:user_id]!=params[:owner_id] && !Network.exists?(follower_id:params[:user_id], followee_id:params[:owner_id])
       network=Network.create(follower_id:params[:user_id], followee_id:params[:owner_id])
-      #Create Activity
-      activity = {}
-      activity[:follower_id]=params[:user_id]
-      activity[:followee_id]=params[:owner_id]
-      follower = User.find(params[:user_id])
-      activity[:follower_name]=follower.name
-      activity[:follower_avatar]=follower.media.image.url
-
-      followee = User.find(params[:owner_id])
-      activity[:followee_name]= followee.name
-      activity[:followee_avatar]= followee.media.image.url
-      activity_params={}
-      activity_params[:user_id]=user.id
-      activity_params[:activity_type]=1
-      activity_params[:activity]=activity
-      activity_params[:activity_level]=1#Public
-      ActivityLog.create_activity(activity_params)
       network.id
     end
   end

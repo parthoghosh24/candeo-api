@@ -34,36 +34,13 @@ class ResponseMap < ActiveRecord::Base
      inspiration_response ={}
      inspiration_response[:feeling] =params[:feeling]
      inspiration_response[:description] =params[:description]
-     response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], content_type:params[:content_type], is_inspired:1, inspiration_response:inspiration_response, owner_id:params[:owner_id])
+     status = Status.find(params[:status_id])
+     owner_id=status.user.id if status
+     response=ResponseMap.create(user_id:params[:user_id], status_id:params[:status_id], content_type:1, is_inspired:1, inspiration_response:inspiration_response, owner_id:owner_id)
      network_map={}
      network_map[:user_id]=params[:user_id]
-     network_map[:owner_id]=params[:owner_id]
+     network_map[:owner_id]=owner_id
      Network.create_network(network_map)
-     #Create Activity
-       activity = {}
-       activity[:feeling]=params[:feeling]
-      activity[:description]=params[:description]
-      activity[:content_type]=params[:content_type]
-      activity[:content_id]=params[:content_id]
-      content = Content.find(params[:content_id])
-    if !content.media.blank?
-      activity[:media_type]=content.media.media_type
-      case content.media.media_type
-        when 1
-            activity[:media_url]=content.media.audio.url
-        when 2
-            activity[:media_url]=content.media.video.url
-        when 3
-            activity[:media_url]=content.media.image.url
-      end
-    end
-    activity[:owner_id]=params[:owner_id]
-    activity_params={}
-    activity_params[:user_id]=user.id
-    activity_params[:activity_type]=12
-    activity_params[:activity]=activity
-    activity_params[:activity_level]=1 #Public
-    ActivityLog.create_activity(activity_params)
     response.id
   end
 
@@ -72,39 +49,24 @@ class ResponseMap < ActiveRecord::Base
     appreciation_response[:rating]=params[:rating]
     appreciation_response[:feedback]=params[:feedback] #micro review
     showcase = Showcase.find(params[:showcase_id])
-    if showcase
-    end
+    owner_id=showcase.user.id if showcase
     #Create Response Map with appreciation
-    response=ResponseMap.create(user_id:params[:user_id], content_id:params[:content_id], content_type:params[:content_type], did_appreciate:1, owner_id:params[:owner_id], appreciation_reaction: appreciation_reaction)
-    #Create Activity
-    activity = {}
-       activity[:rating]=params[:rating]
-      activity[:feedback]=params[:feedback]
-      activity[:content_type]=params[:content_type]
-      activity[:content_id]=params[:content_id]
-      content = Content.find(params[:content_id])
-    if !content.media.blank?
-      activity[:media_type]=content.media.media_type
-      case content.media.media_type
-        when 1
-            activity[:media_url]=content.media.audio.url
-        when 2
-            activity[:media_url]=content.media.video.url
-        when 3
-            activity[:media_url]=content.media.image.url
-      end
-    end
-    activity[:owner_id]=params[:owner_id]
-    activity_params={}
-    activity_params[:user_id]=user.id
-    activity_params[:activity_type]=13
-    activity_params[:activity]=activity
-    activity_params[:activity_level]=1 #Public
-    ActivityLog.create_activity(activity_params)
+    response=ResponseMap.create(user_id:params[:user_id], showcase_id:params[:showcase_id], content_type:2, has_appreciated:1, owner_id:owner_id, appreciation_response: appreciation_response)
+    network_map={}
+     network_map[:user_id]=params[:user_id]
+     network_map[:owner_id]=owner_id
+     Network.create_network(network_map)
     response.id
   end
 
   def self.skip(params)
+    skip_response={}
+    skip_response[:rating]=params[:rating]
+    skip_response[:feedback]=params[:feedback] #reason
+    showcase = Showcase.find(params[:showcase_id])
+    owner_id=showcase.user.id if showcase
+    response=ResponseMap.create(user_id:params[:user_id], showcase_id:params[:showcase_id], content_type:2, has_skipped:1, owner_id:owner_id, skip_response: skip_response)
+    response.id
   end
 
   private
