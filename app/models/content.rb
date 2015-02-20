@@ -34,12 +34,16 @@ class Content < ActiveRecord::Base
     contentHash=nil
     if content
         bg_url = content.user.user_media_map.media_map.media_url if content.content_media_map.media_map.media.media_type != 3
+        puts "bg url #{bg_url}"
         contentHash = content.as_json
         contentHash[:media_type]=content.content_media_map.media_map.media.media_type if content.content_media_map
         contentHash[:media_url]=content.content_media_map.media_map.media_url if content.content_media_map
         contentHash[:bg_url]=bg_url
         contentHash[:user_name]=content.user.name
         contentHash[:user_avatar_url]=content.user.user_media_map.media_map.media_url
+        if type == 1
+           contentHash[:title]=content.shareable.title
+        end
     end
     contentHash
   end

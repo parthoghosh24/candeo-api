@@ -58,10 +58,10 @@ class Api::V1::ContentsController < ApplicationController
   def create
     puts params
     case params[:type].to_i
-    when 1 #status
-       id=Status.create_status(params)
-    when 2 #showcase
+    when 1 #showcase       
        id=Showcase.create_showcase(params)
+    when 2 #status
+       id=Status.create_status(params)
     end
 
     if !id.blank?
