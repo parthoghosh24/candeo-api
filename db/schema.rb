@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150207205337) do
+ActiveRecord::Schema.define(version: 20150222092444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,13 +77,9 @@ ActiveRecord::Schema.define(version: 20150207205337) do
   create_table "performances", force: true do |t|
     t.integer  "showcase_id"
     t.string   "showcase_title"
-    t.string   "showcase_bg_url"
-    t.string   "showcase_media_url"
     t.integer  "showcase_media_type"
     t.integer  "showcase_total_appreciations"
     t.integer  "showcase_total_skips"
-    t.string   "showcase_user_name"
-    t.string   "showcase_user_avatar_url"
     t.datetime "showcase_created_at"
     t.integer  "showcase_rank"
     t.decimal  "showcase_score"
@@ -120,14 +116,10 @@ ActiveRecord::Schema.define(version: 20150207205337) do
     t.boolean  "is_deleted"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name"
     t.string   "title"
-    t.string   "user_avatar_url"
+    t.integer  "media_type"
     t.integer  "total_appreciations"
     t.integer  "total_skips"
-    t.string   "bg_url"
-    t.string   "media_url"
-    t.integer  "media_type"
   end
 
   create_table "showcase_tasks", force: true do |t|

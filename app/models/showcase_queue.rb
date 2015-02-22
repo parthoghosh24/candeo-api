@@ -7,14 +7,10 @@
 #  is_deleted          :boolean
 #  created_at          :datetime
 #  updated_at          :datetime
-#  name                :string(255)
 #  title               :string(255)
-#  user_avatar_url     :string(255)
+#  media_type          :integer
 #  total_appreciations :integer
 #  total_skips         :integer
-#  bg_url              :string(255)
-#  media_url           :string(255)
-#  media_type          :integer
 #
 
 #If somewhatever reason post has been deleted, is_deleted is switched to true. Is Queued is true when showcase is queued for stage, if it is false, it is archieved in shows up in Performances.
@@ -24,20 +20,18 @@ class ShowcaseQueue < ActiveRecord::Base
 
   def self.enqueue(showcase)
   	bg_url = showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
-  	ShowcaseQueue.create!(showcase_id:showcase.id,
-  						  name:showcase.user.name,
-  						  title:showcase.title,
-  						  user_avatar_url:showcase.user.user_media_map.media_map.media_url,
-  						  bg_url:bg_url,
-  						  media_url:showcase.content.content_media_map.media_map.media_url,
-  						  media_type:showcase.content.content_media_map.media_map.media.media_type)
+  	ShowcaseQueue.create!(showcase_id:showcase.id,title:showcase.title,media_type:showcase.content.content_media_map.media_map.media.media_type)
   end
 
 def self.list_limelights(params)
   list=[]
-  if params[:user_id]==0 or !params[:user_id].blank?
-       count=0
-       ShowcaseQueue.all.order(created_at: :desc).each do |data|
+  if params[:user_id].blank? or  params[:user_id].to_i==0
+       ShowcaseQueue.where(is_deleted:false).order(created_at: :desc).limit(50).each do |data|
+            list.push({"id"=>data.id})
+       end
+  else
+      count=0
+       ShowcaseQueue.where(is_deleted:false).order(created_at: :desc).each do |data|
              if count ==50
                  break
              end
@@ -46,9 +40,6 @@ def self.list_limelights(params)
                 count+=1
            end
        end
-       return list
-  else
-      list=ShowcaseQueue.all.order(created_at: :desc).limit(50).pluck(:id)
   end
   list
 end
@@ -57,7 +48,20 @@ end
   Rails.logger.debug("In Showase queue fetch")
 
   item=ShowcaseQueue.find(params[:id])
-  item
+  itemHash={}
+  itemHash[:id]=params[:id]
+  itemHash[:showcase_id]=item.showcase_id
+  itemHash[:name]=item.showcase.user.name
+  itemHash[:title]=item.title
+  itemHash[:user_avatar_url]=item.showcase.user.user_media_map.media_map.media_url
+  itemHash[:total_appreciations]= item.total_appreciations
+  itemHash[:total_skips]=item.total_skips
+  bg_url = item.showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : item.showcase.user.user_media_map.media_map.media_url
+  itemHash[:bg_url]=bg_url
+  itemHash[:media_url]=item.showcase.content.content_media_map.media_map.media_url
+  itemHash[:media_type]=item.media_type
+  puts itemHash
+  itemHash
  end
 
   private

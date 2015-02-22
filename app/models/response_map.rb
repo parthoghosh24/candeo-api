@@ -56,6 +56,8 @@ class ResponseMap < ActiveRecord::Base
      network_map[:user_id]=params[:user_id]
      network_map[:owner_id]=owner_id
      Network.create_network(network_map)
+     showcase_queue = ShowcaseQueue.find_by(showcase_id:showcase.id)
+     showcase_queue.update(total_appreciations:showcase_queue.total_appreciations+1)
     response.id
   end
 
@@ -66,6 +68,8 @@ class ResponseMap < ActiveRecord::Base
     showcase = Showcase.find(params[:showcase_id])
     owner_id=showcase.user.id if showcase
     response=ResponseMap.create(user_id:params[:user_id], showcase_id:params[:showcase_id], content_type:2, has_skipped:1, owner_id:owner_id, skip_response: skip_response)
+    showcase_queue = ShowcaseQueue.find_by(showcase_id:showcase.id)
+    showcase_queue.update(total_appreciations:showcase_queue.total_skip+1)
     response.id
   end
 

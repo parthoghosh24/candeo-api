@@ -43,7 +43,14 @@ class Content < ActiveRecord::Base
         contentHash[:user_avatar_url]=content.user.user_media_map.media_map.media_url
         if type == 1
            contentHash[:title]=content.shareable.title
+           contentHash[:appreciate_count]=ResponseMap.where(showcase_id:params[:id], has_appreciated:true).size()
+           contentHash[:skip_count]=ResponseMap.where(showcase_id:params[:id], has_skipped:true).size()
+           contentHash[:inspired_count]=ResponseMap.where(showcase_id:params[:id], is_inspired:true).size()
+        else
+           contentHash[:inspired_count]=ResponseMap.where(status_id:params[:id], is_inspired:true).size()
         end
+        contentHash[:created_at]=content.created_at.strftime("%d %B, %Y")
+
     end
     contentHash
   end

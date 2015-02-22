@@ -7,14 +7,10 @@
 #  is_deleted          :boolean
 #  created_at          :datetime
 #  updated_at          :datetime
-#  name                :string(255)
 #  title               :string(255)
-#  user_avatar_url     :string(255)
+#  media_type          :integer
 #  total_appreciations :integer
 #  total_skips         :integer
-#  bg_url              :string(255)
-#  media_url           :string(255)
-#  media_type          :integer
 #
 
 require 'rails_helper'

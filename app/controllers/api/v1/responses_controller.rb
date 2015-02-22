@@ -24,7 +24,7 @@ class Api::V1::ResponsesController < ApplicationController
 
 #POST /contents/responses/skip - Appreciating Content
   def skip
-    id=ResponseMap.appreciate(params)
+    id=ResponseMap.skip(params)
     if !id.blank?
       response_map={:id=> id}
       render json: response_map, status: 200

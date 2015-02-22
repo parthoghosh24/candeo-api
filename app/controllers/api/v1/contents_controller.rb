@@ -22,11 +22,23 @@ class Api::V1::ContentsController < ApplicationController
 
   #GET /api/v1/contents/performances/show - Fetch Last Week Performances
   def get_performances_map
-    render json: {}, status: 200
+    performanceMap = Performance.fetch_performance
+    if performanceMap.blank?
+        render json:{:response=>"failed"}, status:422
+    else
+        render json: {:performance => performanceMap}, status: 200
+    end
+
   end
 
   #GET /api/v1/contents/performances/list/:rank - Fetch 10 showcases sorted by rank in ascending order
   def list_performances
+      performances = Performance.performance_list(params)
+    if performances.blank?
+        render json:{:response=>"failed"}, status:422
+    else
+        render json: {:performances => performances}, status: 200
+    end
   end
 
   #GET /api/v1/contents/limelight/:id - Fetch Showcase from queue which has not by responded by user yet
@@ -39,6 +51,7 @@ class Api::V1::ContentsController < ApplicationController
       end
   end
 
+ #GET /api/v1/contents/limelights/list/:user_id - Fetch Showcase queue list for user
   def list_limelight
       list = ShowcaseQueue.list_limelights(params)
       if list.blank?
@@ -58,7 +71,7 @@ class Api::V1::ContentsController < ApplicationController
   def create
     puts params
     case params[:type].to_i
-    when 1 #showcase       
+    when 1 #showcase
        id=Showcase.create_showcase(params)
     when 2 #status
        id=Status.create_status(params)
