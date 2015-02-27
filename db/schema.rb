@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150222092444) do
+ActiveRecord::Schema.define(version: 20150226143927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20150222092444) do
     t.decimal  "showcase_score"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_showcase_copyrighted"
   end
 
   create_table "redirects", force: true do |t|
@@ -120,6 +121,7 @@ ActiveRecord::Schema.define(version: 20150222092444) do
     t.integer  "media_type"
     t.integer  "total_appreciations"
     t.integer  "total_skips"
+    t.boolean  "is_copyrighted"
   end
 
   create_table "showcase_tasks", force: true do |t|
@@ -138,6 +140,7 @@ ActiveRecord::Schema.define(version: 20150222092444) do
     t.integer  "user_id"
     t.integer  "state"
     t.string   "uuid"
+    t.boolean  "is_copyrighted"
   end
 
   create_table "statuses", force: true do |t|

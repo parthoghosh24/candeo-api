@@ -11,6 +11,7 @@
 #  media_type          :integer
 #  total_appreciations :integer
 #  total_skips         :integer
+#  is_copyrighted      :boolean
 #
 
 require 'rails_helper'

@@ -11,6 +11,7 @@
 #  media_type          :integer
 #  total_appreciations :integer
 #  total_skips         :integer
+#  is_copyrighted      :boolean
 #
 
 #If somewhatever reason post has been deleted, is_deleted is switched to true. Is Queued is true when showcase is queued for stage, if it is false, it is archieved in shows up in Performances.

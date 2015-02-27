@@ -13,6 +13,7 @@
 #  showcase_score               :decimal(, )
 #  created_at                   :datetime
 #  updated_at                   :datetime
+#  is_showcase_copyrighted      :boolean
 #
 
 require 'rails_helper'
