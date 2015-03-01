@@ -55,6 +55,29 @@ class Content < ActiveRecord::Base
     contentHash
   end
 
+  def self.fetch_responses(params)
+       if params[:timestamp]=="now"
+        last= Time.now
+      else
+        last = Time.parse(params[:timestamp])
+     end
+     list = ResponseMap.where("user_id=? and created_at<?",params[:id],last).order(created_at: :desc).limit(10)
+     showcases=[]
+     list.each do |showcase|
+        showcaseHash = showcase.as_json
+        showcaseHash[:rank]=Performance.exists?(showcase_id:showcase.id) ? Performance.find_by(showcase_id:map.showcase.id).showcase_rank : "Not Ranked"
+        showcaseHash[:avatar_path]=showcase.user.user_media_map.media_map.media_url
+        bg_url = showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
+        showcaseHash[:bg_url]=bg_url
+        showcaseHash[:created_at_text]=showcase.created_at.strftime("%d %B, %Y")
+        showcaseHash[:media_type]=showcase.content.content_media_map.media_map.media.media_type if showcase.content.content_media_map
+        showcaseHash[:appreciation_count]=ResponseMap.where(showcase_id:showcase.id,has_appreciated:true).size()
+        showcaseHash[:inspiration_count]=ResponseMap.where(showcase_id:showcase.id,is_inspired:true).size()
+        showcases.push(showcaseHash)
+     end
+     showcases
+  end
+
   def self.referral_tag_exists?(params)
       Content.exists?(referral_tag:params[:referral_tag])
   end
