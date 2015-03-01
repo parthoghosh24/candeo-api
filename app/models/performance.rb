@@ -22,16 +22,20 @@ class Performance < ActiveRecord::Base
    def self.fetch_performance
         performances={}
         list=Performance.all.order(:showcase_rank).limit(10)
+        #Last Week Chartbusters
         performances[:candeoTopContent1]= performance_to_hash(list[0],false)  if list and list[0]
         performances[:candeoTopContent2]= performance_to_hash(list[1],false) if list and list[1]
         performances[:candeoTopContent3]= performance_to_hash(list[2],false) if list and list[2]
         performances[:candeoTopContent4]= performance_to_hash(list[3],false) if list and list[3]
         performances[:candeoTopContent5]= performance_to_hash(list[4],false) if list and list[4]
 
-        performances[:candeoTopCreator1]= list[0].showcase.user if list and list[0]
-        performances[:candeoTopCreator2]= list[1].showcase.user if list and list[1]
-        performances[:candeoTopCreator3]= list[2].showcase.user if list and list[2]
 
+        #All time top performers
+        performances[:candeoTopCreator1]= RankMap.fetch_top_user_by_rank(1)
+        performances[:candeoTopCreator2]= RankMap.fetch_top_user_by_rank(2)
+        performances[:candeoTopCreator3]= RankMap.fetch_top_user_by_rank(3)
+
+        # More Performances
         performances[:morePerformances]=performance_list({:rank => 5})
 
         performances

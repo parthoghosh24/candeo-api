@@ -37,10 +37,10 @@ class ResponseMap < ActiveRecord::Base
      status = Status.find(params[:status_id])
      owner_id=status.user.id if status
      response=ResponseMap.create(user_id:params[:user_id], status_id:params[:status_id], content_type:1, is_inspired:1, inspiration_response:inspiration_response, owner_id:owner_id)
-     network_map={}
-     network_map[:user_id]=params[:user_id]
-     network_map[:owner_id]=owner_id
-     Network.create_network(network_map)
+     # network_map={}
+     # network_map[:user_id]=params[:user_id]
+     # network_map[:owner_id]=owner_id
+     # Network.create_network(network_map)
     response.id
   end
 

@@ -47,7 +47,7 @@ class ShowcaseTask < ActiveRecord::Base
   	 Performance.delete_all
 
   	 performance_maps.each do |performance_map|
-  	 	Performance.create!(showcase_id:performance_map[:showcase_id],
+  	 	performance=Performance.create!(showcase_id:performance_map[:showcase_id],
         				   showcase_title:performance_map[:showcase_title],
         				   showcase_media_type:performance_map[:showcase_media_type],
         				   showcase_total_appreciations:performance_map[:showcase_total_appreciations],
@@ -55,6 +55,7 @@ class ShowcaseTask < ActiveRecord::Base
         				   showcase_created_at:performance_map[:showcase_created_at],
         				   showcase_rank:performance_map[:showcase_rank],
         				   showcase_score:performance_map[:showcase_score])
+            RankMap.create_or_update(performance.showcase.user_id,performance.showcase_rank)
   	 end
      ShowcaseQueue.delete_all
 
