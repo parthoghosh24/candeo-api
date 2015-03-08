@@ -65,6 +65,8 @@ class User < ActiveRecord::Base
             userhash[:total_appreciations]=ResponseMap.where(owner_id:params[:id],has_appreciated:true).size()
             userhash[:total_inspires]=ResponseMap.where(owner_id:params[:id],is_inspired:true).size()
             userhash[:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map
+            userhash[:current_rank]=RankMap.exists?(user_id:params[:id]) ? RankMap.where(user_id:params[:id]).order(created_at: :desc).first.rank : "Not Ranked"
+            userhash[:highest_rank]=RankMap.exists?(user_id:params[:id]) ? RankMap.where(user_id:params[:id]).order(count: :desc).first.rank : "Not Ranked"
             return userhash
        end
        nil
@@ -139,7 +141,7 @@ class User < ActiveRecord::Base
      showcases=[]
      list.each do |showcase|
         showcaseHash = showcase.as_json
-        showcaseHash[:rank]=Performance.exists?(showcase_id:showcase.id) ? Performance.find_by(showcase_id:map.showcase.id).showcase_rank : "Not Ranked"
+        showcaseHash[:rank]=Performance.exists?(showcase_id:showcase.id) ? Performance.find_by(showcase_id:showcase.id).showcase_rank : "Not Ranked"
         showcaseHash[:avatar_path]=showcase.user.user_media_map.media_map.media_url
         bg_url = showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
         showcaseHash[:bg_url]=bg_url

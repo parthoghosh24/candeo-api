@@ -20,7 +20,7 @@ class Network < ActiveRecord::Base
   after_create :update_network_with_defaults
 
   def self.create_network(params)
-    if params[:user_id]!=params[:owner_id] && !Network.exists?(follower_id:params[:user_id], followee_id:params[:owner_id])
+    if params[:user_id].to_i!=params[:owner_id].to_i && !Network.exists?(follower_id:params[:user_id], followee_id:params[:owner_id])
       network=Network.create(follower_id:params[:user_id], followee_id:params[:owner_id])
       network.id
     end
