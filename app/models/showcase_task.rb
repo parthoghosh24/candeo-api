@@ -24,10 +24,11 @@ class ShowcaseTask < ActiveRecord::Base
         performance_map[:showcase_media_type]=queue_data.media_type
         performance_map[:showcase_total_appreciations]=queue_data.total_appreciations
         performance_map[:showcase_total_skips]=queue_data.total_skips
-        performance_map[:showcase_created_at]= Showcase.find(queue_data.showcase_id).created_at
+        performance_map[:showcase_created_at]=queue_data.showcase.created_at
         performance_map[:showcase_rank]=rank
         performance_map[:showcase_score]=0.0 #ideally should be wilson score
         performance_maps.push(performance_map)
+        RankMap.create_or_update(queue_data.showcase.user_id,rank)
         rank+=1
   	 end
 
@@ -55,7 +56,7 @@ class ShowcaseTask < ActiveRecord::Base
         				   showcase_created_at:performance_map[:showcase_created_at],
         				   showcase_rank:performance_map[:showcase_rank],
         				   showcase_score:performance_map[:showcase_score])
-            RankMap.create_or_update(performance.showcase.user_id,performance.showcase_rank)
+
   	 end
      ShowcaseQueue.delete_all
 
