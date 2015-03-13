@@ -19,11 +19,20 @@ class Media < ActiveRecord::Base
   after_create :generate_uuid  
   has_attached_file :attachment
   validates_attachment_content_type :attachment, :content_type => ['image/jpeg','image/jpg','image/png','video/mp4','video/3gpp','audio/mp3','audio/mpeg', 'application/mp4','application/epub+zip']
+  do_not_validate_attachment_file_type :attachment
 
 
 
   #has_attached_file :doc #Need to be dealt in second release
   #validates_attachment_content_type :image, :content_type => [ 'application/epub+zip', 'application/pdf',  'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+
+  def self.purge
+    list=[]
+    Media.all.each do |media|
+      list.push(media.id) if !MediaMap.exists?(media_id:media.id)
+    end         
+    Media.delete(list) if list.size > 0
+  end
 
   def self.upload(file, type)
     media=nil
@@ -41,6 +50,7 @@ class Media < ActiveRecord::Base
        system("ffmpeg -i #{original_path} -y -vn -ar 44100 -ac 2 -ab 192k -f mp3 #{new_path}")
        new_f = open(new_path)
        new_file=new_f
+       puts "New File name is #{File.basename(new_file)}"
        puts "MIME TYPE IS #{MIME::Types.type_for(File.basename(new_file)).first.content_type.to_s}"
 
     when 2 #video

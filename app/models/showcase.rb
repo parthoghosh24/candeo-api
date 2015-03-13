@@ -36,27 +36,8 @@ class Showcase < ActiveRecord::Base
       showcase.content.content_media_map=ContentMediaMap.create!(media_map_attributes:{media_id:media.id,media_url:media.attachment.url})        
       
       
-      #Create Activity
-      activity = {}
-      if !params[:media].blank?
-          activity[:media_url]=showcase.content.content_media_map.media_map.media_url
-      end
-      activity[:title]=params[:title]
-      activity[:showcase_id]=showcase.id
-      if !params[:referral_tag].blank?
-        activity[:referral_tag]="*params[:referral_tag]"
-      end
-      activity[:state]=params[:state]
-      activity_params={}
-      activity_params[:user_id]=showcase.user_id
-      if !params[:referral_tag].blank?
-        activity_params[:activity_type]=5
-      else
-        activity_params[:activity_type]=4
-      end
-      activity_params[:activity]=activity
-      activity_params[:activity_level]=3 #Private
-      ActivityLog.create_activity(activity_params)
+      #lock user to further create till next week
+      showcase.user.update(has_posted:true)
       ShowcaseQueue.enqueue(showcase)
       showcase.id
     end          

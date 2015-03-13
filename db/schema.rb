@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150228085546) do
+ActiveRecord::Schema.define(version: 20150311193854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,14 @@ ActiveRecord::Schema.define(version: 20150228085546) do
     t.json     "skip_response"
   end
 
+  create_table "showcase_caps", force: true do |t|
+    t.integer  "quota"
+    t.datetime "end_time"
+    t.datetime "start_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "showcase_queues", force: true do |t|
     t.integer  "showcase_id"
     t.boolean  "is_deleted"
@@ -178,6 +186,7 @@ ActiveRecord::Schema.define(version: 20150228085546) do
     t.integer  "random_token"
     t.integer  "total_appreciations"
     t.integer  "total_inspires"
+    t.boolean  "has_posted"
   end
 
 end

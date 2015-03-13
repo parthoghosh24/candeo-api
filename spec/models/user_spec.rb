@@ -14,6 +14,7 @@
 #  random_token        :integer
 #  total_appreciations :integer
 #  total_inspires      :integer
+#  has_posted          :boolean
 #
 
 require 'rails_helper'

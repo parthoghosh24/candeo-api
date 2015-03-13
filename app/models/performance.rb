@@ -35,9 +35,7 @@ class Performance < ActiveRecord::Base
               performances[:candeoTopCreator1]= RankMap.fetch_top_user_by_rank(1)
               performances[:candeoTopCreator2]= RankMap.fetch_top_user_by_rank(2)
               performances[:candeoTopCreator3]= RankMap.fetch_top_user_by_rank(3)
-
-              # More Performances
-              performances[:morePerformances]=performance_list({:rank => 5})
+              
         end
         Rails.logger.debug("Performances is #{performances}")
         performances

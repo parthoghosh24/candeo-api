@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
 
+  before_action :authenticate_action, except: [:register, :login]
   #GET /api/v1/users/:id - Fetch User profile
   def show
     user = User.show(params)
@@ -64,9 +65,15 @@ end
     else
       render json:{:response=>"failed"}, status:422
     end
-  end
+  end 
 
-  #POST /users/verify - User verification
+  #GET /api/v1/users/posted/1
+  def has_posted
+     has_posted = User.has_posted?(params)
+     response_map = {:response=> has_posted}
+     render json: response_map, status: 200 
+  end
+  #POST /api/v1/users/verify - User verification
   def verify
     user = User.verify(params)
     if user
@@ -99,7 +106,18 @@ end
   	if !id.blank?
       render json: {:id=>id}, status: 200
   	else
-  		render json:{:response=>"failed"}, status:422
+  		render json:{:response=>"failed! Email already taken"}, status:422
   	end
+  end
+
+  private 
+
+  def authenticate_action
+      authenticate_or_request_with_http_token do |token, options|
+          auth_token = User.find_by(email:request.headers['email']).auth_token
+          hash = CandeoHmac.generate_untouched_hmac(auth_token, request.headers['message'])
+          hash == token
+      end
+      
   end
 end

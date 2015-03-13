@@ -28,6 +28,7 @@ class ShowcaseTask < ActiveRecord::Base
         performance_map[:showcase_rank]=rank
         performance_map[:showcase_score]=0.0 #ideally should be wilson score
         performance_maps.push(performance_map)
+        queue_data.showcase.user.update(has_posted:false)
         RankMap.create_or_update(queue_data.showcase.user_id,rank)
         rank+=1
   	 end

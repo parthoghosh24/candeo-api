@@ -6,8 +6,6 @@ gem 'rails', '4.1.0'
 gem 'rails-api'
 
 gem 'spring', :group => :development
-
-
 gem 'pg'
 gem 'rufus-scheduler'
 gem 'paperclip', "~> 4.1"

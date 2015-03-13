@@ -14,6 +14,7 @@
 #  random_token        :integer
 #  total_appreciations :integer
 #  total_inspires      :integer
+#  has_posted          :boolean
 #
 
 #auth_token is HMAC key. Whenever user logins, a new HMAC will be generated.
@@ -35,28 +36,43 @@ class User < ActiveRecord::Base
   has_many :followees, through: :followee_follows, source: :followee
 
   def self.register(params)
-    username = params[:email][0...params[:email].index('@')]
-    username = username.gsub(/[^0-9A-Za-z]/,'')
-    user = User.create!(name:params[:name], email:params[:email], username:username, about: "Hello World")
-    if !params[:media_id].blank?
-      media = Media.find(params[:media_id])
-      user.user_media_map=UserMediaMap.create!(media_map_attributes:{media_id:media.id,media_url:media.attachment.url})
+    if !User.exists?(email:params[:email])
+        username = params[:email][0...params[:email].index('@')]
+        username = username.gsub(/[^0-9A-Za-z]/,'')
+        user = User.create!(name:params[:name], email:params[:email], username:username, about: "Hello World")
+        if !params[:media_id].blank?
+          media = Media.find(params[:media_id])
+          user.user_media_map=UserMediaMap.create!(media_map_attributes:{media_id:media.id,media_url:media.attachment.url})
+        end
+        if user
+          # Create Activity
+          activity = {}
+          activity[:name]=params[:name]
+          activity_params={}
+          activity_params[:user_id]=user.id
+          activity_params[:activity_type]=1
+          activity_params[:activity]=activity
+          activity_params[:activity_level]=3 #Private
+          ActivityLog.create_activity(activity_params)
+        end
+        return user.id
     end
-    if user
-      # Create Activity
-      activity = {}
-      activity[:name]=params[:name]
-      activity_params={}
-      activity_params[:user_id]=user.id
-      activity_params[:activity_type]=1
-      activity_params[:activity]=activity
-      activity_params[:activity_level]=3 #Private
-      ActivityLog.create_activity(activity_params)
-    end
-    user.id
+      
   end
 
 
+  def self.has_posted(params)
+    response=nil     
+     if User.exists?(id:params[:id]) 
+        user = User.find(params[:id])
+        showcase_queue_count = ShowcaseQueue.count
+        cap = ShowcaseCap.find(1)
+        if(user.has_posted || showcase_queue_count>=cap.quota || Time.now > cap.end_time)
+           response={state:true, start_date:cap.start_time}           
+        end
+     end
+     response
+  end
 
   def self.show(params)
        user = User.find(params[:id])
