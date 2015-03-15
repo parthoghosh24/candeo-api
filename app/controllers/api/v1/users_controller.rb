@@ -1,14 +1,30 @@
 class Api::V1::UsersController < ApplicationController
 
-  before_action :authenticate_action, except: [:register, :login]
+  include ActionController::HttpAuthentication::Token::ControllerMethods
+  before_action :authenticate_action, except: [:register, :login, :verify, :get_fans, :get_promoted, :get_showcases, :show]
+
   #GET /api/v1/users/:id - Fetch User profile
   def show
-    user = User.show(params)
-    if user
-      response_map={:user => user}
-      render json: response_map, status: 200
+    if request.headers['email'].blank?
+         if authenticate_with_default_key
+              user = User.show(params)
+              if user
+                response_map={:user => user}
+                render json: response_map, status: 200
+              else
+                render json:{:response=>"failed"}, status:422
+              end
+         end
     else
-      render json:{:response=>"failed"}, status:422
+        if authenticate_action
+              user = User.show(params)
+              if user
+                response_map={:user => user}
+                render json: response_map, status: 200
+              else
+                render json:{:response=>"failed"}, status:422
+              end
+         end
     end
   end
 
@@ -36,88 +52,156 @@ end
 
   #GET /api/v1/users/:id/fans/:timestamp - Fetch User fans
   def get_fans
-      fans = User.get_fans(params)
-     if fans
-      response_map={:fans => fans}
-      render json: response_map, status: 200
+
+      if request.headers['email'].blank?
+         if authenticate_with_default_key
+               fans = User.get_fans(params)
+               if fans
+                response_map={:fans => fans}
+                render json: response_map, status: 200
+              else
+                render json:{:response=>"failed"}, status:422
+              end
+         end
     else
-      render json:{:response=>"failed"}, status:422
+        if authenticate_action
+              fans = User.get_fans(params)
+               if fans
+                response_map={:fans => fans}
+                render json: response_map, status: 200
+              else
+                render json:{:response=>"failed"}, status:422
+              end
+         end
     end
+
   end
 
   #GET /api/v1/users/:id/promoted/:timestamp - Fetch User promoted
   def get_promoted
-      promoted = User.get_promoted(params)
-     if promoted
-      response_map={:promoted => promoted}
-      render json: response_map, status: 200
+      if request.headers['email'].blank?
+         if authenticate_with_default_key
+                 promoted = User.get_promoted(params)
+                 if promoted
+                  response_map={:promoted => promoted}
+                  render json: response_map, status: 200
+                else
+                  render json:{:response=>"failed"}, status:422
+                end
+         end
     else
-      render json:{:response=>"failed"}, status:422
+        if authenticate_action
+              promoted = User.get_promoted(params)
+               if promoted
+                response_map={:promoted => promoted}
+                render json: response_map, status: 200
+              else
+                render json:{:response=>"failed"}, status:422
+              end
+         end
     end
   end
 
   #GET /api/v1/users/:id/showcases/:timestamp - Fetch User showcases
   def get_showcases
-      showcases = User.get_showcases(params)
-     if showcases
-      response_map={:showcases => showcases}
-      render json: response_map, status: 200
+      if request.headers['email'].blank?
+         if authenticate_with_default_key
+                 showcases = User.get_showcases(params)
+                 if showcases
+                  response_map={:showcases => showcases}
+                  render json: response_map, status: 200
+                else
+                  render json:{:response=>"failed"}, status:422
+                end
+         end
     else
-      render json:{:response=>"failed"}, status:422
+        if authenticate_action
+              showcases = User.get_showcases(params)
+               if showcases
+                response_map={:showcases => showcases}
+                render json: response_map, status: 200
+              else
+                render json:{:response=>"failed"}, status:422
+              end
+         end
     end
-  end 
+
+  end
 
   #GET /api/v1/users/posted/1
   def has_posted
-     has_posted = User.has_posted?(params)
+     has_posted = User.has_posted(params)
      response_map = {:response=> has_posted}
-     render json: response_map, status: 200 
+     puts "posted hash #{response_map}"
+     render json: response_map, status: 200
   end
+
+
   #POST /api/v1/users/verify - User verification
   def verify
-    user = User.verify(params)
-    if user
-      response_map={:user => user}
-      render json: response_map, status: 200
-    else
-      render json:{:response=>"failed"}, status:422
+    if authenticate_with_default_key
+          user = User.verify(params)
+          if user
+            response_map={:user => user}
+            render json: response_map, status: 200
+          else
+            render json:{:response=>"failed"}, status:422
+          end
     end
   end
 
   #POST /api/v1/users/login - User logins
   def login
-     response = User.login(params)
-     if !response.blank?
-        user = response[:user]
-        url = "http://www.candeoapp.com/verify/#{response[:random_token]}"
-        Thread.new do
-           CandeoMailer.verify_user(user, url).deliver
+     if authenticate_with_default_key
+        response = User.login(params)
+         if !response.blank?
+            user = response[:user]
+            url = "http://www.candeoapp.com/verify/#{response[:random_token]}"
+            Thread.new do
+               CandeoMailer.verify_user(user, url).deliver
+            end
+            puts "Sending success"
+            render json: {:response=>"success"}, status: 200
+         else
+          render json:{:response=>"failed"}, status:422
         end
-        puts "Sending success"
-        render json: {:response=>"success"}, status: 200
-     else
-      render json:{:response=>"failed"}, status:422
-      end
+     end
   end
 
   #POST /api/v1/users/register - User registers
   def register
-  	id=User.register(params)
-  	if !id.blank?
-      render json: {:id=>id}, status: 200
-  	else
-  		render json:{:response=>"failed! Email already taken"}, status:422
-  	end
+      if authenticate_with_default_key
+            id=User.register(params)
+            if !id.blank?
+              render json: {:id=>id}, status: 200
+            else
+              render json:{:response=>"failed! Email already taken"}, status:422
+            end
+      end
   end
 
-  private 
+  private
+
+  def authenticate_with_default_key
+       authenticate_or_request_with_http_token do |token, options|
+            hash = CandeoHmac.generate_untouched_hmac("candeosecret2015",request.headers['message'])
+            puts "gen hash is start#{hash}end"
+            puts "incoming hash is start#{token}end"
+            return hash == token
+       end
+       false
+  end
 
   def authenticate_action
-      authenticate_or_request_with_http_token do |token, options|
-          auth_token = User.find_by(email:request.headers['email']).auth_token
-          hash = CandeoHmac.generate_untouched_hmac(auth_token, request.headers['message'])
-          hash == token
-      end
-      
+     authenticate_or_request_with_http_token do |token, options|
+            puts "email is#{request.headers['email']}"
+            auth_token = User.find_by(email:request.headers['email']).auth_token
+            puts "Message is#{request.headers['message']}"
+            hash = CandeoHmac.generate_untouched_hmac(auth_token,request.headers['message'])
+            puts "gen hash is start#{hash}end"
+            puts "incoming hash is start#{token}end"
+            return hash == token
+       end
+       false
   end
 end

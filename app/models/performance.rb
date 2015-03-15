@@ -24,18 +24,18 @@ class Performance < ActiveRecord::Base
         list=Performance.all.order(:showcase_rank).limit(10)
         if list.size > 0
              #Last Week Chartbusters
-              performances[:candeoTopContent1]= performance_to_hash(list[0],false)
-              performances[:candeoTopContent2]= performance_to_hash(list[1],false)
-              performances[:candeoTopContent3]= performance_to_hash(list[2],false)
-              performances[:candeoTopContent4]= performance_to_hash(list[3],false)
-              performances[:candeoTopContent5]= performance_to_hash(list[4],false)
+              performances[:candeoTopContent1]= performance_to_hash(list[0],true)
+              performances[:candeoTopContent2]= performance_to_hash(list[1],true)
+              performances[:candeoTopContent3]= performance_to_hash(list[2],true)
+              performances[:candeoTopContent4]= performance_to_hash(list[3],true)
+              performances[:candeoTopContent5]= performance_to_hash(list[4],true)
 
 
               #All time top performers
               performances[:candeoTopCreator1]= RankMap.fetch_top_user_by_rank(1)
               performances[:candeoTopCreator2]= RankMap.fetch_top_user_by_rank(2)
               performances[:candeoTopCreator3]= RankMap.fetch_top_user_by_rank(3)
-              
+
         end
         Rails.logger.debug("Performances is #{performances}")
         performances

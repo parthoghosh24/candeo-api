@@ -60,6 +60,7 @@ class ShowcaseTask < ActiveRecord::Base
 
   	 end
      ShowcaseQueue.delete_all
+     ShowcaseCap.update_showcase_cap
 
   end
 

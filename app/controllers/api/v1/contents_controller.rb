@@ -1,70 +1,134 @@
 class Api::V1::ContentsController < ApplicationController
   skip_before_filter :verify_authenticity_token
   include ActionView::Helpers::DateHelper
+  include ActionController::HttpAuthentication::Token::ControllerMethods
 
-  #GET /api/v1/contents - Fetches Contents for Feed Screen
-  def list
-    require 'action_view'
-    contentMap ={}
-    contents=[]
-    Content.all.order(created_at: :desc).each do |content|
-      contentData={}
-      contentData[:id]=content.id
-      contentData[:desc]=content.description
-      contentData[:name]=content.user.name
-      contentData[:time]=distance_of_time_in_words(Time.now, content.created_at)+" ago"
-      contentData[:media_type]= content.media ? content.media.media_type : 0
-      contents.push(contentData)
-    end
-    contentMap[:contents]=contents
-    render json: contentMap, status: 200
-  end
+    before_action :authenticate_action, except: [:show, :get_performances_map, :list_performances, :limelight, :list_limelight]
 
   #GET /api/v1/contents/performances/show - Fetch Last Week Performances
   def get_performances_map
-    performanceMap = Performance.fetch_performance
-    if performanceMap.blank?
-        render json:{:response=>"failed"}, status:422
+    if request.headers['email'].blank?
+         if authenticate_with_default_key
+              performanceMap = Performance.fetch_performance
+              if performanceMap.blank?
+                  render json:{:response=>"failed"}, status:422
+              else
+                  render json: {:performance => performanceMap}, status: 200
+              end
+         end
     else
-        render json: {:performance => performanceMap}, status: 200
+        if authenticate_action
+              performanceMap = Performance.fetch_performance
+              if performanceMap.blank?
+                  render json:{:response=>"failed"}, status:422
+              else
+                  render json: {:performance => performanceMap}, status: 200
+              end
+         end
     end
-
   end
 
   #GET /api/v1/contents/performances/list/:rank - Fetch 10 showcases sorted by rank in ascending order
   def list_performances
-      performances = Performance.performance_list(params)
-    if performances.blank?
-        render json:{:response=>"failed"}, status:422
+
+      if request.headers['email'].blank?
+         if authenticate_with_default_key
+              performances = Performance.performance_list(params)
+              if performances.blank?
+                  render json:{:response=>"failed"}, status:422
+              else
+                  render json: {:performances => performances}, status: 200
+              end
+         end
     else
-        render json: {:performances => performances}, status: 200
+        if authenticate_action
+              performances = Performance.performance_list(params)
+              if performances.blank?
+                  render json:{:response=>"failed"}, status:422
+              else
+                  render json: {:performances => performances}, status: 200
+              end
+         end
     end
+
   end
 
-  #GET /api/v1/contents/limelight/:id - Fetch Showcase from queue which has not by responded by user yet
+  #GET /api/v1/contents/limelight/:id - Fetch Showcase from queue which has not been responded by user yet
   def limelight
-      limelightMap = ShowcaseQueue.fetch(params)
-      if limelightMap.blank?
-         render json:{:response=>"failed"}, status:422
-      else
-         render json: {:limelight=>limelightMap}, status: 200
-      end
+      if request.headers['email'].blank?
+         if authenticate_with_default_key
+              limelightMap = ShowcaseQueue.fetch(params)
+              if limelightMap.blank?
+                 render json:{:response=>"failed"}, status:422
+              else
+                 render json: {:limelight=>limelightMap}, status: 200
+              end
+         end
+    else
+        if authenticate_action
+              limelightMap = ShowcaseQueue.fetch(params)
+              if limelightMap.blank?
+                 render json:{:response=>"failed"}, status:422
+              else
+                 render json: {:limelight=>limelightMap}, status: 200
+              end
+         end
+    end
+
+
+
   end
 
  #GET /api/v1/contents/limelights/list/:user_id - Fetch Showcase queue list for user
   def list_limelight
-      list = ShowcaseQueue.list_limelights(params)
-      if list.blank?
-         render json:{:response=>"failed"}, status:422
-      else
-         render json: {:limelights=>list}, status: 200
-      end
+      if request.headers['email'].blank?
+         if authenticate_with_default_key
+              list = ShowcaseQueue.list_limelights(params)
+              if list.blank?
+                 render json:{:response=>"failed"}, status:422
+              else
+                 render json: {:limelights=>list}, status: 200
+              end
+         end
+    else
+        if authenticate_action
+              list = ShowcaseQueue.list_limelights(params)
+              if list.blank?
+                 render json:{:response=>"failed"}, status:422
+              else
+                 render json: {:limelights=>list}, status: 200
+              end
+         end
+    end
+
+
+
   end
 
-  #GET /api/v1/contents/:id - Show Content Detail Screen
+  #GET /api/v1/contents/:id/:type - Show Content Detail Screen
   def show
-    contentMap=Content.show(params)
-    render json: contentMap, status: 200
+    if request.headers['email'].blank?
+         if authenticate_with_default_key
+              contentMap=Content.show(params)
+              if contentMap.blank?
+                 render json:{:response=>"failed"}, status:422
+              else
+                 render json: contentMap, status: 200
+              end
+         end
+    else
+        if authenticate_action
+              contentMap=Content.show(params)
+              if contentMap.blank?
+                 render json:{:response=>"failed"}, status:422
+              else
+                 render json: contentMap, status: 200
+              end
+         end
+    end
+
+
+
   end
 
   #POST  /api/v1/contents/create - Create Content
@@ -84,6 +148,31 @@ class Api::V1::ContentsController < ApplicationController
     else
       render json:{:response=>"failed"}, status:422
     end
+  end
+
+  private
+
+  def authenticate_with_default_key
+       authenticate_or_request_with_http_token do |token, options|
+            hash = CandeoHmac.generate_untouched_hmac("candeosecret2015",request.headers['message'])
+            puts "gen hash is start#{hash}end"
+            puts "incoming hash is start#{token}end"
+            return hash == token
+       end
+       false
+  end
+
+  def authenticate_action
+       authenticate_or_request_with_http_token do |token, options|
+            puts "email is#{request.headers['email']}"
+            auth_token = User.find_by(email:request.headers['email']).auth_token
+            puts "Message is#{request.headers['message']}"
+            hash = CandeoHmac.generate_untouched_hmac(auth_token,request.headers['message'])
+            puts "gen hash is start#{hash}end"
+            puts "incoming hash is start#{token}end"
+            return hash == token
+       end
+       false
   end
 
 end

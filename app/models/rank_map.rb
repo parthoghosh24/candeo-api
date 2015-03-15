@@ -25,11 +25,13 @@ class RankMap < ActiveRecord::Base
 
    def self.fetch_top_user_by_rank(rank)
       rank_map=RankMap.where(rank:rank).order(count: :desc).first
-      user=nil
+      userMap=nil
       if rank_map
-           user = User.find(rank_map.user_id)
+           user= User.find(rank_map.user_id)
+           userMap = user.as_json
+           userMap[:user_avatar_url]=user.user_media_map.media_map.media_url if user.user_media_map
       end
-      user
+      userMap
    end
 
 end
