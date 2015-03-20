@@ -34,9 +34,9 @@ class ResponseMap < ActiveRecord::Base
      inspiration_response ={}
      inspiration_response[:feeling] =params[:feeling]
      inspiration_response[:description] =params[:description]
-     status = Status.find(params[:status_id])
-     owner_id=status.user.id if status
-     response=ResponseMap.create(user_id:params[:user_id], status_id:params[:status_id], content_type:1, is_inspired:1, inspiration_response:inspiration_response, owner_id:owner_id)
+     showcase = Showcase.find(params[:showcase_id])
+     owner_id=showcase.user.id if showcase
+     response=ResponseMap.create(user_id:params[:user_id], showcase_id:params[:showcase_id], content_type:1, is_inspired:1, inspiration_response:inspiration_response, owner_id:owner_id)
      # network_map={}
      # network_map[:user_id]=params[:user_id]
      # network_map[:owner_id]=owner_id
@@ -69,7 +69,7 @@ class ResponseMap < ActiveRecord::Base
     owner_id=showcase.user.id if showcase
     response=ResponseMap.create(user_id:params[:user_id], showcase_id:params[:showcase_id], content_type:2, has_skipped:1, owner_id:owner_id, skip_response: skip_response)
     showcase_queue = ShowcaseQueue.find_by(showcase_id:showcase.id)
-    showcase_queue.update(total_appreciations:showcase_queue.total_skip+1)
+    showcase_queue.update(total_appreciations:showcase_queue.total_skips+1)
     response.id
   end
 

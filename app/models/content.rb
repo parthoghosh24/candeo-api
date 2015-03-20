@@ -25,21 +25,28 @@ class Content < ActiveRecord::Base
 
   def self.show(params)
     type=params[:type].to_i
+    contentHash=nil
     if(type == 1)
          content = Content.find_by(shareable_id:params[:id], shareable_type:"Showcase")
     else
         content = Content.find_by(shareable_id:params[:id], shareable_type:"Status")
     end
 
-    contentHash=nil
+    
     if content
-        bg_url = content.user.user_media_map.media_map.media_url if content.content_media_map.media_map.media.media_type != 3
-        puts "bg url #{bg_url}"
         contentHash = content.as_json
+        bg_url = content.user.user_media_map.media_map.media_url if content.content_media_map.media_map.media.media_type != 3
+        if(type == 1)
+          contentHash[:has_been_inspired]=ResponseMap.exists?(user_id:params[:user_id], showcase_id:params[:id], is_inspired:1)
+        else
+          contentHash[:has_been_inspired]=ResponseMap.exists?(user_id:params[:user_id], status_id:params[:id], is_inspired:1)
+        end
+        puts "bg url #{bg_url}"        
         contentHash[:media_type]=content.content_media_map.media_map.media.media_type if content.content_media_map
         contentHash[:media_url]=content.content_media_map.media_map.media_url if content.content_media_map
         contentHash[:bg_url]=bg_url
         contentHash[:user_name]=content.user.name
+        contentHash[:user_id]=content.user.id
         contentHash[:user_avatar_url]=content.user.user_media_map.media_map.media_url
         if type == 1
            contentHash[:title]=content.shareable.title
@@ -50,6 +57,7 @@ class Content < ActiveRecord::Base
            contentHash[:inspired_count]=ResponseMap.where(status_id:params[:id], is_inspired:true).size()
         end
         contentHash[:created_at]=content.created_at.strftime("%d %B, %Y")
+
 
     end
     contentHash

@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
             userhash[:total_inspires]=ResponseMap.where(owner_id:params[:id],is_inspired:true).size()
             userhash[:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map
             userhash[:current_rank]=RankMap.exists?(user_id:params[:id]) ? RankMap.where(user_id:params[:id]).order(created_at: :desc).first.rank : "Not Ranked"
-            userhash[:highest_rank]=RankMap.exists?(user_id:params[:id]) ? RankMap.where(user_id:params[:id]).order(count: :desc).first.rank : "Not Ranked"
+            userhash[:highest_rank]=RankMap.exists?(user_id:params[:id]) ? RankMap.where(user_id:params[:id]).order(:rank).first.rank : "Not Ranked"
             return userhash
        end
        nil
@@ -113,13 +113,14 @@ class User < ActiveRecord::Base
     list=ResponseMap.where("user_id=? and is_inspired =? and created_at <? ",params[:id],1,last).order(created_at: :desc).limit(10)
     inspirations=[]
     list.each do |map|
-        if map.content_type ==2
+        if map.content_type ==1
             inspiration = Showcase.find(map.showcase_id)
         else
             inspiration = Status.find(map.status_id)
         end
 
         inspirationHash = inspiration.as_json
+        inspirationHash[:rank]=Performance.exists?(showcase_id:map.showcase_id) ? Performance.find_by(showcase_id:map.showcase_id).showcase_rank : "Not Ranked"
         inspirationHash[:user_name]=inspiration.user.name
         inspirationHash[:avatar_path]=inspiration.user.user_media_map.media_map.media_url
         bg_url = inspiration.content.content_media_map.media_map.media.media_type == 3 ? nil : inspiration.user.user_media_map.media_map.media_url
@@ -127,7 +128,7 @@ class User < ActiveRecord::Base
         inspirationHash[:created_at_text]=inspiration.created_at.strftime("%d %B, %Y")
         inspirationHash[:media_url]=inspiration.content.content_media_map.media_map.media_url
         inspirationHash[:media_type]=inspiration.content.content_media_map.media_map.media.media_type if inspiration.content.content_media_map
-        if map.content_type==2
+        if map.content_type==1
             inspirationHash[:inspiration_count]=ResponseMap.where(showcase_id:map.showcase_id,is_inspired:true).size()
         else
             inspirationHash[:inspiration_count]=ResponseMap.where(status_id:map.status_id,is_inspired:true).size()
@@ -135,6 +136,8 @@ class User < ActiveRecord::Base
 
         inspirations.push(inspirationHash)
     end
+    puts inspirations
+    puts "inspirations size #{inspirations.size}"
     inspirations
   end
 

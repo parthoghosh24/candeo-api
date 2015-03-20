@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150311193854) do
+ActiveRecord::Schema.define(version: 20150320051715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20150311193854) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_showcase_copyrighted"
+    t.integer  "showcase_top_rank"
   end
 
   create_table "rank_maps", force: true do |t|
@@ -147,6 +148,7 @@ ActiveRecord::Schema.define(version: 20150311193854) do
     t.integer  "last_timestamp_epoch"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "last_rank"
   end
 
   create_table "showcases", force: true do |t|

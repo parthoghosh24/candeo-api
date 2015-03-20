@@ -14,6 +14,7 @@
 #  created_at                   :datetime
 #  updated_at                   :datetime
 #  is_showcase_copyrighted      :boolean
+#  showcase_top_rank            :integer
 #
 
 require 'rails_helper'

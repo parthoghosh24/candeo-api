@@ -9,6 +9,7 @@
 #  last_timestamp_epoch :integer
 #  created_at           :datetime
 #  updated_at           :datetime
+#  last_rank            :integer
 #
 
 require 'rails_helper'

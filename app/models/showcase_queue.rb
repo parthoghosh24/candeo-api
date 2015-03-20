@@ -36,7 +36,7 @@ def self.list_limelights(params)
              if count ==50
                  break
              end
-            if(!ResponseMap.exists?(user_id:params[:user_id].to_i, showcase_id:data.showcase.id))
+            if(!ResponseMap.exists?(user_id:params[:user_id].to_i, showcase_id:data.showcase.id, has_appreciated:true) && !ResponseMap.exists?(user_id:params[:user_id].to_i, showcase_id:data.showcase.id, has_skipped:true))
                 list.push({"id"=>data.id})
                 count+=1
            end
@@ -53,6 +53,7 @@ end
   itemHash[:id]=params[:id]
   itemHash[:showcase_id]=item.showcase_id
   itemHash[:name]=item.showcase.user.name
+  itemHash[:user_id]=item.showcase.user.id
   itemHash[:title]=item.title
   itemHash[:user_avatar_url]=item.showcase.user.user_media_map.media_map.media_url
   itemHash[:total_appreciations]= item.total_appreciations
