@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     match  '/users/login', to:'users#login', via:'post', as: :login
     match  '/users/register', to:'users#register', via:'post', as: :register
     match  '/users/verify', to:'users#verify', via:'post',as: :verify
+    match '/users/update_profile', to:'users#update_profile',via:'post',as: :update_profile
 
     #Contents
     match '/contents/performances/show', to:'contents#get_performances_map', via:'get',as: :performance_map

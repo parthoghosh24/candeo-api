@@ -180,6 +180,15 @@ end
       end
   end
 
+  def update_profile
+     response = User.update_profile(params)
+     if !response.blank?
+          render json: {:response=> response}, status:200
+     else
+          render json: {:response=> "failed"}, status:422
+     end
+  end
+
   private
 
   def authenticate_with_default_key

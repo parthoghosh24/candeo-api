@@ -17,7 +17,7 @@ class ShowcaseTask < ActiveRecord::Base
   def self.populate_performances
 
      performance_maps = []
-     last_rank=1;
+     # last_rank=1;
      rank=1
   	 ShowcaseQueue.where(is_deleted:false).order(total_appreciations: :desc).each do |queue_data|
         performance_map ={}
@@ -29,13 +29,13 @@ class ShowcaseTask < ActiveRecord::Base
         performance_map[:showcase_created_at]=queue_data.showcase.created_at
         performance_map[:showcase_rank]=rank
         performance_map[:showcase_top_rank]=rank
-        performance_map[:last_rank]=last_rank
+        # performance_map[:last_rank]=last_rank
         performance_map[:showcase_score]=0.0 #ideally should be wilson score
         performance_maps.push(performance_map)
         queue_data.showcase.user.update(has_posted:false)
         RankMap.create_or_update(queue_data.showcase.user_id,rank)
         rank+=1
-        last_rank+=1
+        # last_rank+=1
   	 end
 
   	 Performance.all.order(:showcase_rank).each do |performance|
@@ -47,7 +47,7 @@ class ShowcaseTask < ActiveRecord::Base
             performance_map[:showcase_total_skips]=performance.showcase_total_skips
             performance_map[:showcase_created_at]= performance.showcase_created_at
             performance_map[:showcase_top_rank]=performance.showcase_top_rank
-            performance_map[:last_rank]=performance.showcase_rank
+            # performance_map[:last_rank]=performance.showcase_rank
             performance_map[:showcase_rank]=rank
             performance_map[:showcase_score]=performance.showcase_score #ideally should be wilson score
             performance_maps.push(performance_map)
@@ -64,7 +64,7 @@ class ShowcaseTask < ActiveRecord::Base
         				   showcase_created_at:performance_map[:showcase_created_at],
         				   showcase_rank:performance_map[:showcase_rank],
         				   showcase_score:performance_map[:showcase_score],
-                   last_rank:performance_map[:last_rank],
+                              # last_rank:performance_map[:last_rank],
                    showcase_top_rank:performance_map[:showcase_top_rank])
 
   	 end

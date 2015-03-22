@@ -65,6 +65,22 @@ class User < ActiveRecord::Base
      response
   end
 
+  def self.update_profile(params)
+    response=nil
+    if User.exists?(id:params[:id])
+        user = User.find(params[:id])
+        if !params[:media_id].blank?
+             media = Media.find(params[:media_id])
+             user.user_media_map=UserMediaMap.create!(media_map_attributes:{media_id:media.id,media_url:media.attachment.url})
+        end
+        user.update(name:params[:name]) if !params[:name].blank?
+        user.update( about:params[:bio]) if !params[:bio].blank?
+        puts user.user_media_map.media_map.media_url
+        response=user.user_media_map.media_map.media_url
+    end
+    response
+  end
+
   def self.show(params)
        user = User.find(params[:id])
        if user
@@ -101,6 +117,7 @@ class User < ActiveRecord::Base
         appreciationHash[:appreciation_count]=ResponseMap.where(showcase_id:map.showcase_id,has_appreciated:true).size()
         appreciations.push(appreciationHash)
     end
+    puts appreciations
     appreciations
   end
 
