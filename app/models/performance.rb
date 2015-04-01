@@ -46,7 +46,7 @@ class Performance < ActiveRecord::Base
    def self.performance_list(params)
         list=[]
         if !params[:rank].blank?
-             Performance.where("showcase_rank > ?",params[:rank]).order(:showcase_rank).limit(5).each do |performance|
+             Performance.where("showcase_rank > ?",params[:rank]).order(:showcase_rank).limit(50).each do |performance|
                   list.push(performance_to_hash(performance,true))
              end
         end

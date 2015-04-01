@@ -28,7 +28,7 @@ class RankMap < ActiveRecord::Base
       userMap=nil
       if rank_map
            user= User.find(rank_map.user_id)
-           userMap = user.as_json
+           userMap = user.as_json(except:[:auth_token, :email, :random_token])
            userMap[:user_avatar_url]=user.user_media_map.media_map.media_url if user.user_media_map
       end
       userMap

@@ -5,6 +5,7 @@ gem 'rails', '4.1.0'
 
 gem 'rails-api'
 gem 'puma'
+gem 'fog'
 
 gem 'spring', :group => :development
 gem 'pg'

@@ -17,8 +17,12 @@
 # media_type -> 1:audio 2:video 3:image 4:Book
 class Media < ActiveRecord::Base
   after_create :generate_uuid  
-  has_attached_file :attachment
-  validates_attachment_content_type :attachment, :content_type => ['image/jpeg','image/jpg','image/png','video/mp4','video/3gpp','audio/mp3','audio/mpeg', 'application/mp4','application/epub+zip']
+  has_attached_file :attachment,
+                    :storage => :fog,
+                    :fog_credentials => "#{Rails.root}/config/gce.yml",
+                    :fog_directory => FOG_CONF['fog_directory']
+
+  validates_attachment_content_type :attachment, :content_type => ['application/octet-stream','image/jpeg','image/jpg','image/png','video/mp4','video/3gpp','audio/mp3','audio/mpeg', 'application/mp4','application/epub+zip']
   do_not_validate_attachment_file_type :attachment
 
 
@@ -42,16 +46,23 @@ class Media < ActiveRecord::Base
     case type
     when 1 #audio
        f = file.tempfile
-       original_path="/tmp/#{file.original_filename}"
-       File.rename(f, "/tmp/#{file.original_filename}")
-       puts "ORIGINAL PATH #{original_path}"
-       new_path="/tmp/#{File.basename(original_path,'.*')}.mp3"
-       puts "NEW PATH #{new_path}"
-       system("ffmpeg -i #{original_path} -y -vn -ar 44100 -ac 2 -ab 192k -f mp3 #{new_path}")
-       new_f = open(new_path)
-       new_file=new_f
-       puts "New File name is #{File.basename(new_file)}"
-       puts "MIME TYPE IS #{MIME::Types.type_for(File.basename(new_file)).first.content_type.to_s}"
+       puts "FILE NAME IS #{file.original_filename}"
+       puts "FILE CONTAINS MP3 #{file.original_filename.include?".mp3"}"       
+       if !file.original_filename.include?".mp3"
+           original_path="/tmp/#{file.original_filename}"
+           File.rename(f, "/tmp/#{file.original_filename}")
+           puts "ORIGINAL PATH #{original_path}"
+           new_path="/tmp/#{File.basename(original_path,'.*')}.mp3"
+           puts "NEW PATH #{new_path}"
+           system("ffmpeg -i #{original_path} -y -vn -ar 44100 -ac 2 -ab 192k -f mp3 #{new_path}")
+           new_f = open(new_path)
+           new_file=new_f
+           puts "New File name is #{File.basename(new_file)}"
+       else
+        file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s
+        puts "CONTENT TYPE #{file.content_type}"
+        new_file=file
+       end       
 
     when 2 #video
        file.content_type=MIME::Types.type_for(file.original_filename).first.content_type.to_s

@@ -56,11 +56,11 @@ class User < ActiveRecord::Base
         user = User.find(params[:id])
         showcase_queue_count = ShowcaseQueue.count
         cap = ShowcaseCap.find(1)
-        if(user.has_posted || showcase_queue_count>=cap.quota || Time.now > cap.end_time)
-           response={state:true, start_date:cap.start_time}
-        else
+        # if(user.has_posted || showcase_queue_count>=cap.quota || Time.now > cap.end_time)
+           # response={state:true, start_date:cap.start_time.strftime("%Y-%m-%d %H:%M:%S")}
+        # else
           response={state:false, start_date:nil}
-        end
+        # end
      end
      response
   end
@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
   def self.show(params)
        user = User.find(params[:id])
        if user
-            userhash = user.as_json
+            userhash = user.as_json(except:[:auth_token, :email, :random_token])
             userhash[:total_appreciations]=ResponseMap.where(owner_id:params[:id],has_appreciated:true).size()
             userhash[:total_inspires]=ResponseMap.where(owner_id:params[:id],is_inspired:true).size()
             userhash[:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map
@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
     else
       last = Time.parse(params[:timestamp])
     end
-    list=ResponseMap.where("user_id=? and has_appreciated=? and created_at <? ",params[:id],1,last).order(created_at: :desc).limit(10)
+    list=ResponseMap.where("user_id=? and has_appreciated=? and created_at <? ",params[:id],1,last).limit(50).order(created_at: :desc).limit(10)
     appreciations=[]
     list.each do |map|
         appreciation = Showcase.find(map.showcase_id)
@@ -127,7 +127,7 @@ class User < ActiveRecord::Base
     else
       last = Time.parse(params[:timestamp])
     end
-    list=ResponseMap.where("user_id=? and is_inspired =? and created_at <? ",params[:id],1,last).order(created_at: :desc).limit(10)
+    list=ResponseMap.where("user_id=? and is_inspired =? and created_at <? ",params[:id],1,last).limit(50).order(created_at: :desc).limit(10)
     inspirations=[]
     list.each do |map|
         if map.content_type ==1
@@ -164,7 +164,7 @@ class User < ActiveRecord::Base
       else
         last = Time.parse(params[:timestamp])
      end
-     list = Showcase.where("user_id=? and created_at<?",params[:id],last).order(created_at: :desc).limit(10)
+     list = Showcase.where("user_id=? and created_at<?",params[:id],last).order(created_at: :desc).limit(50)
      showcases=[]
      list.each do |showcase|
         showcaseHash = showcase.as_json
@@ -188,11 +188,11 @@ class User < ActiveRecord::Base
       else
         last = Time.parse(params[:timestamp])
       end
-      list=Network.where("followee_id=? and created_at<?",params[:id],last).order(created_at: :desc)
+      list=Network.where("followee_id=? and created_at<?",params[:id],last).limit(50).order(created_at: :desc)
       fans=[]
       list.each do |fan|
            user = User.find(fan.follower_id)
-           userHash = user.as_json
+           userHash = user.as_json(except:[:auth_token, :email, :random_token])
            userHash[:total_appreciations]=ResponseMap.where(owner_id:fan.follower_id,has_appreciated:true).size()
             userHash[:total_inspires]=ResponseMap.where(owner_id:fan.follower_id,is_inspired:true).size()
             userHash[:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map
@@ -207,11 +207,11 @@ class User < ActiveRecord::Base
       else
         last = Time.parse(params[:timestamp])
       end
-      list=Network.where("follower_id=? and created_at<?",params[:id],last).order(created_at: :desc)
+      list=Network.where("follower_id=? and created_at<?",params[:id],last).limit(50).order(created_at: :desc)
       promotes=[]
       list.each do |promoted|
            user = User.find(promoted.followee_id)
-           userHash = user.as_json
+           userHash = user.as_json(except:[:auth_token, :email, :random_token])
            userHash[:total_appreciations]=ResponseMap.where(owner_id:promoted.followee_id,has_appreciated:true).size()
             userHash[:total_inspires]=ResponseMap.where(owner_id:promoted.followee_id,is_inspired:true).size()
             userHash[:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map
