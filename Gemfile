@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 
-
 gem 'rails', '4.2.0'
-gem 'capistrano'
 gem 'rails-api'
 gem 'puma'
 gem 'fog'
