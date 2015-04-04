@@ -3,7 +3,12 @@ class Api::V1::ContentsController < ApplicationController
   include ActionView::Helpers::DateHelper
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
-    before_action :authenticate_action, except: [:show, :get_performances_map, :list_performances, :limelight, :list_limelight]
+    before_action :authenticate_action, except: [:test, :show, :get_performances_map, :list_performances, :limelight, :list_limelight]
+
+  #GET /api/v1/contents/test - API test  
+  def test
+     render json:{response:"Welcome to Candeo...Rise and shine!"}
+  end
 
   #GET /api/v1/contents/performances/show - Fetch Last Week Performances
   def get_performances_map

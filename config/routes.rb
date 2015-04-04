@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     match '/users/update_profile', to:'users#update_profile',via:'post',as: :update_profile
 
     #Contents
+    match '/contents/test', to:'contents#test', via:'get',as: :test
     match '/contents/performances/show', to:'contents#get_performances_map', via:'get',as: :performance_map
     match '/contents/performances/list/:rank', to:'contents#list_performances', via:'get', as: :performances
     match '/contents/limelight/:id', to:'contents#limelight', via:'get', as: :limelight
