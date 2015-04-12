@@ -1,0 +1,15 @@
+development:
+  api_key: AKIAJ63I63NIW5ZA4DGA
+  api_secret: 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
+
+production:
+  api_key: AKIAJ63I63NIW5ZA4DGA
+  api_secret: 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
+
+test:
+  api_key: AKIAJ63I63NIW5ZA4DGA
+  api_secret: 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
+
+staging:
+  api_key: AKIAJ63I63NIW5ZA4DGA
+  api_secret: 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

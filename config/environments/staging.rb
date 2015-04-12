@@ -34,6 +34,8 @@ Rails.application.configure do
 
   # Version of your assets, change this if you want to expire all your assets.
   config.assets.version = '1.0'
+  config.action_mailer.default_url_options = { :host => 'stage.candeoapp.com' }
+  config.action_mailer.delivery_method = :ses
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
@@ -81,4 +83,5 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   FOG_CONF = YAML::load_file("#{Rails.root}/config/fog.yml")[Rails.env]
+  SES_CONF = YAML::load_file("#{Rails.root}/config/ses.yml")[Rails.env]
 end
