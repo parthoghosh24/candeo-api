@@ -5,9 +5,14 @@ class Api::V1::ContentsController < ApplicationController
 
     before_action :authenticate_action, except: [:test, :show, :get_performances_map, :list_performances, :limelight, :list_limelight]
 
-  #GET /api/v1/contents/test - API test  
+  #GET /api/v1/contents/test - API test
   def test
-     render json:{response:"Welcome to Candeo...Rise and shine!"}
+     if Rails.env.staging?
+        render json:{response:"Welcome to Candeo TEST...Rise and shine!"}
+     else
+        render json:{response:"Welcome to Candeo...Rise and shine!"}
+     end
+
   end
 
   #GET /api/v1/contents/performances/show - Fetch Last Week Performances
