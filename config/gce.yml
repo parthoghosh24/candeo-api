@@ -2,3 +2,15 @@ development:
   provider: Google
   google_storage_access_key_id: GOOG3Z5UEUYAAQSKAFLN
   google_storage_secret_access_key: cp2w8a68yI2GVY6c9ioj+xiqzKHDGzoN3ZmSLJuR
+test:
+  provider: Google
+  google_storage_access_key_id: GOOG3Z5UEUYAAQSKAFLN
+  google_storage_secret_access_key: cp2w8a68yI2GVY6c9ioj+xiqzKHDGzoN3ZmSLJuR
+production:
+  provider: Google
+  google_storage_access_key_id: GOOG3Z5UEUYAAQSKAFLN
+  google_storage_secret_access_key: cp2w8a68yI2GVY6c9ioj+xiqzKHDGzoN3ZmSLJuR
+staging:
+  provider: Google
+  google_storage_access_key_id: GOOG3Z5UEUYAAQSKAFLN
+  google_storage_secret_access_key: cp2w8a68yI2GVY6c9ioj+xiqzKHDGzoN3ZmSLJuR      
