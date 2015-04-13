@@ -159,6 +159,7 @@ end
             url = "http://www.candeoapp.com/verify/#{response[:random_token]}"
             Thread.new do
                CandeoMailer.verify_user(user, url).deliver
+               ActiveRecord::Base.connection.close
             end
             puts "Sending success"
             render json: {:response=>"success"}, status: 200
