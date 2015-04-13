@@ -35,7 +35,7 @@ class Media < ActiveRecord::Base
     Media.all.each do |media|
       list.push(media.id) if !MediaMap.exists?(media_id:media.id)
     end         
-    Media.delete(list) if list.size > 0
+    Media.where(id:list).destroy_all
   end
 
   def self.upload(file, type)
