@@ -79,7 +79,12 @@ class Media < ActiveRecord::Base
         new_file=file
         puts "CONTENT TYPE #{file.content_type}"
     end
-    media = Media.create!(attachment:new_file)
+    begin
+      media = Media.create!(attachment:new_file)  
+    rescue Exception => e
+        puts "Error #{$!}"
+    end
+    
     File.delete(original_path) if original_path && File.exist?(original_path)
     File.delete(new_path) if new_path && File.exist?(new_path)
     media.update(media_type:type)
