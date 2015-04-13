@@ -1,8 +1,8 @@
 development:
-  fog_directory: "candeo-media/dev"
+  fog_directory: "candeo-media-dev"
 test:
-  fog_directory: "candeo-media/dev" 	 
+  fog_directory: "candeo-media-dev" 	 
 production:
-  fog_directory: "candeo-media/prod"
+  fog_directory: "candeo-media-prod"
 staging:
-  fog_directory: "candeo-media/stage"
+  fog_directory: "candeo-media-stage"
