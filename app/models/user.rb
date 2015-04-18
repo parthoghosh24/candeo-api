@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
         appreciationHash[:rank]=Performance.exists?(showcase_id:map.showcase_id) ? Performance.find_by(showcase_id:map.showcase_id).showcase_rank : "Not Ranked"
         appreciationHash[:user_name]=appreciation.user.name
         appreciationHash[:avatar_path]=appreciation.user.user_media_map.media_map.media_url
-        bg_url = appreciation.content.content_media_map.media_map.media.media_type == 3 ? nil : appreciation.user.user_media_map.media_map.media_url
+        bg_url = appreciation.content.content_media_map && appreciation.content.content_media_map.media_map.media.media_type == 3 ? nil : appreciation.user.user_media_map.media_map.media_url
         appreciationHash[:bg_url]=bg_url
         appreciationHash[:created_at_text]=appreciation.created_at.strftime("%d %B, %Y")
         appreciationHash[:media_url]=appreciation.content.content_media_map.media_map.media_url if appreciation.content.content_media_map
@@ -140,7 +140,7 @@ class User < ActiveRecord::Base
         inspirationHash[:rank]=Performance.exists?(showcase_id:map.showcase_id) ? Performance.find_by(showcase_id:map.showcase_id).showcase_rank : "Not Ranked"
         inspirationHash[:user_name]=inspiration.user.name
         inspirationHash[:avatar_path]=inspiration.user.user_media_map.media_map.media_url
-        bg_url = inspiration.content.content_media_map.media_map.media.media_type == 3 ? nil : inspiration.user.user_media_map.media_map.media_url
+        bg_url = inspiration.content.content_media_map && inspiration.content.content_media_map.media_map.media.media_type == 3 ? nil : inspiration.user.user_media_map.media_map.media_url
         inspirationHash[:bg_url]=bg_url
         inspirationHash[:created_at_text]=inspiration.created_at.strftime("%d %B, %Y")
         inspirationHash[:media_url]=inspiration.content.content_media_map.media_map.media_url if inspiration.content.content_media_map
@@ -170,7 +170,7 @@ class User < ActiveRecord::Base
         showcaseHash = showcase.as_json
         showcaseHash[:rank]=Performance.exists?(showcase_id:showcase.id) ? Performance.find_by(showcase_id:showcase.id).showcase_rank : "Not Ranked"
         showcaseHash[:avatar_path]=showcase.user.user_media_map.media_map.media_url
-        bg_url = showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
+        bg_url = showcase.content.content_media_map && showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
         showcaseHash[:bg_url]=bg_url
         showcaseHash[:created_at_text]=showcase.created_at.strftime("%d %B, %Y")
         showcaseHash[:media_type]=showcase.content.content_media_map ? showcase.content.content_media_map.media_map.media.media_type : 0
