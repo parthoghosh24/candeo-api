@@ -21,6 +21,7 @@ class ShowcaseQueue < ActiveRecord::Base
 
   def self.enqueue(showcase)
   	bg_url = showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
+      media_type= showcase.content.content_media_map ? showcase.content.content_media_map.media_map.media.media_type : 0
   	ShowcaseQueue.create!(showcase_id:showcase.id,title:showcase.title,media_type:showcase.content.content_media_map.media_map.media.media_type)
   end
 
@@ -61,7 +62,7 @@ end
   bg_url = item.showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : item.showcase.user.user_media_map.media_map.media_url
   itemHash[:bg_url]=bg_url
   itemHash[:media_url]=item.showcase.content.content_media_map.media_map.media_url
-  itemHash[:media_type]=item.media_type
+  itemHash[:media_type]=item.media_type.blank? ? 0 : item.media_type
   puts itemHash
   itemHash
  end

@@ -24,24 +24,25 @@ class Showcase < ActiveRecord::Base
   accepts_nested_attributes_for :content
 
   def self.create_showcase(params)
-    showcase =nil    
+    showcase =nil
+    showcase=Showcase.create(content_attributes:{user_id:params[:user_id], description:params[:description]}, title:params[:title], user_id: params[:user_id], state:2) #state needs to be implemented after people's usage
+    if !params[:referral_tag].blank?
+      showcase.content.update(referral_tag:params[:referral_tag])
+    end
+
     if !params[:media_id].blank?
       media = Media.find(params[:media_id])
-      showcase=Showcase.create(content_attributes:{user_id:params[:user_id]}, title:params[:title], user_id: params[:user_id], state:2) #state needs to be implemented after people's usage
-      if !params[:referral_tag].blank?
-        showcase.content.update(referral_tag:params[:referral_tag])
-      end
-      
-        
-      showcase.content.content_media_map=ContentMediaMap.create!(media_map_attributes:{media_id:media.id,media_url:media.attachment.url})        
-      
-      
+      showcase.content.content_media_map=ContentMediaMap.create!(media_map_attributes:{media_id:media.id,media_url:media.attachment.url})
+    end
+
+
+
+
       #lock user to further create till next week
       showcase.user.update(has_posted:true)
       ShowcaseQueue.enqueue(showcase)
       showcase.id
-    end          
-  end  
+  end
 
   private
 
