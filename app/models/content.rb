@@ -35,7 +35,7 @@ class Content < ActiveRecord::Base
 
     if content
         contentHash = content.as_json
-        bg_url = content.user.user_media_map.media_map.media_url if content.content_media_map && content.content_media_map.media_map.media.media_type != 3
+        bg_url = content.content_media_map && content.content_media_map.media_map.media.media_type == 3 ? nil : content.user.user_media_map.media_map.media_url
         if(type == 1)
           contentHash[:has_been_inspired]=ResponseMap.exists?(user_id:params[:user_id], showcase_id:params[:id], is_inspired:1)
         else
