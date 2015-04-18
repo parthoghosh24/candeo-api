@@ -20,7 +20,7 @@ class ShowcaseQueue < ActiveRecord::Base
   belongs_to :showcase
 
   def self.enqueue(showcase)
-  	bg_url = showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
+  	bg_url = showcase.content.content_media_map && showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
       media_type= showcase.content.content_media_map ? showcase.content.content_media_map.media_map.media.media_type : 0
   	ShowcaseQueue.create!(showcase_id:showcase.id,title:showcase.title,media_type:showcase.content.content_media_map.media_map.media.media_type)
   end
