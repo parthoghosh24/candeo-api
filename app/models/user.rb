@@ -112,8 +112,8 @@ class User < ActiveRecord::Base
         bg_url = appreciation.content.content_media_map.media_map.media.media_type == 3 ? nil : appreciation.user.user_media_map.media_map.media_url
         appreciationHash[:bg_url]=bg_url
         appreciationHash[:created_at_text]=appreciation.created_at.strftime("%d %B, %Y")
-        appreciationHash[:media_url]=appreciation.content.content_media_map.media_map.media_url
-        appreciationHash[:media_type]=appreciation.content.content_media_map.media_map.media.media_type if appreciation.content.content_media_map
+        appreciationHash[:media_url]=appreciation.content.content_media_map.media_map.media_url if appreciation.content.content_media_map
+        appreciationHash[:media_type]=appreciation.content.content_media_map ? appreciation.content.content_media_map.media_map.media.media_type : 0
         appreciationHash[:appreciation_count]=ResponseMap.where(showcase_id:map.showcase_id,has_appreciated:true).size()
         appreciations.push(appreciationHash)
     end
@@ -143,8 +143,8 @@ class User < ActiveRecord::Base
         bg_url = inspiration.content.content_media_map.media_map.media.media_type == 3 ? nil : inspiration.user.user_media_map.media_map.media_url
         inspirationHash[:bg_url]=bg_url
         inspirationHash[:created_at_text]=inspiration.created_at.strftime("%d %B, %Y")
-        inspirationHash[:media_url]=inspiration.content.content_media_map.media_map.media_url
-        inspirationHash[:media_type]=inspiration.content.content_media_map.media_map.media.media_type if inspiration.content.content_media_map
+        inspirationHash[:media_url]=inspiration.content.content_media_map.media_map.media_url if inspiration.content.content_media_map
+        inspirationHash[:media_type]=inspiration.content.content_media_map ? inspiration.content.content_media_map.media_map.media.media_type : 0
         if map.content_type==1
             inspirationHash[:inspiration_count]=ResponseMap.where(showcase_id:map.showcase_id,is_inspired:true).size()
         else
@@ -173,8 +173,8 @@ class User < ActiveRecord::Base
         bg_url = showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
         showcaseHash[:bg_url]=bg_url
         showcaseHash[:created_at_text]=showcase.created_at.strftime("%d %B, %Y")
-        showcaseHash[:media_type]=showcase.content.content_media_map.media_map.media.media_type if showcase.content.content_media_map
-        showcaseHash[:media_url]=showcase.content.content_media_map.media_map.media_url
+        showcaseHash[:media_type]=showcase.content.content_media_map ? showcase.content.content_media_map.media_map.media.media_type : 0
+        showcaseHash[:media_url]=showcase.content.content_media_map.media_map.media_url if showcase.content.content_media_map
         showcaseHash[:appreciation_count]=ResponseMap.where(showcase_id:showcase.id,has_appreciated:true).size()
         showcaseHash[:inspiration_count]=ResponseMap.where(showcase_id:showcase.id,is_inspired:true).size()
         showcases.push(showcaseHash)

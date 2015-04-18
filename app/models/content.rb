@@ -32,7 +32,7 @@ class Content < ActiveRecord::Base
         content = Content.find_by(shareable_id:params[:id], shareable_type:"Status")
     end
 
-    
+
     if content
         contentHash = content.as_json
         bg_url = content.user.user_media_map.media_map.media_url if content.content_media_map.media_map.media.media_type != 3
@@ -41,8 +41,8 @@ class Content < ActiveRecord::Base
         else
           contentHash[:has_been_inspired]=ResponseMap.exists?(user_id:params[:user_id], status_id:params[:id], is_inspired:1)
         end
-        puts "bg url #{bg_url}"        
-        contentHash[:media_type]=content.content_media_map.media_map.media.media_type if content.content_media_map
+        puts "bg url #{bg_url}"
+        contentHash[:media_type]=content.content_media_map ? content.content_media_map.media_map.media.media_type : 0
         contentHash[:media_url]=content.content_media_map.media_map.media_url if content.content_media_map
         contentHash[:bg_url]=bg_url
         contentHash[:user_name]=content.user.name
@@ -78,7 +78,7 @@ class Content < ActiveRecord::Base
         bg_url = showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
         showcaseHash[:bg_url]=bg_url
         showcaseHash[:created_at_text]=showcase.created_at.strftime("%d %B, %Y")
-        showcaseHash[:media_type]=showcase.content.content_media_map.media_map.media.media_type if showcase.content.content_media_map
+        showcaseHash[:media_type]=showcase.content.content_media_map ? showcase.content.content_media_map.media_map.media.media_type : 0
         showcaseHash[:appreciation_count]=ResponseMap.where(showcase_id:showcase.id,has_appreciated:true).size()
         showcaseHash[:inspiration_count]=ResponseMap.where(showcase_id:showcase.id,is_inspired:true).size()
         showcases.push(showcaseHash)
