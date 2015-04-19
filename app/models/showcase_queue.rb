@@ -59,9 +59,9 @@ end
   itemHash[:user_avatar_url]=item.showcase.user.user_media_map.media_map.media_url
   itemHash[:total_appreciations]= item.total_appreciations
   itemHash[:total_skips]=item.total_skips
-  bg_url = item.showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : item.showcase.user.user_media_map.media_map.media_url
+  bg_url = item.showcase.content.content_media_map && item.showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : item.showcase.user.user_media_map.media_map.media_url
   itemHash[:bg_url]=bg_url
-  itemHash[:media_url]=item.showcase.content.content_media_map.media_map.media_url
+  itemHash[:media_url]=item.showcase.content.content_media_map.media_map.media_url if item.showcase.content.content_media_map
   itemHash[:media_type]=item.media_type.blank? ? 0 : item.media_type
   puts itemHash
   itemHash
