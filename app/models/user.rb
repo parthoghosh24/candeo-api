@@ -56,11 +56,11 @@ class User < ActiveRecord::Base
         user = User.find(params[:id])
         showcase_queue_count = ShowcaseQueue.count
         cap = ShowcaseCap.find(1)
-        # if(user.has_posted || showcase_queue_count>=cap.quota || Time.now > cap.end_time)
-           # response={state:true, start_date:cap.start_time.strftime("%Y-%m-%d %H:%M:%S")}
-        # else
+        if(user.has_posted || showcase_queue_count>=cap.quota || Time.now > cap.end_time)
+           response={state:true, start_date:cap.start_time.strftime("%Y-%m-%d %H:%M:%S")}
+        else
           response={state:false, start_date:nil}
-        # end
+        end
      end
      response
   end
