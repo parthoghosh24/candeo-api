@@ -24,7 +24,6 @@ class Performance < ActiveRecord::Base
    def self.fetch_performance
         performances={}
         list=Performance.where(is_showcase_archived:false).order(:showcase_rank).limit(10)
-        if list.size > 0
              #Last Week Chartbusters
               performances[:candeoTopContent1]= list.size>0 ? performance_to_hash(list[0],true) : {}
               performances[:candeoTopContent2]= list.size>1 ? performance_to_hash(list[1],true) : {}
@@ -41,7 +40,7 @@ class Performance < ActiveRecord::Base
               last_user=performances[:candeoTopCreator2].user_id
               performances[:candeoTopCreator3]= RankMap.fetch_top_user_by_rank(3,last_user)
 
-        end
+        
         Rails.logger.debug("Performances is #{performances}")
         performances
 
