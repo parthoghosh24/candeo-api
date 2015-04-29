@@ -35,9 +35,9 @@ class Performance < ActiveRecord::Base
               #All time top performers
               last_user=nil
               performances[:candeoTopCreator1]= RankMap.fetch_top_user_by_rank(1,last_user)
-              last_user=performances[:candeoTopCreator1][:id]
+              last_user=performances[:candeoTopCreator1]["id"]
               performances[:candeoTopCreator2]= RankMap.fetch_top_user_by_rank(2,last_user)
-              last_user=performances[:candeoTopCreator2][:id]
+              last_user=performances[:candeoTopCreator2]["id"]
               performances[:candeoTopCreator3]= RankMap.fetch_top_user_by_rank(3,last_user)
 
         
