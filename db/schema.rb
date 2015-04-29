@@ -11,72 +11,72 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150320051715) do
+ActiveRecord::Schema.define(version: 20150429145459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "activity_logs", force: true do |t|
+  create_table "activity_logs", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "activity_type"
     t.json     "activity"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "activity_level"
-    t.string   "uuid"
+    t.string   "uuid",           limit: 255
   end
 
-  create_table "content_media_maps", force: true do |t|
+  create_table "content_media_maps", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "content_id"
   end
 
-  create_table "contents", force: true do |t|
+  create_table "contents", force: :cascade do |t|
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "shareable_type"
+    t.string   "shareable_type", limit: 255
     t.integer  "shareable_id"
     t.integer  "user_id"
-    t.string   "uuid"
-    t.string   "referral_tag"
+    t.string   "uuid",           limit: 255
+    t.string   "referral_tag",   limit: 255
   end
 
-  create_table "media", force: true do |t|
+  create_table "media", force: :cascade do |t|
     t.integer  "media_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "uuid"
-    t.string   "attachment_file_name"
-    t.string   "attachment_content_type"
+    t.string   "uuid",                    limit: 255
+    t.string   "attachment_file_name",    limit: 255
+    t.string   "attachment_content_type", limit: 255
     t.integer  "attachment_file_size"
     t.datetime "attachment_updated_at"
   end
 
-  create_table "media_maps", force: true do |t|
+  create_table "media_maps", force: :cascade do |t|
     t.integer  "media_id"
-    t.string   "media_url"
+    t.string   "media_url",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "attachable_id"
-    t.string   "attachable_type"
-    t.string   "uuid"
+    t.string   "attachable_type", limit: 255
+    t.string   "uuid",            limit: 255
   end
 
-  create_table "networks", force: true do |t|
+  create_table "networks", force: :cascade do |t|
     t.integer  "follower_id"
     t.integer  "followee_id"
     t.integer  "is_friend"
     t.integer  "is_blocked"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "uuid"
+    t.string   "uuid",        limit: 255
   end
 
-  create_table "performances", force: true do |t|
+  create_table "performances", force: :cascade do |t|
     t.integer  "showcase_id"
-    t.string   "showcase_title"
+    t.string   "showcase_title",               limit: 255
     t.integer  "showcase_media_type"
     t.integer  "showcase_total_appreciations"
     t.integer  "showcase_total_skips"
@@ -87,9 +87,10 @@ ActiveRecord::Schema.define(version: 20150320051715) do
     t.datetime "updated_at"
     t.boolean  "is_showcase_copyrighted"
     t.integer  "showcase_top_rank"
+    t.boolean  "is_showcase_archived"
   end
 
-  create_table "rank_maps", force: true do |t|
+  create_table "rank_maps", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "rank"
     t.integer  "count"
@@ -97,14 +98,14 @@ ActiveRecord::Schema.define(version: 20150320051715) do
     t.datetime "updated_at"
   end
 
-  create_table "redirects", force: true do |t|
-    t.string   "token"
-    t.string   "long_url"
+  create_table "redirects", force: :cascade do |t|
+    t.string   "token",      limit: 255
+    t.string   "long_url",   limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "response_maps", force: true do |t|
+  create_table "response_maps", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "is_inspired"
     t.integer  "has_appreciated"
@@ -112,7 +113,7 @@ ActiveRecord::Schema.define(version: 20150320051715) do
     t.datetime "updated_at"
     t.integer  "owner_id"
     t.json     "appreciation_response"
-    t.string   "uuid"
+    t.string   "uuid",                  limit: 255
     t.json     "inspiration_response"
     t.integer  "content_type"
     t.integer  "showcase_id"
@@ -121,7 +122,7 @@ ActiveRecord::Schema.define(version: 20150320051715) do
     t.json     "skip_response"
   end
 
-  create_table "showcase_caps", force: true do |t|
+  create_table "showcase_caps", force: :cascade do |t|
     t.integer  "quota"
     t.datetime "end_time"
     t.datetime "start_time"
@@ -129,20 +130,20 @@ ActiveRecord::Schema.define(version: 20150320051715) do
     t.datetime "updated_at"
   end
 
-  create_table "showcase_queues", force: true do |t|
+  create_table "showcase_queues", force: :cascade do |t|
     t.integer  "showcase_id"
     t.boolean  "is_deleted"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title"
+    t.string   "title",               limit: 255
     t.integer  "media_type"
     t.integer  "total_appreciations"
     t.integer  "total_skips"
     t.boolean  "is_copyrighted"
   end
 
-  create_table "showcase_tasks", force: true do |t|
-    t.string   "cron"
+  create_table "showcase_tasks", force: :cascade do |t|
+    t.string   "cron",                 limit: 255
     t.integer  "content_limit"
     t.datetime "last_timestamp"
     t.integer  "last_timestamp_epoch"
@@ -151,40 +152,40 @@ ActiveRecord::Schema.define(version: 20150320051715) do
     t.integer  "last_rank"
   end
 
-  create_table "showcases", force: true do |t|
-    t.string   "title"
+  create_table "showcases", force: :cascade do |t|
+    t.string   "title",          limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
     t.integer  "state"
-    t.string   "uuid"
+    t.string   "uuid",           limit: 255
     t.boolean  "is_copyrighted"
   end
 
-  create_table "statuses", force: true do |t|
+  create_table "statuses", force: :cascade do |t|
     t.integer  "mode"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "tag"
-    t.string   "uuid"
+    t.string   "tag",        limit: 255
+    t.string   "uuid",       limit: 255
   end
 
-  create_table "user_media_maps", force: true do |t|
+  create_table "user_media_maps", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
   end
 
-  create_table "users", force: true do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "auth_token"
+  create_table "users", force: :cascade do |t|
+    t.string   "name",                limit: 255
+    t.string   "email",               limit: 255
+    t.string   "auth_token",          limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "uuid"
-    t.string   "username"
-    t.string   "about"
+    t.string   "uuid",                limit: 255
+    t.string   "username",            limit: 255
+    t.string   "about",               limit: 255
     t.integer  "random_token"
     t.integer  "total_appreciations"
     t.integer  "total_inspires"

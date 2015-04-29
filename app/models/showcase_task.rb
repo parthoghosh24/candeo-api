@@ -29,9 +29,11 @@ class ShowcaseTask < ActiveRecord::Base
         performance_map[:showcase_created_at]=queue_data.showcase.created_at
         performance_map[:showcase_rank]=rank
         performance_map[:showcase_top_rank]=rank
+        performance_map[:is_showcase_copyrighted]=false
         # performance_map[:last_rank]=last_rank
         performance_map[:showcase_score]=0.0 #ideally should be wilson score
         performance_maps.push(performance_map)
+
         queue_data.showcase.user.update(has_posted:false)
         RankMap.create_or_update(queue_data.showcase.user_id,rank)
         rank+=1
@@ -49,6 +51,7 @@ class ShowcaseTask < ActiveRecord::Base
             performance_map[:showcase_top_rank]=performance.showcase_top_rank
             # performance_map[:last_rank]=performance.showcase_rank
             performance_map[:showcase_rank]=rank
+            performance_map[:is_showcase_copyrighted]=true
             performance_map[:showcase_score]=performance.showcase_score #ideally should be wilson score
             performance_maps.push(performance_map)
             rank+=1
@@ -64,6 +67,7 @@ class ShowcaseTask < ActiveRecord::Base
         				   showcase_created_at:performance_map[:showcase_created_at],
         				   showcase_rank:performance_map[:showcase_rank],
         				   showcase_score:performance_map[:showcase_score],
+                   is_showcase_copyrighted:performance_map[:is_showcase_copyrighted],
                               # last_rank:performance_map[:last_rank],
                    showcase_top_rank:performance_map[:showcase_top_rank])
 

@@ -15,6 +15,7 @@
 #  updated_at                   :datetime
 #  is_showcase_copyrighted      :boolean
 #  showcase_top_rank            :integer
+#  is_showcase_archived         :boolean
 #
 
 class Performance < ActiveRecord::Base
@@ -22,20 +23,23 @@ class Performance < ActiveRecord::Base
 
    def self.fetch_performance
         performances={}
-        list=Performance.all.order(:showcase_rank).limit(10)
+        list=Performance.where(is_showcase_archived:false).order(:showcase_rank).limit(10)
         if list.size > 0
              #Last Week Chartbusters
-              performances[:candeoTopContent1]= performance_to_hash(list[0],true)
-              performances[:candeoTopContent2]= performance_to_hash(list[1],true)
-              performances[:candeoTopContent3]= performance_to_hash(list[2],true)
-              performances[:candeoTopContent4]= performance_to_hash(list[3],true)
-              performances[:candeoTopContent5]= performance_to_hash(list[4],true)
+              performances[:candeoTopContent1]= list.size>0 ? performance_to_hash(list[0],true) : {}
+              performances[:candeoTopContent2]= list.size>1 ? performance_to_hash(list[1],true) : {}
+              performances[:candeoTopContent3]= list.size>2 ? performance_to_hash(list[2],true) : {}
+              performances[:candeoTopContent4]= list.size>3 ? performance_to_hash(list[3],true) : {}
+              performances[:candeoTopContent5]= list.size>4 ? performance_to_hash(list[4],true) : {}
 
 
               #All time top performers
-              performances[:candeoTopCreator1]= RankMap.fetch_top_user_by_rank(1)
-              performances[:candeoTopCreator2]= RankMap.fetch_top_user_by_rank(2)
-              performances[:candeoTopCreator3]= RankMap.fetch_top_user_by_rank(3)
+              last_user=nil
+              performances[:candeoTopCreator1]= RankMap.fetch_top_user_by_rank(1,last_user)
+              last_user=performances[:candeoTopCreator1].user_id
+              performances[:candeoTopCreator2]= RankMap.fetch_top_user_by_rank(2,last_user)
+              last_user=performances[:candeoTopCreator2].user_id
+              performances[:candeoTopCreator3]= RankMap.fetch_top_user_by_rank(3,last_user)
 
         end
         Rails.logger.debug("Performances is #{performances}")
@@ -46,7 +50,7 @@ class Performance < ActiveRecord::Base
    def self.performance_list(params)
         list=[]
         if !params[:rank].blank?
-             Performance.where("showcase_rank > ?",params[:rank]).order(:showcase_rank).limit(50).each do |performance|
+             Performance.where("showcase_rank > ? and is_showcase_archived='t'",params[:rank]).order(:showcase_rank).limit(50).each do |performance|
                   list.push(performance_to_hash(performance,true))
              end
         end
