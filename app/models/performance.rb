@@ -61,7 +61,7 @@ class Performance < ActiveRecord::Base
         performance_hash=performance.as_json
         bg_url = performance.showcase.content.content_media_map && performance.showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : performance.showcase.user.user_media_map.media_map.media_url
         performance_hash[:bg_url]=bg_url
-        performance_hash[:media_url]=performance.showcase.content.content_media_map.media_map.media_url if performance.showcase.content.content_media_map
+        performance_hash[:media_url]=performance.showcase.content.content_media_map ? performance.showcase.content.content_media_map.media_map.media_url : nil
         if has_user
             performance_hash[:name]=performance.showcase.user.name
             performance_hash[:user_avatar_url]=performance.showcase.user.user_media_map.media_map.media_url
