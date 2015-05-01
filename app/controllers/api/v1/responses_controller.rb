@@ -58,6 +58,15 @@ class Api::V1::ResponsesController < ApplicationController
     end
   end
 
+def authenticate_with_default_key
+       authenticate_or_request_with_http_token do |token, options|
+            hash = CandeoHmac.generate_untouched_hmac("candeosecret2015",request.headers['message'])
+            puts "gen hash is start#{hash}end"
+            puts "incoming hash is start#{token}end"
+            return hash == token
+       end
+       false
+  end
   def authenticate_action
        authenticate_or_request_with_http_token do |token, options|
             puts "email is#{request.headers['email']}"
