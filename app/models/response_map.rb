@@ -73,6 +73,38 @@ class ResponseMap < ActiveRecord::Base
     response.id
   end
 
+  def self.fetch_responses(params)
+    list =[]
+    if !params.blank?
+      response_type=params[:type].to_i  
+      content_id=params[:content_id]
+      content = Content.find(content_id)
+      if content.shareable_type=="Showcase"
+        if response_type == 1 #appreciation
+            response_maps = ResponseMap.where(showcase_id:content.shareable_id, has_appreciated:1).order(created_at: :desc)
+        else
+            response_maps = ResponseMap.where(showcase_id:content.shareable_id, is_inspired:1).order(created_at: :desc)
+        end        
+      else
+        if response_type == 1
+            response_maps = ResponseMap.where(status_id:content.shareable_id, has_appreciated:1).order(created_at: :desc)
+        else
+            response_maps = ResponseMap.where(status_id:content.shareable_id, is_inspired:1).order(created_at: :desc)
+        end      
+      end
+      response_maps.each do |repsonse_map|
+         final_response = {}
+         final_response[:response]=response_map.to_json
+         final_response[:response][:created_at_timestamp]=response_map.created_at.to_i*1000
+         user = User.find(response_map.user_id)
+         final_response[:user]=user.as_json(except:[:auth_token, :email, :random_token])
+         final_response[:user][:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map  
+         list.push(final_response)
+      end
+    end    
+    list
+  end
+
   private
 
   def generate_uuid

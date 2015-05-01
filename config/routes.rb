@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     match '/contents/responses/inspire', to:'responses#inspire', via:'post', as: :get_inspired
     match '/contents/responses/appreciate', to:'responses#appreciate', via:'post', as: :appreciate
     match '/contents/responses/skip', to:'responses#skip', via:'post', as: :skip
+    match '/contents/responses/:type/:content_id', to:'responses#fetch_responses', via:'get', as: :fetch_responses
     match  '/contents/:id/:type/:user_id', to:'contents#show', via:'get', as: :content
 
     end

@@ -36,6 +36,28 @@ class Api::V1::ResponsesController < ApplicationController
     end
   end
 
+  def fetch_responses
+    if request.headers['email'].blank?
+         if authenticate_with_default_key
+              responses = ResponseMap.fetch_responses(params)
+              if responses.blank?
+                  render json:{:response=>"failed"}, status:422
+              else
+                  render json: {:responses => responses}, status: 200
+              end
+         end
+    else
+        if authenticate_action
+              responses = ResponseMap.fetch_responses(params)
+              if responses.blank?
+                  render json:{:response=>"failed"}, status:422
+              else
+                  render json: {:responses => responses}, status: 200
+              end
+         end
+    end
+  end
+
   def authenticate_action
        authenticate_or_request_with_http_token do |token, options|
             puts "email is#{request.headers['email']}"
