@@ -92,7 +92,7 @@ class ResponseMap < ActiveRecord::Base
             response_maps = ResponseMap.where(status_id:content.shareable_id, is_inspired:1).order(created_at: :desc)
         end      
       end
-      response_maps.each do |repsonse_map|
+      response_maps.each do |response_map|
          final_response = {}
          final_response[:response]=response_map.to_json
          final_response[:response][:created_at_timestamp]=response_map.created_at.to_i*1000
