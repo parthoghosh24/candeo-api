@@ -32,8 +32,8 @@ class ResponseMap < ActiveRecord::Base
 
   def self.get_inspired(params)
      inspiration_response ={}
-     inspiration_response[:feeling] =params[:feeling]
-     inspiration_response[:description] =params[:description]
+     inspiration_response[:feeling] =params[:rating]
+     inspiration_response[:description] =params[:feedback]
      showcase = Showcase.find(params[:showcase_id])
      owner_id=showcase.user.id if showcase
      response=ResponseMap.create(user_id:params[:user_id], showcase_id:params[:showcase_id], content_type:1, is_inspired:1, inspiration_response:inspiration_response, owner_id:owner_id)
