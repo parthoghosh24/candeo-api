@@ -94,7 +94,7 @@ class ResponseMap < ActiveRecord::Base
       end
       response_maps.each do |response_map|
          final_response = {}
-         final_response[:response]=response_map.to_json
+         final_response[:response]=response_map.as_json
          final_response[:response][:created_at_timestamp]=response_map.created_at.to_i*1000
          user = User.find(response_map.user_id)
          final_response[:user]=user.as_json(except:[:auth_token, :email, :random_token])
