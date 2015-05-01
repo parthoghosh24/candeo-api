@@ -1,7 +1,7 @@
 class Api::V1::ResponsesController < ApplicationController
 
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  before_action :authenticate_action
+  before_action :authenticate_action, except: [:fetch_responses]
 
   #POST /contents/responses/inspire - Getting inspired from content
   def inspire
@@ -36,6 +36,7 @@ class Api::V1::ResponsesController < ApplicationController
     end
   end
 
+#GET /contents/responses/:type/:content_id - Fetch responses (appreciations/inspirations)
   def fetch_responses
     if request.headers['email'].blank?
          if authenticate_with_default_key
@@ -57,6 +58,8 @@ class Api::V1::ResponsesController < ApplicationController
          end
     end
   end
+
+  private
 
 def authenticate_with_default_key
        authenticate_or_request_with_http_token do |token, options|
