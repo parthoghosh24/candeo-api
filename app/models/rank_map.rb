@@ -31,7 +31,7 @@ class RankMap < ActiveRecord::Base
       else
           rank_map=RankMap.where("user_id<>? and rank=?",last_user_id,rank).order(count: :desc).first
       end        
-      userMap=nil
+      userMap={}
       if rank_map
            user= User.find(rank_map.user_id)
            userMap = user.as_json(except:[:auth_token, :email, :random_token])
