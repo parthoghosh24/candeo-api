@@ -10,13 +10,14 @@ if Rails.env.development?
 end
 
 if Rails.env.production?
-	scheduler = Rufus::Scheduler.new(:lockfile => ".rufus-scheduler.lock")	
-	unless scheduler.down?        
-        scheduler.every '7d' do
-          # Queue refresh in every 7 days  
-          ShowcaseTask.populate_performances
-        end
-    end
+	# scheduler = Rufus::Scheduler.new(:lockfile => ".rufus-scheduler.lock")	
+	# unless scheduler.down?        
+ #        scheduler.every '7d' do
+ #          # Queue refresh in every 7 days  
+ #          puts "Running Job for pouplating performances"
+ #          ShowcaseTask.populate_performances
+ #        end
+ #    end
 end
 
 if Rails.env.staging?
