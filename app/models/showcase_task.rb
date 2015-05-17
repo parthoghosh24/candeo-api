@@ -29,7 +29,8 @@ class ShowcaseTask < ActiveRecord::Base
         performance_map[:showcase_created_at]=queue_data.showcase.created_at
         performance_map[:showcase_rank]=rank
         performance_map[:showcase_top_rank]=rank
-        performance_map[:is_showcase_archived]=false
+
+        performance_map[:is_showcase_archived]= rank>5 ? true : false
         # performance_map[:last_rank]=last_rank
         performance_map[:showcase_score]=0.0 #ideally should be wilson score
         performance_maps.push(performance_map)

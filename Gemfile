@@ -5,6 +5,7 @@ gem 'rails-api'
 gem 'puma'
 gem 'fog'
 gem "aws-ses"
+gem 'rpush'
 
 gem 'spring', :group => :development
 gem 'pg'
