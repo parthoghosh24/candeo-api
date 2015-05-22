@@ -136,6 +136,15 @@ end
      render json: response_map, status: 200
   end
 
+  #POST /api/v1/users/gcm
+  def update_gcm
+    response = User.update_gcm
+    if response.blank?
+      render json:{:response=>"failed"}, status:422
+    else
+      render json: {:response=>"success"}, status: 200
+    end
+  end
 
   #POST /api/v1/users/verify - User verification
   def verify

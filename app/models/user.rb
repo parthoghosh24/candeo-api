@@ -15,6 +15,7 @@
 #  total_appreciations :integer
 #  total_inspires      :integer
 #  has_posted          :boolean
+#  gcm_id              :string
 #
 
 #auth_token is HMAC key. Whenever user logins, a new HMAC will be generated.
@@ -250,6 +251,16 @@ class User < ActiveRecord::Base
       return userHash
     end
     nil
+  end
+
+  def self.update_gcm(params)    
+    response = nil
+    if !params[:id].blank?
+       user = User.find(params[:id])
+       user.update(gcm_id:params[:gcm_id]) 
+       response = user
+    end
+    response
   end
 
   private

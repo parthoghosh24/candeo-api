@@ -7,6 +7,7 @@ class Api::V1::ContentsController < ApplicationController
 
   #GET /api/v1/contents/test - API test
   def test
+        
      if Rails.env.staging?
         render json:{response:"Welcome to Candeo TEST...Rise and shine!"}
      else

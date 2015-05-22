@@ -15,6 +15,7 @@
 #  total_appreciations :integer
 #  total_inspires      :integer
 #  has_posted          :boolean
+#  gcm_id              :string
 #
 
 require 'test_helper'
