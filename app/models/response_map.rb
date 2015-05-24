@@ -20,11 +20,12 @@
 #
 
 #@Partho- Response Maps hold all the mapping information between users and content.
-#feeling-> 1: Happy, 2: Confident, 3: Motivated, 4: Boosted, 5: Energetic, 6: Blessed, 7: Crazy, 8: Epic, 9: Super
+#skip_rating -> "Didn't Like", "Repeated", "Offensive", "Plagiarized"
+#appreciate_rating -> "Good", "Wow", "Superb", "Excellent", "Mesmerizing"
+#inspire_feeling-> "Motivated", "Spirited", "Enlightened", "Happy", "Cheered", "Loved", "Blessed", "Funny", "Strong"
 #Content Type-> 1:Status/Inspirition, 2:Showcase
 #appreciate_rating -> Positive ratings
-#user_id is the person who is getting inspired and/or appreciating the owner_id's inspirtion and showcase
-# User follows another user when user is getting inspired from that user. Appreciation has no following flow as user can appreciate anyone on platform.
+#user_id is the person who is getting inspired and/or appreciating the owner_id's showcase
 
 class ResponseMap < ActiveRecord::Base
 
@@ -37,6 +38,41 @@ class ResponseMap < ActiveRecord::Base
      showcase = Showcase.find(params[:showcase_id])
      owner_id=showcase.user.id if showcase
      response=ResponseMap.create(user_id:params[:user_id], showcase_id:params[:showcase_id], content_type:1, is_inspired:1, inspiration_response:inspiration_response, owner_id:owner_id)
+     if params[:user_id].to_i!=owner_id
+        Thread.new do                    
+          # Notifiying owner fans that owner inspiring people
+             user_ids = Network.where("followee_id=? and follower_id<>?",owner_id,params[:user_id]).pluck(:follower_id)
+             ids = User.where(id:user_ids).pluck(:gcm_id)
+             promoter = User.find(params[:user_id])
+             feeling={1=> "Motivated", 2=>"Spirited", 3=>"Enlightened", 4=>"Happy", 5=>"Cheered", 6=>"Loved", 7=>"Blessed", 8=>"Funny", 9=>"Strong"}             
+             if ids.size > 1     
+
+                 message = {title:"#{showcase.user.name} inspiring", 
+                            body:"#{promoter.name} feeling #{feeling[params[:rating].to_i]} by \"#{showcase.title}\"", 
+                            imageUrl: promoter.user_media_map.media_map.media_url, 
+                            bigImageUrl: "", 
+                            type: "content", 
+                            id: params[:showcase_id]}            
+                 Notification.init
+                 Notification.send(message,ids)
+             end          
+
+          #Notifying owner that he/she inspired
+             ids =[]
+             ids.push(showcase.user.gcm_id)                 
+             if ids.size >1
+                message = {title:"#{promoter.name} got inspired", 
+                            body:"#{promoter.name} feeling #{feeling[params[:rating].to_i]} by \"#{showcase.title}\"", 
+                            imageUrl: promoter.user_media_map.media_map.media_url, 
+                            bigImageUrl: "", 
+                            type: "content", 
+                            id: params[:showcase_id]}            
+                 Notification.init
+                 Notification.send(message,ids)
+             end
+          ActiveRecord::Base.connection.close
+      end
+     end     
      # network_map={}
      # network_map[:user_id]=params[:user_id]
      # network_map[:owner_id]=owner_id
@@ -58,6 +94,43 @@ class ResponseMap < ActiveRecord::Base
      Network.create_network(network_map)
      showcase_queue = ShowcaseQueue.find_by(showcase_id:showcase.id)
      showcase_queue.update(total_appreciations:showcase_queue.total_appreciations+1)
+     if params[:user_id].to_i!= owner_id
+        Thread.new do                    
+          # Notifiying owner fans that people appreciating owner
+             user_ids = Network.where("followee_id=? and follower_id<>?",owner_id,params[:user_id]).pluck(:follower_id)
+             ids = User.where(id:user_ids).pluck(:gcm_id)
+             fan = User.find(params[:user_id])
+             feeling={1=>"Good", 2=>"Wow", 3=>"Superb", 4=>"Excellent", 5=>"Mesmerizing"}             
+             if ids.size > 1     
+
+                 message = {title:"#{showcase.user.name} getting appreciated", 
+                            body:"#{fan.name} found \"#{showcase.title}\" #{feeling[params[:rating].to_i]}", 
+                            imageUrl: fan.user_media_map.media_map.media_url, 
+                            bigImageUrl: "", 
+                            type: "content", 
+                            id: params[:showcase_id]}            
+                 Notification.init
+                 Notification.send(message,ids)
+             end          
+
+          #Notifying fanbase of fan who are not in owner's fanbase
+             user_ids.push(owner_id)
+             fan_ids = Network.where("followee_id=? and follower_id not in (?)",params[:user_id], user_ids).pluck(:follower_id)
+             ids =User.where(id:fan_ids).pluck(:gcm_id)             
+             if ids.size >1
+                message = {title:"#{fan.name} appreciated", 
+                            body:"#{fan.name} found \"#{showcase.title}\" #{feeling[params[:rating].to_i]}", 
+                            imageUrl: fan.user_media_map.media_map.media_url, 
+                            bigImageUrl: "", 
+                            type: "content", 
+                            id: params[:showcase_id]}            
+                 Notification.init
+                 Notification.send(message,ids)
+             end
+          ActiveRecord::Base.connection.close
+      end
+     end
+     
     response.id
   end
 

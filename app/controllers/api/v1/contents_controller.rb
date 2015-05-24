@@ -155,6 +155,29 @@ class Api::V1::ContentsController < ApplicationController
     if !id.blank?
       response_map={:id=> id}
       puts response_map.to_json
+      Thread.new do          
+          showcase = Showcase.find(id)
+          if showcase             
+             ids = User.where("id<>?",params[:user_id]).pluck(:gcm_id)             
+             if ids.size > 1
+                type="Written"
+                 if showcase.content.content_media_map
+                    case showcase.content.content_media_map.media_map.media.media_type
+                      when 1 #Audio
+                        type="Audio"
+                      when 2 #Video
+                        type ="Video"
+                      when 3 #Image
+                         type="Image"
+                    end                   
+                 end
+                 message = {title:"New Performance", body:"Checkout #{showcase.user.name}'s #{type} performance \"#{showcase.title}\"", imageUrl: showcase.user.user_media_map.media_map.media_url, bigImageUrl: "", type: "home", id: ""}            
+                 Notification.init
+                 Notification.send(message,ids)
+             end             
+          end
+          ActiveRecord::Base.connection.close
+      end
       render json: response_map.to_json , status: 200
     else
       render json:{:response=>"failed"}, status:422

@@ -22,6 +22,23 @@ class Network < ActiveRecord::Base
   def self.create_network(params)
     if params[:user_id].to_i!=params[:owner_id].to_i && !Network.exists?(follower_id:params[:user_id], followee_id:params[:owner_id])
       network=Network.create(follower_id:params[:user_id], followee_id:params[:owner_id])
+      Thread.new do                    
+          # Notifiying owner that he/she has new fan             
+             ids = User.where(id:params[:owner_id]).pluck(:gcm_id)                                  
+             fan = User.find(params[:user_id])
+             ids.push(showcase.user.gcm_id)                 
+             if ids.size >1
+                message = {title:"You have new fan", 
+                            body:"#{fan.name} is now your fan", 
+                            imageUrl: fan.user_media_map.media_map.media_url, 
+                            bigImageUrl: "", 
+                            type: "user", 
+                            id: params[:user_id]}            
+                 Notification.init
+                 Notification.send(message,ids)
+             end
+          ActiveRecord::Base.connection.close
+      end
       network.id
     end
   end

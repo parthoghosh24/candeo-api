@@ -1,36 +1,39 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
-#
 
 development:
+  gcm_key: "AIzaSyD_JLGVGkzq2v5aQegfxVzAi1VA6gLbaWQ"
   adapter: postgresql
   encoding: unicode
   host: localhost
-  database: candeo_dev
-  username: root
-  password: root
+  database: candeo_dev  
   pool: 5
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
+  gcm_key: "AIzaSyD_JLGVGkzq2v5aQegfxVzAi1VA6gLbaWQ"
   adapter: postgresql
   encoding: unicode
   host: localhost
-  database: candeo_test
-  username: root
-  password: root
+  database: candeo_test  
   pool: 5
 
 production:
+  gcm_key: "AIzaSyCz4vMO21ESBxPyBidYp2zL1B2XWhcr0Q4"
   adapter: postgresql
   encoding: unicode
   host: localhost
   database: candeo_prod
+  username: root
+  password: root
+  pool: 5
+
+staging:
+  gcm_key: "AIzaSyCz4vMO21ESBxPyBidYp2zL1B2XWhcr0Q4"
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  database: candeo_stage
   username: root
   password: root
   pool: 5

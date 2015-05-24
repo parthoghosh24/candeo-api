@@ -39,4 +39,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
   FOG_CONF = YAML::load_file("#{Rails.root}/config/fog.yml")[Rails.env]
   SES_CONF = YAML::load_file("#{Rails.root}/config/ses.yml")[Rails.env]
+  DATABASE_CONF = YAML::load_file("#{Rails.root}/config/database.yml")[Rails.env]
 end

@@ -138,7 +138,7 @@ end
 
   #POST /api/v1/users/gcm
   def update_gcm
-    response = User.update_gcm
+    response = User.update_gcm(params)
     if response.blank?
       render json:{:response=>"failed"}, status:422
     else

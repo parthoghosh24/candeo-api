@@ -84,4 +84,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   FOG_CONF = YAML::load_file("#{Rails.root}/config/fog.yml")[Rails.env]
   SES_CONF = YAML::load_file("#{Rails.root}/config/ses.yml")[Rails.env]
+  DATABASE_CONF = YAML::load_file("#{Rails.root}/config/database.yml")[Rails.env]
 end
