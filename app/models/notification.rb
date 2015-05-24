@@ -14,7 +14,7 @@ class Notification < ActiveRecord::Base
 			app = Rpush::Gcm::App.new
 			app.name = "candeo-gcm"
 			app.environment = Rails.env
-			app.auth_key="DATABASE_CONF['gcm_key']"
+			app.auth_key=DATABASE_CONF['gcm_key']
 			app.connections=1
 			app.save!	 
 		end
