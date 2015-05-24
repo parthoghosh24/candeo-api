@@ -1,5 +1,4 @@
 if Rails.env.development?
-	# CandeoNotification.init
 	# scheduler = Rufus::Scheduler.new(:lockfile => ".rufus-scheduler.lock")
 	#   var = "1s"
  #      unless scheduler.down?        
@@ -11,7 +10,6 @@ if Rails.env.development?
 end
 
 if Rails.env.production?
-	CandeoNotification.init
 	# scheduler = Rufus::Scheduler.new(:lockfile => ".rufus-scheduler.lock")	
 	# unless scheduler.down?        
  #        scheduler.every '7d' do
@@ -23,6 +21,4 @@ if Rails.env.production?
 end
 
 if Rails.env.staging?
-	CandeoNotification.init
-	# scheduler = Rufus::Scheduler.new(:lockfile => ".rufus-scheduler.lock")
 end	
