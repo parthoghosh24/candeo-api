@@ -24,7 +24,7 @@ class Network < ActiveRecord::Base
       network=Network.create(follower_id:params[:user_id], followee_id:params[:owner_id])
       Thread.new do                    
           # Notifiying owner that he/she has new fan             
-             ids = User.where(id:params[:owner_id]).pluck(:gcm_id)                                  
+             ids = User.where("id=? and gcm_id not null",params[:owner_id]).pluck(:gcm_id)                                  
              fan = User.find(params[:user_id])
              ids.push(showcase.user.gcm_id)                 
              if ids.size >1
