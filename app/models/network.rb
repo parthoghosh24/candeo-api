@@ -27,7 +27,7 @@ class Network < ActiveRecord::Base
              ids = User.where("id=? and gcm_id not null",params[:owner_id]).pluck(:gcm_id)                                  
              fan = User.find(params[:user_id])
              ids.push(showcase.user.gcm_id)                 
-             if ids.size >1
+             if ids.size >0
                 message = {title:"You have new fan", 
                             body:"#{fan.name} is now your fan", 
                             imageUrl: fan.user_media_map.media_map.media_url, 

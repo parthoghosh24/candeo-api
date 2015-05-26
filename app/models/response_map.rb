@@ -45,7 +45,7 @@ class ResponseMap < ActiveRecord::Base
              ids = User.where("gcm_id is not null and id in (?)",user_ids).pluck(:gcm_id)
              promoter = User.find(params[:user_id])
              feeling={1=> "Motivated", 2=>"Spirited", 3=>"Enlightened", 4=>"Happy", 5=>"Cheered", 6=>"Loved", 7=>"Blessed", 8=>"Funny", 9=>"Strong"}             
-             if ids.size > 1     
+             if ids.size > 0     
 
                  message = {title:"#{showcase.user.name} inspiring", 
                             body:"#{promoter.name} feeling #{feeling[params[:rating].to_i]} by \"#{showcase.title}\"", 
@@ -60,7 +60,7 @@ class ResponseMap < ActiveRecord::Base
           #Notifying owner that he/she inspired
              ids =[]
              ids.push(showcase.user.gcm_id) if !showcase.user.gcm_id.blank?                
-             if ids.size >1
+             if ids.size >0
                 message = {title:"#{promoter.name} got inspired", 
                             body:"#{promoter.name} feeling #{feeling[params[:rating].to_i]} by \"#{showcase.title}\"", 
                             imageUrl: promoter.user_media_map.media_map.media_url, 
@@ -101,7 +101,7 @@ class ResponseMap < ActiveRecord::Base
              ids = User.where("gcm_id is not null and id in (?)",user_ids).pluck(:gcm_id)
              fan = User.find(params[:user_id])
              feeling={1=>"Good", 2=>"Wow", 3=>"Superb", 4=>"Excellent", 5=>"Mesmerizing"}             
-             if ids.size > 1     
+             if ids.size > 0     
 
                  message = {title:"#{showcase.user.name} getting appreciated", 
                             body:"#{fan.name} found \"#{showcase.title}\" #{feeling[params[:rating].to_i]}", 
@@ -117,7 +117,7 @@ class ResponseMap < ActiveRecord::Base
              fan_ids = Network.where("followee_id=? and follower_id not in (?)",params[:user_id], user_ids).pluck(:follower_id)
              fan_ids.push(owner_id) if !fan_ids.include?(owner_id)
              ids =User.where("gcm_id is not null and id in (?)",fan_ids).pluck(:gcm_id)             
-             if ids.size >1
+             if ids.size >0
                 message = {title:"#{fan.name} appreciated", 
                             body:"#{fan.name} found \"#{showcase.title}\" #{feeling[params[:rating].to_i]}", 
                             imageUrl: fan.user_media_map.media_map.media_url, 

@@ -82,7 +82,7 @@ class ShowcaseTask < ActiveRecord::Base
      Thread.new do                    
           if first_perfomance_showcase             
              ids = User.where("gcm_id is not null").pluck(:gcm_id)             
-             if ids.size > 1                
+             if ids.size > 0                
                 big_image_url=first_perfomance_showcase.user.user_media_map.media_map.media_url
                  if first_perfomance_showcase.content.content_media_map && first_perfomance_showcase.content.content_media_map.media_map.media.media_type == 3
                     big_image_url=first_perfomance_showcase.content.content_media_map.media_map.media_url

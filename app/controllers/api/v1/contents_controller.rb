@@ -159,7 +159,7 @@ class Api::V1::ContentsController < ApplicationController
           showcase = Showcase.find(id)
           if showcase             
              ids = User.where("gcm_id is not null and id<>?",params[:user_id]).pluck(:gcm_id)             
-             if ids.size > 1
+             if ids.size > 0
                 type="Written"
                  if showcase.content.content_media_map
                     case showcase.content.content_media_map.media_map.media.media_type
