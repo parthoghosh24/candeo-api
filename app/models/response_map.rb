@@ -113,9 +113,9 @@ class ResponseMap < ActiveRecord::Base
                  Notification.send(message,ids)
              end          
 
-          #Notifying fanbase of fan who are not in owner's fanbase
-             user_ids.push(owner_id)
+          #Notifying fanbase of fan who are not in owner's fanbase             
              fan_ids = Network.where("followee_id=? and follower_id not in (?)",params[:user_id], user_ids).pluck(:follower_id)
+             fan_ids.push(owner_id)
              ids =User.where("gcm_id is not null and id in (?)",fan_ids).pluck(:gcm_id)             
              if ids.size >1
                 message = {title:"#{fan.name} appreciated", 
