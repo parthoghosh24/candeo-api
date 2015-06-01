@@ -17,7 +17,7 @@ class ShowcaseTask < ActiveRecord::Base
   def self.populate_performances
 
      performance_maps = []
-     first_perfomance_showcase=nil
+     first_performance_showcase=nil
      # last_rank=1;
      rank=1
   	 ShowcaseQueue.where(is_deleted:false).order(total_appreciations: :desc).each do |queue_data|
@@ -80,12 +80,12 @@ class ShowcaseTask < ActiveRecord::Base
      ShowcaseQueue.delete_all
      ShowcaseCap.update_showcase_cap
      Thread.new do                    
-          if first_perfomance_showcase             
+          if first_performance_showcase             
              ids = User.where("gcm_id is not null").pluck(:gcm_id)             
              if ids.size > 0                
-                big_image_url=first_perfomance_showcase.user.user_media_map.media_map.media_url
-                 if first_perfomance_showcase.content.content_media_map && first_perfomance_showcase.content.content_media_map.media_map.media.media_type == 3
-                    big_image_url=first_perfomance_showcase.content.content_media_map.media_map.media_url
+                big_image_url=first_performance_showcase.user.user_media_map.media_map.media_url
+                 if first_performance_showcase.content.content_media_map && first_performance_showcase.content.content_media_map.media_map.media.media_type == 3
+                    big_image_url=first_performance_showcase.content.content_media_map.media_map.media_url
                  end
                  message = {title:"Congratulations #{showcase.user.name}", body:"Your performance \"#{showcase.title}\" topped this week!", imageUrl: first_perfomance_showcase.user.user_media_map.media_map.media_url, bigImageUrl: big_image_url, type: "performance", id: ""}            
                  Notification.init
