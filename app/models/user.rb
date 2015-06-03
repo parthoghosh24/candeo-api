@@ -22,6 +22,7 @@
 class User < ActiveRecord::Base
 
   after_create :generate_uuid
+  has_many :shouts
   has_many :showcases
   has_many :contents
   has_many :inspiritions, foreign_key: 'user_id', class_name: "Status"
