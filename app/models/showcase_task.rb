@@ -87,7 +87,7 @@ class ShowcaseTask < ActiveRecord::Base
                  if first_performance_showcase.content.content_media_map && first_performance_showcase.content.content_media_map.media_map.media.media_type == 3
                     big_image_url=first_performance_showcase.content.content_media_map.media_map.media_url
                  end
-                 message = {title:"Congratulations #{showcase.user.name}", body:"Your performance \"#{showcase.title}\" topped this week!", imageUrl: first_perfomance_showcase.user.user_media_map.media_map.media_url, bigImageUrl: big_image_url, type: "performance", id: ""}            
+                 message = {title:"Congratulations #{first_performance_showcase.user.name}", body:"#{first_performance_showcase.user.name}'s performance \"#{first_performance_showcase.title}\" topped this week!", imageUrl: first_performance_showcase.user.user_media_map.media_map.media_url, bigImageUrl: big_image_url, type: "performance", id: ""}
                  Notification.init
                  Notification.send(message,ids)
              end             
