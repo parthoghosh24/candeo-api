@@ -39,40 +39,40 @@ class ResponseMap < ActiveRecord::Base
      owner_id=showcase.user.id if showcase
      response=ResponseMap.create(user_id:params[:user_id], showcase_id:params[:showcase_id], content_type:1, is_inspired:1, inspiration_response:inspiration_response, owner_id:owner_id)
      if params[:user_id].to_i!=owner_id
-        Thread.new do                    
+        Thread.new do
           # Notifiying owner fans that owner inspiring people
              user_ids = Network.where("followee_id=? and follower_id<>?",owner_id,params[:user_id]).pluck(:follower_id)
              ids = User.where("gcm_id is not null and id in (?)",user_ids).pluck(:gcm_id)
              promoter = User.find(params[:user_id])
-             feeling={1=> "Motivated", 2=>"Spirited", 3=>"Enlightened", 4=>"Happy", 5=>"Cheered", 6=>"Loved", 7=>"Blessed", 8=>"Funny", 9=>"Strong"}             
-             if ids.size > 0     
+             feeling={1=> "Motivated", 2=>"Spirited", 3=>"Enlightened", 4=>"Happy", 5=>"Cheered", 6=>"Loved", 7=>"Blessed", 8=>"Funny", 9=>"Strong"}
+             if ids.size > 0
 
-                 message = {title:"#{showcase.user.name} inspiring", 
-                            body:"#{promoter.name} feeling #{feeling[params[:rating].to_i]} by \"#{showcase.title}\"", 
-                            imageUrl: promoter.user_media_map.media_map.media_url, 
-                            bigImageUrl: "", 
-                            type: "content", 
-                            id: params[:showcase_id]}            
+                 message = {title:"#{showcase.user.name} inspiring",
+                            body:"#{promoter.name} feeling #{feeling[params[:rating].to_i]} by \"#{showcase.title}\"",
+                            imageUrl: promoter.user_media_map.media_map.media_url,
+                            bigImageUrl: "",
+                            type: "content",
+                            id: params[:showcase_id]}
                  Notification.init
                  Notification.send(message,ids)
-             end          
+             end
 
           #Notifying owner that he/she inspired
              ids =[]
-             ids.push(showcase.user.gcm_id) if !showcase.user.gcm_id.blank?                
+             ids.push(showcase.user.gcm_id) if !showcase.user.gcm_id.blank?
              if ids.size >0
-                message = {title:"#{promoter.name} got inspired", 
-                            body:"#{promoter.name} feeling #{feeling[params[:rating].to_i]} by \"#{showcase.title}\"", 
-                            imageUrl: promoter.user_media_map.media_map.media_url, 
-                            bigImageUrl: "", 
-                            type: "content", 
-                            id: params[:showcase_id]}            
+                message = {title:"#{promoter.name} got inspired",
+                            body:"#{promoter.name} feeling #{feeling[params[:rating].to_i]} by \"#{showcase.title}\"",
+                            imageUrl: promoter.user_media_map.media_map.media_url,
+                            bigImageUrl: "",
+                            type: "content",
+                            id: params[:showcase_id]}
                  Notification.init
                  Notification.send(message,ids)
              end
           ActiveRecord::Base.connection.close
       end
-     end     
+     end
      # network_map={}
      # network_map[:user_id]=params[:user_id]
      # network_map[:owner_id]=owner_id
@@ -95,42 +95,42 @@ class ResponseMap < ActiveRecord::Base
      showcase_queue = ShowcaseQueue.find_by(showcase_id:showcase.id)
      showcase_queue.update(total_appreciations:showcase_queue.total_appreciations+1)
      if params[:user_id].to_i!= owner_id
-        Thread.new do                    
+        Thread.new do
           # Notifiying owner fans that people appreciating owner
              user_ids = Network.where("followee_id=? and follower_id<>?",owner_id,params[:user_id]).pluck(:follower_id)
              ids = User.where("gcm_id is not null and id in (?)",user_ids).pluck(:gcm_id)
              fan = User.find(params[:user_id])
-             feeling={1=>"Good", 2=>"Wow", 3=>"Superb", 4=>"Excellent", 5=>"Mesmerizing"}             
-             if ids.size > 0     
+             feeling={1=>"Good", 2=>"Wow", 3=>"Superb", 4=>"Excellent", 5=>"Mesmerizing"}
+             if ids.size > 0
 
-                 message = {title:"#{showcase.user.name} getting appreciated", 
-                            body:"#{fan.name} found \"#{showcase.title}\" #{feeling[params[:rating].to_i]}", 
-                            imageUrl: fan.user_media_map.media_map.media_url, 
-                            bigImageUrl: "", 
-                            type: "content", 
-                            id: params[:showcase_id]}            
+                 message = {title:"#{showcase.user.name} getting appreciated",
+                            body:"#{fan.name} found \"#{showcase.title}\" #{feeling[params[:rating].to_i]}",
+                            imageUrl: fan.user_media_map.media_map.media_url,
+                            bigImageUrl: "",
+                            type: "content",
+                            id: params[:showcase_id]}
                  Notification.init
                  Notification.send(message,ids)
-             end          
+             end
 
-          #Notifying fanbase of fan who are not in owner's fanbase             
+          #Notifying fanbase of fan who are not in owner's fanbase
              fan_ids = Network.where("followee_id=? and follower_id not in (?)",params[:user_id], user_ids).pluck(:follower_id)
              fan_ids.push(owner_id) if !fan_ids.include?(owner_id)
-             ids =User.where("gcm_id is not null and id in (?)",fan_ids).pluck(:gcm_id)             
+             ids =User.where("gcm_id is not null and id in (?)",fan_ids).pluck(:gcm_id)
              if ids.size >0
-                message = {title:"#{fan.name} appreciated", 
-                            body:"#{fan.name} found \"#{showcase.title}\" #{feeling[params[:rating].to_i]}", 
-                            imageUrl: fan.user_media_map.media_map.media_url, 
-                            bigImageUrl: "", 
-                            type: "content", 
-                            id: params[:showcase_id]}            
+                message = {title:"#{fan.name} appreciated",
+                            body:"#{fan.name} found \"#{showcase.title}\" #{feeling[params[:rating].to_i]}",
+                            imageUrl: fan.user_media_map.media_map.media_url,
+                            bigImageUrl: "",
+                            type: "content",
+                            id: params[:showcase_id]}
                  Notification.init
                  Notification.send(message,ids)
              end
           ActiveRecord::Base.connection.close
       end
      end
-     
+
     response.id
   end
 
@@ -142,14 +142,14 @@ class ResponseMap < ActiveRecord::Base
     owner_id=showcase.user.id if showcase
     response=ResponseMap.create(user_id:params[:user_id], showcase_id:params[:showcase_id], content_type:2, has_skipped:1, owner_id:owner_id, skip_response: skip_response)
     showcase_queue = ShowcaseQueue.find_by(showcase_id:showcase.id)
-    showcase_queue.update(total_appreciations:showcase_queue.total_skips+1)
+    showcase_queue.update(total_skips:showcase_queue.total_skips+1)
     response.id
   end
 
   def self.fetch_responses(params)
     list =[]
     if !params.blank?
-      response_type=params[:type].to_i  
+      response_type=params[:type].to_i
       content_id=params[:content_id]
       content = Content.find(content_id)
       if content.shareable_type=="Showcase"
@@ -157,13 +157,13 @@ class ResponseMap < ActiveRecord::Base
             response_maps = ResponseMap.where(showcase_id:content.shareable_id, has_appreciated:1).order(created_at: :desc)
         else
             response_maps = ResponseMap.where(showcase_id:content.shareable_id, is_inspired:1).order(created_at: :desc)
-        end        
+        end
       else
         if response_type == 1
             response_maps = ResponseMap.where(status_id:content.shareable_id, has_appreciated:1).order(created_at: :desc)
         else
             response_maps = ResponseMap.where(status_id:content.shareable_id, is_inspired:1).order(created_at: :desc)
-        end      
+        end
       end
       response_maps.each do |response_map|
          final_response = {}
@@ -171,10 +171,10 @@ class ResponseMap < ActiveRecord::Base
          final_response[:response][:created_at_timestamp]=response_map.created_at.to_i*1000
          user = User.find(response_map.user_id)
          final_response[:user]=user.as_json(except:[:auth_token, :email, :random_token])
-         final_response[:user][:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map  
+         final_response[:user][:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map
          list.push(final_response)
       end
-    end    
+    end
     list
   end
 
