@@ -77,6 +77,32 @@ end
 
   end
 
+  def get_public_shouts
+
+    if request.headers['email'].blank?
+         if authenticate_with_default_key
+               shouts = User.get_public_shouts(params)
+               if shouts
+                response_map={:shouts => shouts}
+                render json: response_map, status: 200
+              else
+                render json:{:response=>"failed"}, status:422
+              end
+         end
+    else
+        if authenticate_action
+              shouts = User.get_public_shouts(params)
+               if shouts
+                response_map={:shouts => shouts}
+                render json: response_map, status: 200
+              else
+                render json:{:response=>"failed"}, status:422
+              end
+         end
+    end
+
+  end
+
   #GET /api/v1/users/:id/promoted/:timestamp - Fetch User promoted
   def get_promoted
       if request.headers['email'].blank?

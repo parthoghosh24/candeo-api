@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     match '/users/:id/appreciations/:timestamp',  to:'users#get_appreciations',via:'get', as: :user_appreciations
     match '/users/:id/inspirations/:timestamp',  to:'users#get_inspirations',via:'get', as: :user_inspirations
     match '/users/:id/fans/:timestamp',  to:'users#get_fans',via:'get', as: :user_fans
+    match '/users/:id/shouts/:timestamp', to:'users#get_public_shouts', via:'get', as: :user_public_shouts
     match '/users/:id/promoted/:timestamp',  to:'users#get_promoted',via:'get', as: :user_promoted
     match '/users/:id/showcases/:timestamp',  to:'users#get_showcases',via:'get', as: :user_showcases
     match  '/users/login', to:'users#login', via:'post', as: :login
@@ -44,6 +45,8 @@ Rails.application.routes.draw do
     #Shouts
     match  '/shouts/create', to:'shouts#show', via:'post', as: :shout_create
     match  '/shouts/:id', to:'shouts#show', via:'get', as: :shout_show
+    match  '/shouts/list/:id', to:'shouts#list_shouts', via:'get', as: :list_shouts
+    match  '/shouts/network/:id', to:'shouts#list_network', via:'get', as: :list_network
 
 
     end
