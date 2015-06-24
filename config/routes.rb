@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     match  '/contents/:id/:type/:user_id', to:'contents#show', via:'get', as: :content
 
     #Shouts
-    match  '/shouts/create', to:'shouts#show', via:'post', as: :shout_create
+    match  '/shouts/create', to:'shouts#create', via:'post', as: :shout_create
     match  '/shouts/:id', to:'shouts#show', via:'get', as: :shout_show
     match  '/shouts/list/:id', to:'shouts#list_shouts', via:'get', as: :list_shouts
     match  '/shouts/network/:id', to:'shouts#list_network', via:'get', as: :list_network

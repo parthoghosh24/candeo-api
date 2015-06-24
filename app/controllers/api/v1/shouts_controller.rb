@@ -2,7 +2,14 @@ class Api::V1::ShoutsController < ApplicationController
 
   include ActionController::HttpAuthentication::Token::ControllerMethods
   before_action :authenticate_action, except: [ :show]
+  #POST - /shouts/create - Create Shout
   def create
+      shout = Shout.create(params)
+      if !shout.blank?
+            render json: {:response => "success"}, status: 200
+      else
+           render json: {:response=>"failed"}, status: 422
+      end
   end
 
   def show
@@ -21,6 +28,13 @@ class Api::V1::ShoutsController < ApplicationController
 
  #GET /shouts/list/:id - Fetch shouts for user with :id
   def list_shouts
+     shouts = Shout.list_shouts(params)
+     if !shouts.blank?
+        response_map={:shouts=>shouts}
+        render json: response_map, status: 200
+      else
+        render json:{:response=>"failed"}, status:422
+    end
   end
 
   private

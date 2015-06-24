@@ -6,7 +6,6 @@
 #  user_id    :integer
 #  shout_id   :integer
 #  is_owner   :boolean
-#  is_public  :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
