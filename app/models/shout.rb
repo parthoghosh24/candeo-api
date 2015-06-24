@@ -37,7 +37,7 @@ class Shout < ActiveRecord::Base
      all = []
      shouts = ids.size>0 ? Shout.where(user_id:ids,is_public:true).order(created_at: :desc) : [] # Pull all public shouts (user + user's network)
      all.push(shouts)
-     shouts = ShoutParticipant.exists?(user_id:params[:id]) ? ShoutParticipant.includes(:shout).where(user_id:params[:id]).order(created_at: :desc) : [] # Pull all shouts where user is participant
+     shouts = ShoutParticipant.exists?(user_id:params[:id]) ? ShoutParticipant.includes(:shout).where(user_id:params[:id]).order(created_at: :desc) : [] # Pull all private shouts where user is participant
      all.push(shouts)
      all.sort_by{|map| -map[:created_at]} if all.size>0 #Sorting the array with created_at descending
      all
