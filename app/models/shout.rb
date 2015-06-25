@@ -17,7 +17,7 @@ class Shout < ActiveRecord::Base
      user = User.find(params[:id])
      shout = user.shouts.create(body:params[:body])
      shout.is_public=true
-     if params[:public] == "0" #Private
+     if params[:type] == "0" #Private
          shout.is_public=false
          ids = params[:ids]
          ids.split(",").each do |id|

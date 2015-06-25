@@ -184,6 +184,18 @@ class User < ActiveRecord::Base
      showcases
   end
 
+  def self.get_public_shouts(params)
+      if params[:timestamp]=="now"
+        last= Time.now
+      else
+        last = Time.parse(params[:timestamp])
+      end
+      shouts=Shout.where("user_id=? and created_at<?",params[:id],last).limit(50).order(created_at: :desc)
+
+
+      shouts
+  end
+
   def self.get_fans(params)
       if params[:timestamp]=="now"
         last= Time.now
@@ -254,11 +266,11 @@ class User < ActiveRecord::Base
     nil
   end
 
-  def self.update_gcm(params)    
+  def self.update_gcm(params)
     response = nil
     if !params[:id].blank?
        user = User.find(params[:id])
-       user.update(gcm_id:params[:gcm_id]) 
+       user.update(gcm_id:params[:gcm_id])
        response = user
     end
     response
