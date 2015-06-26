@@ -34,19 +34,31 @@ class Shout < ActiveRecord::Base
      user = User.find(params[:id])
      ids = network.pluck(:id)
      ids.push(params[:id])
-     all = []
+
      shouts = ids.size>0 ? Shout.where(user_id:ids,is_public:true).order(created_at: :desc) : [] # Pull all public shouts (user + user's network)
-     all.push(shouts)
+
      shout_participants = ShoutParticipant.exists?(user_id:params[:id]) ? ShoutParticipant.where(user_id:params[:id]).order(created_at: :desc) : [] # Pull all private shouts where user is participant
-     shouts=[]
+
      if shout_participants.size > 0
       shout_participants.each do |shout_participant|
          shouts.push(shout_participant.shout)
       end
      end
-     all.push(shouts)
-     all.sort_by{|map| -map[:created_at]} if all.size>0 #Sorting the array with created_at descending
-     all
+
+
+
+     # all.sort_by{|map| -map.created_at} if all.size>0
+     result=[]
+     puts shouts
+     shouts.each do |shout|
+        shout_hash=shout.as_json
+        shout_hash["avatar_path"]= shout.user.user_media_map.media_map.media_url if shout.user.user_media_map
+        shout_hash["name"]=shout.user.name
+        shout_hash["created_at_timestamp"]=shout.created_at.to_i*1000
+        result.push(shout_hash)
+     end
+     result.sort_by{|map| map["created_at"]}#Sorting the array with created_at descending
+     result
 
   end
 

@@ -28,7 +28,8 @@ class Api::V1::ShoutsController < ApplicationController
 
  #GET /shouts/list/:id - Fetch shouts for user with :id
   def list_shouts
-     shouts = Shout.list_shouts(params)
+    puts "IN HERE"
+     shouts = Shout.fetch_list(params)
      if !shouts.blank?
         response_map={:shouts=>shouts}
         render json: response_map, status: 200
