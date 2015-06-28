@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     #Users
     match  '/users/:id', to:'users#show', via:'get', as: :user
     match '/users/posted/:id',to:'users#has_posted', via:'get', as: :user_has_posted
+    match '/users/shout/:id',to:'users#can_shout', via:'get', as: :user_can_shout
     match '/users/:id/appreciations/:timestamp',  to:'users#get_appreciations',via:'get', as: :user_appreciations
     match '/users/:id/inspirations/:timestamp',  to:'users#get_inspirations',via:'get', as: :user_inspirations
     match '/users/:id/fans/:timestamp',  to:'users#get_fans',via:'get', as: :user_fans
@@ -47,6 +48,8 @@ Rails.application.routes.draw do
     match  '/shouts/:id', to:'shouts#show', via:'get', as: :shout_show
     match  '/shouts/list/:id', to:'shouts#list_shouts', via:'get', as: :list_shouts
     match  '/shouts/network/:id', to:'shouts#list_network', via:'get', as: :list_network
+    match  '/shouts/discussions/create', to:'shouts#create_discussion', via:'post', as: :create_discussion
+    match  '/shouts/:id/discussions/:timestamp', to:'shouts#fetch_more_discussions', via:'get', as: :fetch_more_discussions
 
 
     end

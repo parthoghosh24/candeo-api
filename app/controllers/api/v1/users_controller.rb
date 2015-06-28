@@ -162,6 +162,13 @@ end
      render json: response_map, status: 200
   end
 
+  #GET /api/v1/users/shout/1
+  def can_shout
+     can_shout = Shout.is_eligible_to_shout(params)
+     response_map = {:response=> can_shout}
+     render json: response_map, status: 200
+  end
+
   #POST /api/v1/users/gcm
   def update_gcm
     response = User.update_gcm(params)
@@ -193,7 +200,7 @@ end
             user = response[:user]
             url = "http://www.candeoapp.com/verify/#{response[:random_token]}"
             Thread.new do
-               CandeoMailer.verify_user(user, url).deliver
+               CandeoMailer.verify_user(user, url).deliver_now
                ActiveRecord::Base.connection.close
             end
             puts "Sending success"

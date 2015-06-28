@@ -103,7 +103,7 @@ class User < ActiveRecord::Base
     else
       last = Time.parse(params[:timestamp])
     end
-    list=ResponseMap.where("user_id=? and has_appreciated=? and created_at <? ",params[:id],1,last).limit(50).order(created_at: :desc).limit(10)
+    list=ResponseMap.where("user_id=? and has_appreciated=? and created_at <? ",params[:id],1,last).limit(50).order(created_at: :desc)
     appreciations=[]
     list.each do |map|
         appreciation = Showcase.find(map.showcase_id)
@@ -129,7 +129,7 @@ class User < ActiveRecord::Base
     else
       last = Time.parse(params[:timestamp])
     end
-    list=ResponseMap.where("user_id=? and is_inspired =? and created_at <? ",params[:id],1,last).limit(50).order(created_at: :desc).limit(10)
+    list=ResponseMap.where("user_id=? and is_inspired =? and created_at <? ",params[:id],1,last).limit(50).order(created_at: :desc)
     inspirations=[]
     list.each do |map|
         if map.content_type ==1

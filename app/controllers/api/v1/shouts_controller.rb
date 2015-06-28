@@ -1,7 +1,7 @@
 class Api::V1::ShoutsController < ApplicationController
 
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  before_action :authenticate_action, except: [ :show]
+  before_action :authenticate_action
   #POST - /shouts/create - Create Shout
   def create
       shout = Shout.create(params)
@@ -12,7 +12,35 @@ class Api::V1::ShoutsController < ApplicationController
       end
   end
 
+#POST - /shouts/discussions/create- Create Shout Discussion
+  def create_discussion
+    discussion = ShoutDiscussion.create_discussion(params)
+      if !discussion.blank?
+            render json: {:response => "success"}, status: 200
+      else
+           render json: {:response=>"failed"}, status: 422
+      end
+  end
+
+ #GET-'/shouts/:id - Fetch Shout
   def show
+    shout = Shout.fetch(params)
+    puts shout
+      if !shout.blank?
+            render json: {:shout => shout}, status: 200
+      else
+           render json: {:response=>"failed"}, status: 422
+      end
+  end
+
+#GET /shouts/:id/discussions/:timestamp - Fetch more discussions
+  def fetch_more_discussions
+    more_discussions = Shout.fetch_more_shout_discussion(params)
+      if !more_discussions.blank?
+            render json: {:discussions => more_discussions}, status: 200
+      else
+           render json: {:response=>"failed"}, status: 422
+      end
   end
 
  #GET /shouts/network/:id - Fetch network for user with :id

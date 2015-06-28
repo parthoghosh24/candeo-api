@@ -11,6 +11,14 @@
 #
 
 class ShoutDiscussion < ActiveRecord::Base
-	belongs_to :user_id
+	belongs_to :user
 	belongs_to :shout
+
+  def self.create_discussion(params)
+       discussion_message={}
+       discussion_message[:text]=params[:discussion]
+       discussion = ShoutDiscussion.create(shout_id:params[:shout_id], user_id:params[:user_id],discussion:discussion_message)
+       discussion
+  end
+
 end
