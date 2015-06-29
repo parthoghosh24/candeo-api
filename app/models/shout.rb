@@ -26,6 +26,25 @@ class Shout < ActiveRecord::Base
          ShoutParticipant.create(user_id:user.id, shout_id:shout.id, is_owner:true)
      end
      shout.save
+     if !shout.is_public
+      Thread.new do
+
+          #Notifying shout participants
+            participants = ShoutParticipant.where("shout_id=? and user_id<>?",shout.id,shout.user.id) #all shout participants except creator
+             ids =User.where("gcm_id is not null and id in (?)",participants.pluck(:user_id)).pluck(:gcm_id)
+             if ids.size >0
+                message = {title:"#{shout.user.name} shouting",
+                            body:"#{shout.user.name} shouting \"#{shout.body[0..20]}\"... ",
+                            imageUrl: user.user_media_map.media_map.media_url,
+                            bigImageUrl: "",
+                            type: "shout",
+                            id:shout.id}
+                 Notification.init
+                 Notification.send(message,ids)
+             end
+          ActiveRecord::Base.connection.close
+      end
+     end
      shout
  end
 
