@@ -34,7 +34,7 @@ class ShoutDiscussion < ActiveRecord::Base
              ids =User.where("gcm_id is not null and id in (?)",shout_ids).pluck(:gcm_id)
              if ids.size >0
                 message = {title:"#{user.name} messaged",
-                            body:"#{user.name} messaged  in shout \"#{discussionshout.body[0..20]}\"... ",
+                            body:"#{user.name} messaged  in shout \"#{discussion.shout.body[0..20]}\"... ",
                             imageUrl: user.user_media_map.media_map.media_url,
                             bigImageUrl: "",
                             type: "shout",
