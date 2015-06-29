@@ -19,7 +19,6 @@ class ShoutDiscussion < ActiveRecord::Base
        discussion_message[:text]=params[:discussion]
        discussion = ShoutDiscussion.create(shout_id:params[:shout_id], user_id:params[:user_id],discussion:discussion_message)
 
-       Thread.new do
 
           #Notifying shout creator and participants if private
              user =User.find(params[:user_id])
@@ -32,6 +31,7 @@ class ShoutDiscussion < ActiveRecord::Base
                  end
              end
              ids =User.where("gcm_id is not null and id in (?)",shout_ids).pluck(:gcm_id)
+             puts ids
              if ids.size >0
                 message = {title:"#{user.name} messaged",
                             body:"#{user.name} messaged  in shout \"#{discussion.shout.body[0..20]}\"... ",
@@ -42,8 +42,6 @@ class ShoutDiscussion < ActiveRecord::Base
                  Notification.init
                  Notification.send(message,ids)
              end
-          ActiveRecord::Base.connection.close
-      end
 
 
        discussion
