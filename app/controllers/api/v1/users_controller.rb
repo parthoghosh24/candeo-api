@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
 
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  before_action :authenticate_action, except: [:register, :login, :verify, :get_fans, :get_promoted, :get_showcases, :show]
+  before_action :authenticate_action, except: [:get_web_showcases,:show_web, :register, :login, :verify, :get_fans, :get_promoted, :get_showcases, :show]
 
   #GET /api/v1/users/:id - Fetch User profile
   def show
@@ -25,6 +25,28 @@ class Api::V1::UsersController < ApplicationController
                 render json:{:response=>"failed"}, status:422
               end
          end
+    end
+  end
+
+  #GET /api/v1/web/users/:id - Fetch User profile
+  def show_web
+    user = User.show(params)
+    if user
+      response_map={:user => user}
+      render json: response_map, status: 200
+    else
+      render json:{:response=>"failed"}, status:422
+    end
+  end
+
+  #GET /api/v1//web/users/:id/showcases/:timestamp - Fetch User profile
+  def get_web_showcases
+     showcases = User.get_showcases(params)
+     if showcases
+      response_map={:showcases => showcases}
+      render json: response_map, status: 200
+    else
+      render json:{:response=>"failed"}, status:422
     end
   end
 

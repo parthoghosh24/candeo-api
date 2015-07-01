@@ -3,11 +3,11 @@ class Api::V1::ContentsController < ApplicationController
   include ActionView::Helpers::DateHelper
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
-    before_action :authenticate_action, except: [:test, :show, :get_performances_map, :list_performances, :limelight, :list_limelight]
+    before_action :authenticate_action, except: [:show_web, :test, :show, :get_performances_map, :list_performances, :limelight, :list_limelight]
 
   #GET /api/v1/contents/test - API test
   def test
-        
+
      if Rails.env.staging?
         render json:{response:"Welcome to Candeo TEST...Rise and shine!"}
      else
@@ -116,6 +116,18 @@ class Api::V1::ContentsController < ApplicationController
 
   end
 
+#GET /api/v1/web/contents/:id/:type - Show Content Detail Screen
+ def show_web
+  contentMap=Content.show(params)
+              if contentMap.blank?
+                 render json:{:response=>"failed"}, status:422
+              else
+                 render json: contentMap, status: 200
+              end
+ end
+
+
+
   #GET /api/v1/contents/:id/:type - Show Content Detail Screen
   def show
     if request.headers['email'].blank?
@@ -155,10 +167,10 @@ class Api::V1::ContentsController < ApplicationController
     if !id.blank?
       response_map={:id=> id}
       puts response_map.to_json
-      Thread.new do          
+      Thread.new do
           showcase = Showcase.find(id)
-          if showcase             
-             ids = User.where("gcm_id is not null and id<>?",params[:user_id]).pluck(:gcm_id)             
+          if showcase
+             ids = User.where("gcm_id is not null and id<>?",params[:user_id]).pluck(:gcm_id)
              if ids.size > 0
                 type="Written"
                  if showcase.content.content_media_map
@@ -169,12 +181,12 @@ class Api::V1::ContentsController < ApplicationController
                         type ="Video"
                       when 3 #Image
                          type="Image"
-                    end                   
+                    end
                  end
-                 message = {title:"New Performance", body:"Checkout #{showcase.user.name}'s #{type} performance \"#{showcase.title}\"", imageUrl: showcase.user.user_media_map.media_map.media_url, bigImageUrl: "", type: "home", id: ""}            
+                 message = {title:"New Performance", body:"Checkout #{showcase.user.name}'s #{type} performance \"#{showcase.title}\"", imageUrl: showcase.user.user_media_map.media_map.media_url, bigImageUrl: "", type: "home", id: ""}
                  Notification.init
                  Notification.send(message,ids)
-             end             
+             end
           end
           ActiveRecord::Base.connection.close
       end

@@ -27,6 +27,8 @@ Rails.application.routes.draw do
     match  '/users/verify', to:'users#verify', via:'post',as: :verify
     match '/users/gcm',to:'users#update_gcm', via: 'post',as: :update_gcm
     match '/users/update_profile', to:'users#update_profile',via:'post',as: :update_profile
+    match '/web/users/:id',to:'users#show_web',via:'get',as: :show_web_profile
+    match '/web/users/:id/showcases/:timestamp',to:'users#get_web_showcases',via:'get',as: :get_web_showcases
 
     #Contents
     match '/contents/test', to:'contents#test', via:'get',as: :test
@@ -42,6 +44,7 @@ Rails.application.routes.draw do
     match '/contents/responses/skip', to:'responses#skip', via:'post', as: :skip
     match '/contents/responses/:type/:content_id', to:'responses#fetch_responses', via:'get', as: :fetch_responses
     match  '/contents/:id/:type/:user_id', to:'contents#show', via:'get', as: :content
+    match '/web/contents/:id/:type', to:'contents#show_web',via:'get',as: :content_web
 
     #Shouts
     match  '/shouts/create', to:'shouts#create', via:'post', as: :shout_create
