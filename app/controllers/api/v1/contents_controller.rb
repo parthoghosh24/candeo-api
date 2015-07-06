@@ -122,7 +122,12 @@ class Api::V1::ContentsController < ApplicationController
               if contentMap.blank?
                  render json:{:response=>"failed"}, status:422
               else
-                 render json: contentMap, status: 200
+                if params[:callback].blank?
+                    render json: contentMap, status: 200
+                else
+                  render json: contentMap,callback: params[:callback], status: 200
+                end
+
               end
  end
 

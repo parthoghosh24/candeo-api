@@ -33,18 +33,27 @@ class Api::V1::UsersController < ApplicationController
     user = User.show(params)
     if user
       response_map={:user => user}
-      render json: response_map, status: 200
+      if params[:callback].blank?
+        render json: response_map, status: 200
+       else
+        render json: response_map, callback: params[:callback], status: 200
+       end
     else
       render json:{:response=>"failed"}, status:422
     end
   end
 
-  #GET /api/v1//web/users/:id/showcases/:timestamp - Fetch User profile
+  #GET /api/v1//web/users/:id/showcases - Fetch User profile
   def get_web_showcases
      showcases = User.get_showcases(params)
      if showcases
       response_map={:showcases => showcases}
-      render json: response_map, status: 200
+
+      if params[:callback].blank?
+        render json: response_map, status: 200
+      else
+        render json: response_map, callback: params[:callback], status: 200
+      end
     else
       render json:{:response=>"failed"}, status:422
     end

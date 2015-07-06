@@ -161,7 +161,7 @@ class User < ActiveRecord::Base
   end
 
   def self.get_showcases(params)
-      if params[:timestamp]=="now"
+      if params[:timestamp]=="now" || params[:timestamp].blank?
         last= Time.now
       else
         last = Time.parse(params[:timestamp])

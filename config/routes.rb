@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     match '/users/gcm',to:'users#update_gcm', via: 'post',as: :update_gcm
     match '/users/update_profile', to:'users#update_profile',via:'post',as: :update_profile
     match '/web/users/:id',to:'users#show_web',via:'get',as: :show_web_profile
-    match '/web/users/:id/showcases/:timestamp',to:'users#get_web_showcases',via:'get',as: :get_web_showcases
+    match '/web/users/:id/showcases',to:'users#get_web_showcases',via:'get',as: :get_web_showcases
 
     #Contents
     match '/contents/test', to:'contents#test', via:'get',as: :test
