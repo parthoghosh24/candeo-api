@@ -17,6 +17,10 @@
 #  has_posted          :boolean
 #  gcm_id              :string
 #
+# Indexes
+#
+#  index_users_on_username  (username)
+#
 
 #auth_token is HMAC key. Whenever user logins, a new HMAC will be generated.
 class User < ActiveRecord::Base

@@ -17,6 +17,10 @@
 #  has_posted          :boolean
 #  gcm_id              :string
 #
+# Indexes
+#
+#  index_users_on_username  (username)
+#
 
 require 'test_helper'
 
