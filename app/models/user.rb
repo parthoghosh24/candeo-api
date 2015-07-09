@@ -37,6 +37,10 @@ class User < ActiveRecord::Base
   has_many :followee_follows, foreign_key: :follower_id, class_name: "Network"
   has_many :followees, through: :followee_follows, source: :followee
 
+  def to_param
+      [id,username].join("-")
+  end
+
   def self.register(params)
     if !User.exists?(email:params[:email])
         username = params[:email][0...params[:email].index('@')]
