@@ -11,6 +11,7 @@
 #  user_id        :integer
 #  uuid           :string(255)
 #  referral_tag   :string(255)
+#  short_id       :string
 #
 # Indexes
 #
@@ -114,6 +115,8 @@ class Content < ActiveRecord::Base
         while(self.class.exists?(uuid:token)) do
           token = SecureRandom.hex(20)
         end
-        self.update(uuid:token)
+         hashids = Hashids.new(token, 5)
+         hash = hashids.encode(self.id)
+         self.update(uuid:token,short_id:hash)
   end
 end

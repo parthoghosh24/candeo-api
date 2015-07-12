@@ -11,6 +11,7 @@
 #  user_id        :integer
 #  uuid           :string(255)
 #  referral_tag   :string(255)
+#  short_id       :string
 #
 # Indexes
 #

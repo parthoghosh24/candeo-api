@@ -6,6 +6,7 @@ gem 'puma'
 gem 'fog'
 gem "aws-ses"
 gem 'rpush'
+gem 'hashids'
 
 gem 'spring', :group => :development
 gem 'pg'
