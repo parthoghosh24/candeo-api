@@ -12,6 +12,10 @@
 #  uuid           :string(255)
 #  referral_tag   :string(255)
 #
+# Indexes
+#
+#  index_contents_on_uuid  (uuid)
+#
 
 require 'rails_helper'
 

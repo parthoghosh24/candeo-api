@@ -30,6 +30,7 @@ class Api::V1::UsersController < ApplicationController
 
   #GET /api/v1/web/users/:id - Fetch User profile
   def show_web
+
     user = User.show(params)
     if user
       response_map={:user => user}

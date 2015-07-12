@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150709114741) do
+ActiveRecord::Schema.define(version: 20150712193510) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(version: 20150709114741) do
     t.string   "uuid",           limit: 255
     t.string   "referral_tag",   limit: 255
   end
+
+  add_index "contents", ["uuid"], name: "index_contents_on_uuid", using: :btree
 
   create_table "media", force: :cascade do |t|
     t.integer  "media_type"

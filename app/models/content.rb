@@ -12,6 +12,10 @@
 #  uuid           :string(255)
 #  referral_tag   :string(255)
 #
+# Indexes
+#
+#  index_contents_on_uuid  (uuid)
+#
 
 # @Partho - This is the parent Content class. User will generally share Content. Now Content can be a status, a user creation or data shared between friends.
 # Any user on Candeo can get inspired from a posted content. After getting inspired, user responds back with feelings and pledges. This can also have tagged content.
