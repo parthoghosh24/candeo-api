@@ -15,7 +15,8 @@
 #
 # Indexes
 #
-#  index_contents_on_uuid  (uuid)
+#  index_contents_on_short_id  (short_id)
+#  index_contents_on_uuid      (uuid)
 #
 
 # @Partho - This is the parent Content class. User will generally share Content. Now Content can be a status, a user creation or data shared between friends.

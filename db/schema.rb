@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150712205240) do
+ActiveRecord::Schema.define(version: 20150712210648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20150712205240) do
     t.string   "short_id"
   end
 
+  add_index "contents", ["short_id"], name: "index_contents_on_short_id", using: :btree
   add_index "contents", ["uuid"], name: "index_contents_on_uuid", using: :btree
 
   create_table "media", force: :cascade do |t|

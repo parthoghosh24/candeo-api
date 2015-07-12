@@ -15,7 +15,8 @@
 #
 # Indexes
 #
-#  index_contents_on_uuid  (uuid)
+#  index_contents_on_short_id  (short_id)
+#  index_contents_on_uuid      (uuid)
 #
 
 require 'rails_helper'
