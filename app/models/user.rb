@@ -88,8 +88,13 @@ class User < ActiveRecord::Base
   end
 
   def self.show(params)
-       user = User.find(params[:id]) if User.exists?(params[:id])
-       user = User.find_by(username:params[:id]) if user.blank?
+       if params[:id].blank?
+          user = User.find_by(username:params[:username])
+       else
+          user = User.find(params[:id]) if User.exists?(params[:id])
+          user = User.find_by(username:params[:id]) if user.blank?
+       end
+
        if user
             userhash = user.as_json(except:[:auth_token, :email, :random_token, :gcm_id])
             userhash[:total_appreciations]=ResponseMap.where(owner_id:params[:id],has_appreciated:true).size()
