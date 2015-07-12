@@ -33,19 +33,19 @@ class Content < ActiveRecord::Base
     contentHash=nil
     if type == 1
          if params[:id].blank?
-            content = Content.find_by(uuid:params[:uuid], shareable_type:"Showcase")
+            content = Content.find_by(short_id:params[:short], shareable_type:"Showcase")
          else
             content = Content.find_by(shareable_id:params[:id], shareable_type:"Showcase")
-            content = Content.find_by(uuid:params[:id], shareable_type:"Showcase") if content.blank?
+            content = Content.find_by(short_id:params[:id], shareable_type:"Showcase") if content.blank?
          end
 
     else
 
         if params[:id].blank?
-            content = Content.find_by(uuid:params[:uuid], shareable_type:"Status")
+            content = Content.find_by(short_id:params[:short], shareable_type:"Status")
         else
             content = Content.find_by(shareable_id:params[:id], shareable_type:"Status")
-            content = Content.find_by(uuid:params[:id], shareable_type:"Status") if content.blank?
+            content = Content.find_by(short_id:params[:id], shareable_type:"Status") if content.blank?
         end
 
     end
