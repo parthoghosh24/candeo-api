@@ -189,6 +189,7 @@ class User < ActiveRecord::Base
         showcaseHash[:media_url]=showcase.content.content_media_map.media_map.media_url if showcase.content.content_media_map
         showcaseHash[:appreciation_count]=ResponseMap.where(showcase_id:showcase.id,has_appreciated:true).size()
         showcaseHash[:inspiration_count]=ResponseMap.where(showcase_id:showcase.id,is_inspired:true).size()
+        showcaseHash[:short_id]=showcase.content.short_id
         showcases.push(showcaseHash)
      end
      showcases
