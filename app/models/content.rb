@@ -65,6 +65,7 @@ class Content < ActiveRecord::Base
         contentHash[:media_url]=content.content_media_map.media_map.media_url if content.content_media_map
         contentHash[:bg_url]=bg_url
         contentHash[:user_name]=content.user.name
+        contentHash[:web_user_name]=content.user.username
         contentHash[:user_id]=content.user.id
         contentHash[:user_avatar_url]=content.user.user_media_map.media_map.media_url
         if type == 1
