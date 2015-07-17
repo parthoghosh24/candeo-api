@@ -106,6 +106,28 @@ class Content < ActiveRecord::Base
      showcases
   end
 
+  def self.web_top_performances
+      list = Performance.order(:showcase_rank).limit(6)
+     performances=[]
+     list.each do |performance|
+        showcase = performance.showcase
+        performance_hash = showcase.as_json
+        performance_hash[:rank]=Performance.exists?(showcase_id:showcase.id) ? Performance.find_by(showcase_id:showcase.id).showcase_rank : "Not Ranked"
+        performance_hash[:avatar_path]=showcase.user.user_media_map.media_map.media_url
+        performance_hash[:web_user_name]=showcase.user.username
+        bg_url = showcase.content.content_media_map && showcase.content.content_media_map.media_map.media.media_type == 3 ? nil : showcase.user.user_media_map.media_map.media_url
+        performance_hash[:bg_url]=bg_url
+        performance_hash[:created_at_text]=showcase.created_at.strftime("%d %B, %Y")
+        performance_hash[:media_type]=showcase.content.content_media_map ? showcase.content.content_media_map.media_map.media.media_type : 0
+        performance_hash[:media_url]=showcase.content.content_media_map.media_map.media_url if showcase.content.content_media_map
+        performance_hash[:appreciation_count]=ResponseMap.where(showcase_id:showcase.id,has_appreciated:true).size()
+        performance_hash[:inspiration_count]=ResponseMap.where(showcase_id:showcase.id,is_inspired:true).size()
+        performance_hash[:short_id]=showcase.content.short_id
+        performances.push(performance_hash)
+     end
+     performances
+  end
+
   def self.referral_tag_exists?(params)
       Content.exists?(referral_tag:params[:referral_tag])
   end

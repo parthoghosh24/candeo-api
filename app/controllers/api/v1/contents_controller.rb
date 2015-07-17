@@ -3,7 +3,7 @@ class Api::V1::ContentsController < ApplicationController
   include ActionView::Helpers::DateHelper
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
-    before_action :authenticate_action, except: [:show_web, :test, :show, :get_performances_map, :list_performances, :limelight, :list_limelight]
+    before_action :authenticate_action, except: [:show_web, :web_top_performances, :test, :show, :get_performances_map, :list_performances, :limelight, :list_limelight]
 
   #GET /api/v1/contents/test - API test
   def test
@@ -119,16 +119,31 @@ class Api::V1::ContentsController < ApplicationController
 #GET /api/v1/web/contents/:id/:type - Show Content Detail Screen
  def show_web
   contentMap=Content.show(params)
-              if contentMap.blank?
-                 render json:{:response=>"failed"}, status:422
-              else
-                if params[:callback].blank?
-                    render json: contentMap, status: 200
-                else
-                  render json: contentMap,callback: params[:callback], status: 200
-                end
+  if contentMap.blank?
+     render json:{:response=>"failed"}, status:422
+  else
+    if params[:callback].blank?
+        render json: contentMap, status: 200
+    else
+      render json: contentMap,callback: params[:callback], status: 200
+    end
 
-              end
+  end
+ end
+
+ #GET /api/v1/web/performances - Show Content Detail Screen
+ def web_top_performances
+      performances = Content.web_top_performances
+      if performances.blank?
+        render json:{:response=>"failed"}, status:422
+      else
+        response_map={:performances => performances}
+        if params[:callback].blank?
+            render json: response_map, status: 200
+        else
+          render json: response_map,callback: params[:callback], status: 200
+        end
+     end
  end
 
 

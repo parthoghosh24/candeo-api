@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     match '/contents/responses/:type/:content_id', to:'responses#fetch_responses', via:'get', as: :fetch_responses
     match  '/contents/:id/:type/:user_id', to:'contents#show', via:'get', as: :content
     match '/web/contents/:short/:type', to:'contents#show_web',via:'get',as: :content_web
+    match '/web/performances', to:'contents#web_top_performances',via:'get',as: :web_top_performances
 
     #Shouts
     match  '/shouts/create', to:'shouts#create', via:'post', as: :shout_create
