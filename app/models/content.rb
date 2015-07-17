@@ -36,8 +36,8 @@ class Content < ActiveRecord::Base
          if params[:id].blank?
             content = Content.find_by(short_id:params[:short], shareable_type:"Showcase")
          else
-            content = Content.find_by(shareable_id:params[:id], shareable_type:"Showcase")
-            content = Content.find_by(short_id:params[:id], shareable_type:"Showcase") if content.blank?
+            content = Content.find_by(short_id:params[:id], shareable_type:"Showcase")
+            content = Content.find_by(shareable_id:params[:id], shareable_type:"Showcase") if content.blank?
          end
 
     end

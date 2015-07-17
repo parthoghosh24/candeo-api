@@ -91,8 +91,9 @@ class User < ActiveRecord::Base
        if params[:id].blank?
           user = User.find_by(username:params[:username])
        else
-          user = User.find(params[:id]) if User.exists?(params[:id])
-          user = User.find_by(username:params[:id]) if user.blank?
+          user = User.find_by(username:params[:id])
+          user = User.find(params[:id]) if user.blank?
+
        end
 
        if user
