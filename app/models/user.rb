@@ -97,11 +97,12 @@ class User < ActiveRecord::Base
 
        if user
             userhash = user.as_json(except:[:auth_token, :email, :random_token, :gcm_id])
-            userhash[:total_appreciations]=ResponseMap.where(owner_id:params[:id],has_appreciated:true).size()
-            userhash[:total_inspires]=ResponseMap.where(owner_id:params[:id],is_inspired:true).size()
+             id= user.id
+            userhash[:total_appreciations]=ResponseMap.where(owner_id:id,has_appreciated:true).size()
+            userhash[:total_inspires]=ResponseMap.where(owner_id:id,is_inspired:true).size()
             userhash[:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map
-            userhash[:current_rank]=RankMap.exists?(user_id:params[:id]) ? RankMap.where(user_id:params[:id]).order(created_at: :desc).first.rank : "Not Ranked"
-            userhash[:highest_rank]=RankMap.exists?(user_id:params[:id]) ? RankMap.where(user_id:params[:id]).order(:rank).first.rank : "Not Ranked"
+            userhash[:current_rank]=RankMap.exists?(user_id:id) ? RankMap.where(user_id:id).order(created_at: :desc).first.rank : "Not Ranked"
+            userhash[:highest_rank]=RankMap.exists?(user_id:id) ? RankMap.where(user_id:id).order(:rank).first.rank : "Not Ranked"
             return userhash
        end
        nil
