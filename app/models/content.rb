@@ -95,7 +95,7 @@ class Content < ActiveRecord::Base
   end
 
   def self.web_top_performances
-      list = Performance.order(:showcase_rank).limit(6)
+      list = Performance.order(:showcase_rank).limit(4)
      performances=[]
      list.each do |performance|
         showcase = performance.showcase
