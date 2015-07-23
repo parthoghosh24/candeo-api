@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
             userhash[:total_appreciations]=ResponseMap.where(owner_id:id,has_appreciated:true).size()
             userhash[:total_inspires]=ResponseMap.where(owner_id:id,is_inspired:true).size()
             userhash[:avatar_path]=user.user_media_map.media_map.media_url if user.user_media_map
-            userhash[:current_rank]=RankMap.exists?(user_id:id) ? RankMap.where(user_id:id).order(created_at: :desc).first.rank : "Not Ranked"
+            userhash[:current_rank]=RankMap.exists?(user_id:id) ? RankMap.where(user_id:id).order(updated_at: :desc).first.rank : "Not Ranked"
             userhash[:highest_rank]=RankMap.exists?(user_id:id) ? RankMap.where(user_id:id).order(:rank).first.rank : "Not Ranked"
             return userhash
        end
