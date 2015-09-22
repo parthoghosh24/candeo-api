@@ -24,13 +24,13 @@ class RankMap < ActiveRecord::Base
    end
 
    #Since, a single user can have multiple ranks, unique users need to be selected
-   
-   def self.fetch_top_user_by_rank(rank, last_user_id)
-      if last_user_id.blank?
+
+   def self.fetch_top_user_by_rank(rank, last_users)
+      if last_user_id.blank? or last_users and last_users.size==0
           rank_map=RankMap.where(rank:rank).order(count: :desc).first
       else
-          rank_map=RankMap.where("user_id<>? and rank=?",last_user_id,rank).order(count: :desc).first
-      end        
+          rank_map=RankMap.where("user_id not in ? and rank=?",last_users,rank).order(count: :desc).first
+      end
       userMap={}
       if rank_map
            user= User.find(rank_map.user_id)
