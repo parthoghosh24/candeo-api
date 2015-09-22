@@ -29,7 +29,7 @@ class RankMap < ActiveRecord::Base
       if last_user_id.blank? or last_users and last_users.size==0
           rank_map=RankMap.where(rank:rank).order(count: :desc).first
       else
-          rank_map=RankMap.where("user_id not in ? and rank=?",last_users,rank).order(count: :desc).first
+          rank_map=RankMap.where("user_id not in (?) and rank=?",last_users,rank).order(count: :desc).first
       end
       userMap={}
       if rank_map
