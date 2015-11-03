@@ -3,8 +3,8 @@
 # Table name: redirects
 #
 #  id         :integer          not null, primary key
-#  token      :string(255)
-#  long_url   :string(255)
+#  token      :string
+#  long_url   :string
 #  created_at :datetime
 #  updated_at :datetime
 #

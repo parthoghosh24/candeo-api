@@ -9,7 +9,7 @@
 #  is_blocked  :integer
 #  created_at  :datetime
 #  updated_at  :datetime
-#  uuid        :string(255)
+#  uuid        :string
 #
 
 require 'rails_helper'

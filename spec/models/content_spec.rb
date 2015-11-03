@@ -6,11 +6,11 @@
 #  description    :text
 #  created_at     :datetime
 #  updated_at     :datetime
-#  shareable_type :string(255)
+#  shareable_type :string
 #  shareable_id   :integer
 #  user_id        :integer
-#  uuid           :string(255)
-#  referral_tag   :string(255)
+#  uuid           :string
+#  referral_tag   :string
 #  short_id       :string
 #
 # Indexes

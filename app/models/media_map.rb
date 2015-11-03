@@ -4,12 +4,12 @@
 #
 #  id              :integer          not null, primary key
 #  media_id        :integer
-#  media_url       :string(255)
+#  media_url       :string
 #  created_at      :datetime
 #  updated_at      :datetime
 #  attachable_id   :integer
-#  attachable_type :string(255)
-#  uuid            :string(255)
+#  attachable_type :string
+#  uuid            :string
 #
 
 class MediaMap < ActiveRecord::Base

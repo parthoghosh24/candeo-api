@@ -7,8 +7,8 @@
 #  user_id    :integer
 #  created_at :datetime
 #  updated_at :datetime
-#  tag        :string(255)
-#  uuid       :string(255)
+#  tag        :string
+#  uuid       :string
 #
 
 # @Partho - Mode defines what kind of status it is- private or public. Private is meant to be shared amongst friends.

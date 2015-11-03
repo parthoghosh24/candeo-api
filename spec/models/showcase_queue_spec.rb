@@ -7,7 +7,7 @@
 #  is_deleted          :boolean
 #  created_at          :datetime
 #  updated_at          :datetime
-#  title               :string(255)
+#  title               :string
 #  media_type          :integer
 #  total_appreciations :integer
 #  total_skips         :integer

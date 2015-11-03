@@ -10,7 +10,7 @@
 #  updated_at            :datetime
 #  owner_id              :integer
 #  appreciation_response :json
-#  uuid                  :string(255)
+#  uuid                  :string
 #  inspiration_response  :json
 #  content_type          :integer
 #  showcase_id           :integer

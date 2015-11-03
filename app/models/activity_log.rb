@@ -9,7 +9,7 @@
 #  created_at     :datetime
 #  updated_at     :datetime
 #  activity_level :integer
-#  uuid           :string(255)
+#  uuid           :string
 #
 
 # @Partho - Activity Log keeps information about all the activities happening on network.

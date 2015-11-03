@@ -3,14 +3,14 @@
 # Table name: users
 #
 #  id                  :integer          not null, primary key
-#  name                :string(255)
-#  email               :string(255)
-#  auth_token          :string(255)
+#  name                :string
+#  email               :string
+#  auth_token          :string
 #  created_at          :datetime
 #  updated_at          :datetime
-#  uuid                :string(255)
-#  username            :string(255)
-#  about               :string(255)
+#  uuid                :string
+#  username            :string
+#  about               :string
 #  random_token        :integer
 #  total_appreciations :integer
 #  total_inspires      :integer

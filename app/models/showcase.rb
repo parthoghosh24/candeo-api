@@ -3,12 +3,12 @@
 # Table name: showcases
 #
 #  id             :integer          not null, primary key
-#  title          :string(255)
+#  title          :string
 #  created_at     :datetime
 #  updated_at     :datetime
 #  user_id        :integer
 #  state          :integer
-#  uuid           :string(255)
+#  uuid           :string
 #  is_copyrighted :boolean
 #
 

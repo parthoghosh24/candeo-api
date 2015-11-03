@@ -4,7 +4,7 @@
 #
 #  id                           :integer          not null, primary key
 #  showcase_id                  :integer
-#  showcase_title               :string(255)
+#  showcase_title               :string
 #  showcase_media_type          :integer
 #  showcase_total_appreciations :integer
 #  showcase_total_skips         :integer
